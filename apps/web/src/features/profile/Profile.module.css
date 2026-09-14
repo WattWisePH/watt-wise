@@ -29,7 +29,7 @@
 
 .Profile_accountDetails {
   text-align: center;
-  padding: 24px 0px;
+  padding: 12px 0px;
 }
 
 .Profile_card {
@@ -151,4 +151,10 @@
   padding: 4px;
   border-radius: var(--radius-medium);
   display: flex;
+}
+
+.Profile_logo {
+  height: 128px;
+  width: 128px;
+  margin: -24px 0px;
 }

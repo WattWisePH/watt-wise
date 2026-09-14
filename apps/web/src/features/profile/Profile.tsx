@@ -1,4 +1,5 @@
 import styles from "./Profile.module.css";
+import logo from "../../../public/images/watty-logo.svg";
 
 export const Profile = () => {
   return (
@@ -6,7 +7,7 @@ export const Profile = () => {
       {/* Account Details */}
       <section className={styles.Profile_section}>
         <div className={styles.Profile_accountDetails}>
-          wattwiselogo.png
+          <img src={logo} alt="Logo" className={styles.Profile_logo} />
           <h1 className={styles.Profile_sectionTitle}>Username</h1>
           <p className={styles.Profile_sectionSubtitle}>email@example.com</p>
         </div>
