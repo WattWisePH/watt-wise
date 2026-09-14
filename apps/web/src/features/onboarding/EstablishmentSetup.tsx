@@ -106,7 +106,7 @@ export function EstablishmentSetup() {
     <div className="establishment-setup">
       <h1 className="establishment-setup__title">Tell us about your place</h1>
       <p className="establishment-setup__subtitle">
-        These details let WattWise compare your usage against similar
+        These details let Watty compare your usage against similar
         establishments and read your bills correctly.
       </p>
 
@@ -144,7 +144,8 @@ export function EstablishmentSetup() {
             falls back to a wider comparison when it's missing. */}
         <label className="establishment-setup__field">
           <span>
-            Address <span className="establishment-setup__optional">(optional)</span>
+            Address{" "}
+            <span className="establishment-setup__optional">(optional)</span>
           </span>
           <input
             type="text"
@@ -163,7 +164,9 @@ export function EstablishmentSetup() {
             disabled={loading}
             required
           >
-            <option value="">{loading ? "Loading…" : "Select your utility"}</option>
+            <option value="">
+              {loading ? "Loading…" : "Select your utility"}
+            </option>
             {providers.map((provider) => (
               <option key={provider.id} value={provider.id}>
                 {providerLabel(provider)}

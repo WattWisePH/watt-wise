@@ -6,7 +6,7 @@ import { supabase } from "./lib/supabase";
 import "./App.css";
 
 /**
- * App shell: the WattWise header plus an Outlet for whichever page matched.
+ * App shell: the Watty header plus an Outlet for whichever page matched.
  * The header also carries the sign-out control, since it's the one element
  * present on every screen.
  */
@@ -38,7 +38,7 @@ function App() {
           }}
           className="app__brand"
         >
-          WattWise
+          Watty
         </button>
         {signedIn && (
           <button

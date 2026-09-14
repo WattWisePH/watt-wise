@@ -1,5 +1,5 @@
 /**
- * Thin typed client for the WattWise backend (apps/api).
+ * Thin typed client for the Watty backend (apps/api).
  *
  * All network calls to the Node API go through here so components never
  * hardcode URLs or duplicate fetch/error logic. The base URL is read from
@@ -66,7 +66,10 @@ export class ApiError extends Error {
  * rides along with the manual fields — exactly what the API's multer
  * middleware expects. `file` is optional (manual entry works on its own).
  */
-export async function createBill(form: BillFormData, file: File | null): Promise<Bill> {
+export async function createBill(
+  form: BillFormData,
+  file: File | null,
+): Promise<Bill> {
   const body = new FormData();
   // Append each manual field; FormData sends them as text parts.
   body.append("accountName", form.accountName);
@@ -97,7 +100,9 @@ export async function createBill(form: BillFormData, file: File | null): Promise
 
 /** Fetch all stored bills, newest first. */
 export async function listBills(): Promise<Bill[]> {
-  const res = await fetch(`${API_URL}/api/bills`, { headers: await authHeaders() });
+  const res = await fetch(`${API_URL}/api/bills`, {
+    headers: await authHeaders(),
+  });
   if (!res.ok) throw new ApiError("Failed to load bills", res.status);
   return (await res.json()) as Bill[];
 }
@@ -126,7 +131,9 @@ export interface ApplianceDraft {
  * before saving any of them, so a bad row rejects the batch rather than
  * leaving a partial survey.
  */
-export async function saveAppliances(drafts: ApplianceDraft[]): Promise<Appliance[]> {
+export async function saveAppliances(
+  drafts: ApplianceDraft[],
+): Promise<Appliance[]> {
   const res = await fetch(`${API_URL}/api/appliances`, {
     method: "POST",
     headers: { "Content-Type": "application/json", ...(await authHeaders()) },
@@ -172,7 +179,10 @@ export async function scanBill(file: File): Promise<ScanResult> {
   const data = await res.json().catch(() => ({}));
 
   if (!res.ok) {
-    throw new ApiError(data.message ?? data.error ?? "Failed to scan image", res.status);
+    throw new ApiError(
+      data.message ?? data.error ?? "Failed to scan image",
+      res.status,
+    );
   }
   return data as ScanResult;
 }
