@@ -75,7 +75,7 @@
   --background: var(--neutral-50);
   --text: var(--neutral-950);
   --text-muted: var(--neutral-600);
-  --text-primary: var(--primary-300);
+  --text-primary: var(--primary-700);
   --text-on-primary: var(--primary-800);
   --text-secondary: var(--secondary-800);
   --text-on-secondary: var(--secondary-50);
@@ -90,8 +90,11 @@
   --bg-accent: var(--warning-500);
   --bg-accent-hover: var(--warning-600);
   --bg-success: var(--primary-200);
+  --text-on-success: var(--primary-900);
   --bg-warning: var(--warning-300);
+  --text-on-warning: var(--warning-900);
   --bg-danger: var(--danger-300);
+  --text-on-danger: var(--danger-900);
   --outline: var(--neutral-300);
 
   --radius-large: 24px;
