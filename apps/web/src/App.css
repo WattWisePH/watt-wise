@@ -3,7 +3,7 @@
 
 .app {
   min-height: 100vh;
-  background: #f7faf7;
+  background: var(--background);
 }
 
 .app__header {
@@ -11,16 +11,22 @@
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
-  border-bottom: 1px solid #e5e7eb;
-  background: #fff;
+  border-bottom: 1px solid var(--bg-surface);
+  background: white;
+}
+
+.header__logo {
+  height: 42px;
+  width: 42px;
+  margin: -12px 0px;
 }
 
 .app__signout {
   padding: 6px 12px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--outline);
   border-radius: 8px;
   background: #fff;
-  color: #374151;
+  color: var(--text-muted);
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
@@ -33,9 +39,12 @@
 .app__brand {
   font-weight: 700;
   font-size: 1.1rem;
-  color: #2f5233;
+  color: var(--text-primary);
   border: none;
   background-color: transparent;
   padding: 0;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }

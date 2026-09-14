@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router";
 
 import { logout } from "./lib/auth";
 import { supabase } from "./lib/supabase";
+import logo from "../public/images/watty-logo.svg";
 import "./App.css";
 
 /**
@@ -38,6 +39,7 @@ function App() {
           }}
           className="app__brand"
         >
+          <img src={logo} alt="Logo" className="header__logo" />
           Watty
         </button>
         {signedIn && (
