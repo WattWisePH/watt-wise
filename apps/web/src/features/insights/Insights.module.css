@@ -128,6 +128,7 @@ td {
 
 .PriorityAction_badge {
   background-color: var(--bg-danger);
+  color: var(--text-on-danger);
   padding: 4px 8px;
   border-radius: var(--radius-medium);
   height: fit-content;
@@ -137,6 +138,7 @@ td {
 
 .PriorityAction_badge__medium {
   background-color: var(--bg-warning);
+  color: var(--text-on-warning);
 }
 
 .PriorityAction_description {

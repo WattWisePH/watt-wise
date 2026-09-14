@@ -139,7 +139,7 @@
 
 .AccountOptions_button__logout {
   background-color: var(--bg-danger);
-  color: var(--text);
+  color: var(--text-on-danger);
 }
 
 .AccountOptions_button__logout:hover {
