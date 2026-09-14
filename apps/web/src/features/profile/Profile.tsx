@@ -2,6 +2,14 @@ import styles from "./Profile.module.css";
 import logo from "../../../public/images/watty-logo.svg";
 import { useNavigate } from "react-router";
 import { logout } from "../../lib/auth";
+import {
+  CoffeeIcon,
+  CaretRightIcon,
+  HouseIcon,
+  PasswordIcon,
+  QuestionIcon,
+  SignOutIcon,
+} from "@phosphor-icons/react";
 
 export const Profile = () => {
   const navigate = useNavigate();
@@ -35,27 +43,27 @@ export const Profile = () => {
               className={`${styles.PropertiesList_button} ${styles.PropertiesList_button__active}`}
             >
               <div className={styles.PropertiesList_icon}>
-                <span className="material-symbols-rounded">local_cafe</span>
+                <CoffeeIcon size={20} />
               </div>
               <div className={styles.PropertiesList_propertyContent}>
                 <p className={styles.PropertiesList_propertyName}>Cafe Marie</p>
                 <p>Jaro, Iloilo</p>
               </div>
               Selected
-              <span className="material-symbols-rounded">chevron_forward</span>
+              <CaretRightIcon size={20} />
             </button>
           </li>
           <li>
             <button className={styles.PropertiesList_button}>
               {" "}
               <div className={styles.PropertiesList_icon}>
-                <span className="material-symbols-rounded">house</span>
+                <HouseIcon size={20} />
               </div>
               <div className={styles.PropertiesList_propertyContent}>
                 <p className={styles.PropertiesList_propertyName}>Home</p>
                 <p>Iloilo City</p>
               </div>
-              <span className="material-symbols-rounded">chevron_forward</span>
+              <CaretRightIcon size={20} />
             </button>
           </li>
           <li>
@@ -75,21 +83,13 @@ export const Profile = () => {
         <ul className={styles.AccountOptions_container}>
           <li>
             <button className={styles.AccountOptions_button}>
-              <span
-                className={`material-symbols-rounded ${styles.AccountOptions_icon}`}
-              >
-                password
-              </span>
+              <PasswordIcon size={28} className={styles.AccountOptions_icon} />
               Change Password
             </button>
           </li>
           <li>
             <button className={styles.AccountOptions_button}>
-              <span
-                className={`material-symbols-rounded ${styles.AccountOptions_icon}`}
-              >
-                help
-              </span>
+              <QuestionIcon size={28} className={styles.AccountOptions_icon} />
               Help Center
             </button>
           </li>
@@ -98,11 +98,7 @@ export const Profile = () => {
               onClick={handleLogOut}
               className={`${styles.AccountOptions_button} ${styles.AccountOptions_button__logout}`}
             >
-              <span
-                className={`material-symbols-rounded ${styles.AccountOptions_icon}`}
-              >
-                logout
-              </span>
+              <SignOutIcon size={28} className={styles.AccountOptions_icon} />
               Log Out
             </button>
           </li>

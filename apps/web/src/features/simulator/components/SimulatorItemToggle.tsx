@@ -12,10 +12,11 @@ export const SimulatorItemToggle = ({
   isEnabled,
   handleToggle,
 }: SimulatorItemToggleProps) => {
+  const ItemIcon = item.icon;
   return (
     <div onClick={handleToggle} className={styles.SimulatorItem_container}>
       <div className={styles.SimulatorItem_icon}>
-        <span className="material-symbols-rounded">{item.icon}</span>
+        <ItemIcon />
       </div>
       <div className={styles.SimulatorItem_contentLayout}>
         <div className={styles.SimulatorItem_label}>{item.label}</div>

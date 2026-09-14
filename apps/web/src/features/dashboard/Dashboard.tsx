@@ -1,7 +1,18 @@
-import "material-symbols/rounded.css";
-
 import styles from "./Dashboard.module.css";
 import { useNavigate } from "react-router";
+import {
+  BellIcon,
+  HeartIcon,
+  ReceiptIcon,
+  ClipboardTextIcon,
+  CheckSquareIcon,
+  GaugeIcon,
+  StorefrontIcon,
+  HandshakeIcon,
+  PlusIcon,
+  ArrowCircleRightIcon,
+  InfoIcon,
+} from "@phosphor-icons/react";
 
 /**
  * Energy dashboard component. This is what the user first sees when logged in.
@@ -17,7 +28,7 @@ export function Dashboard() {
           <div className={styles.Selector_avatar} />
           <div className={styles.Selector_label}>Cafe Marie</div>
         </div>
-        <span className="material-symbols-rounded">notifications</span>
+        <BellIcon size={24} />
       </div>
       <div className={`${styles.Dashboard_card} ${styles.Dashboard_card__green}`}>
         <div className={styles.Card_header}>
@@ -25,37 +36,36 @@ export function Dashboard() {
           <div className={styles.HealthCard_status}>Good</div>
         </div>
         <div className={styles.HealthCard_content}>
-          <span
-            className={`material-symbols-rounded ${styles.Icon__large} ${styles.Icon__filled} ${styles.Icon__colorPrimary}`}
-          >
-            favorite
-          </span>
+          <HeartIcon
+            weight="fill"
+            className={`${styles.Icon__large} ${styles.Icon__colorPrimary}`}
+          />
           <p className={styles.HealthCard_percentage}>78%</p>
         </div>
       </div>
       <ul className={`${styles.Dashboard_card} ${styles.QuickLinks}`}>
         <li className={styles.QuickLinks_item}>
-          <span className="material-symbols-rounded">receipt_long</span>
+          <ReceiptIcon size={24} />
           <p>Bill History</p>
         </li>
         <li className={styles.QuickLinks_item}>
-          <span className="material-symbols-rounded">inventory</span>
+          <ClipboardTextIcon size={24} />
           <p>My Inventory</p>
         </li>
         <li className={styles.QuickLinks_item}>
-          <span className="material-symbols-rounded">priority</span>
+          <CheckSquareIcon size={24} />
           <p>Priority Actions</p>
         </li>
         <li className={styles.QuickLinks_item}>
-          <span className="material-symbols-rounded">speed</span>
+          <GaugeIcon size={24} />
           <p>Benchmarking</p>
         </li>
-        <li className={`${styles.QuickLinks_item} ${styles.Icon__filled}`}>
-          <span className="material-symbols-rounded">store</span>
+        <li className={styles.QuickLinks_item}>
+          <StorefrontIcon size={24} weight="fill" />
           <p>My Properties</p>
         </li>
         <li className={styles.QuickLinks_item}>
-          <span className="material-symbols-rounded">handshake</span>
+          <HandshakeIcon size={24} />
           <p>Partners</p>
         </li>
       </ul>
@@ -63,13 +73,13 @@ export function Dashboard() {
         className={`${styles.Dashboard_button} ${styles.Dashboard_button__primary} ${styles.Dashboard_button__withIcon}`}
         onClick={() => navigate("/upload")}
       >
-        <span className="material-symbols-rounded">add</span>
+        <PlusIcon size={24} />
         <p>Add a Bill</p>
       </button>
       <div className={styles.Dashboard_card}>
         <div className={styles.Card_header}>
           <h3 className={styles.Card_title}>Priority Actions</h3>
-          <span className="material-symbols-rounded">arrow_circle_right</span>
+          <ArrowCircleRightIcon size={24} />
         </div>
         <ul className={styles.PriorityList}>
           <li className={styles.PriorityList_item}>
@@ -93,7 +103,7 @@ export function Dashboard() {
       <div className={styles.Dashboard_card}>
         <div className={styles.Card_header}>
           <h3 className={styles.Card_title}>Monthly Bill Trend</h3>
-          <span className="material-symbols-rounded">info</span>
+          <InfoIcon size={24} />
         </div>
         <div className={`${styles.MonthlyCard_placeholder} ${styles.Text_muted}`}>
           placeholder

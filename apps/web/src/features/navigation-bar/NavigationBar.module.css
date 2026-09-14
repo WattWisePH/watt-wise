@@ -60,7 +60,6 @@
 }
 
 .NavBar_menuicon__selected {
-  font-variation-settings: "FILL" 100;
   color: var(--text-on-secondary);
 }
 

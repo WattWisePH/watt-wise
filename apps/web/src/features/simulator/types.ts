@@ -1,6 +1,8 @@
+import type { Icon } from "@phosphor-icons/react";
+
 export interface SimulatorItem {
   id: number;
-  icon: string;
+  icon: Icon;
   label: string;
   estSavings: number;
 }

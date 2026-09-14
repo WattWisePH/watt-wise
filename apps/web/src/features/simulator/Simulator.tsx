@@ -1,33 +1,37 @@
-import "material-symbols/rounded.css";
-
 import styles from "./Simulator.module.css";
 import type { SimulatorItem } from "./types";
 import { useEffect, useState } from "react";
 import { SimulatorItemToggle } from "./components/SimulatorItemToggle";
+import {
+  SnowflakeIcon,
+  HourglassIcon,
+  PackageIcon,
+  PlugIcon,
+} from "@phosphor-icons/react";
 
 export const Simulator = () => {
   const simulatorData: SimulatorItem[] = [
     {
       id: 0,
-      icon: "climate_mini_split",
+      icon: SnowflakeIcon,
       label: "Switch to inverter AC",
       estSavings: 1450,
     },
     {
       id: 1,
-      icon: "hourglass",
+      icon: HourglassIcon,
       label: "Optimize operating hours",
       estSavings: 950,
     },
     {
       id: 2,
-      icon: "kitchen",
+      icon: PackageIcon,
       label: "Replace old refrigerator",
       estSavings: 750,
     },
     {
       id: 3,
-      icon: "power",
+      icon: PlugIcon,
       label: "Reduce idle appliance usage",
       estSavings: 350,
     },

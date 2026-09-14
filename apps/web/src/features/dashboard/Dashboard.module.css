@@ -124,11 +124,6 @@ p {
 
 .Icon__large {
   font-size: 28px !important;
-  font-variation-settings: "opsz" 48;
-}
-
-.Icon__filled {
-  font-variation-settings: "FILL" 100;
 }
 
 .Icon__colorPrimary {

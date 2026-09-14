@@ -1,24 +1,29 @@
-import "material-symbols/rounded.css";
-
 import navStyles from "./NavigationBar.module.css";
 import { useNavigate, useLocation } from "react-router";
+import {
+  HouseIcon,
+  LightbulbIcon,
+  LeafIcon,
+  UserIcon,
+  type Icon,
+} from "@phosphor-icons/react";
 
 interface NavBarItem {
-  materialIcon: string;
+  icon: Icon;
   itemName: string;
   route: string;
 }
 
 export const NavigationBar = () => {
   const navBarItems: NavBarItem[] = [
-    { materialIcon: "home", itemName: "Home", route: "/dashboard" },
-    { materialIcon: "lightbulb", itemName: "Insights", route: "/insights" },
+    { icon: HouseIcon, itemName: "Home", route: "/dashboard" },
+    { icon: LightbulbIcon, itemName: "Insights", route: "/insights" },
     {
-      materialIcon: "energy_savings_leaf",
+      icon: LeafIcon,
       itemName: "Simulator",
       route: "/simulator",
     },
-    { materialIcon: "person", itemName: "Profile", route: "/profile" },
+    { icon: UserIcon, itemName: "Profile", route: "/profile" },
   ];
   const { pathname } = useLocation();
   const currentRoute = pathname.split("/")[1];
@@ -33,8 +38,7 @@ export const NavigationBar = () => {
       <ul className={navStyles.NavBar_layout}>
         {navBarItems.map((navItem) => {
           const isSelected = currentRoute === navItem.route.split("/")[1];
-          console.log(currentRoute, navItem.route);
-          console.log("is selected:", isSelected);
+          const NavIcon = navItem.icon;
           return (
             <li key={navItem.route}>
               <button
@@ -46,11 +50,10 @@ export const NavigationBar = () => {
                 <div
                   className={`${navStyles.NavBar_menuIconContainer} ${isSelected ? navStyles.NavBar_menuIconContainer__selected : ""}`}
                 >
-                  <span
-                    className={`material-symbols-rounded ${navStyles.NavBar_menuicon} ${isSelected ? navStyles.NavBar_menuicon__selected : ""}`}
-                  >
-                    {navItem.materialIcon}
-                  </span>
+                  <NavIcon
+                    weight={isSelected ? "fill" : "regular"}
+                    className={`${navStyles.NavBar_menuicon} ${isSelected ? navStyles.NavBar_menuicon__selected : ""}`}
+                  />
                 </div>
 
                 <p className={navStyles.NavBar_menuName}>{navItem.itemName}</p>
