@@ -30,7 +30,7 @@
   width: 5rem;
 }
 
-.NavBar_menuButton___selected {
+.NavBar_menuButton__selected {
   color: var(--text-secondary);
   font-weight: bold;
 }
@@ -47,11 +47,11 @@
   background-color: var(--bg-surface-hover);
 }
 
-.NavBar_menuIconContainer___selected {
+.NavBar_menuIconContainer__selected {
   background-color: var(--bg-secondary);
 }
 
-.NavBar_menuButton:hover .NavBar_menuIconContainer___selected {
+.NavBar_menuButton:hover .NavBar_menuIconContainer__selected {
   background-color: var(--bg-secondary-hover);
 }
 
@@ -59,7 +59,7 @@
   font-size: 24px !important;
 }
 
-.NavBar_menuicon___selected {
+.NavBar_menuicon__selected {
   font-variation-settings: "FILL" 100;
   color: var(--text-on-secondary);
 }

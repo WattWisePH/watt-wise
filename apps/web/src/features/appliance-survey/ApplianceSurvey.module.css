@@ -1,7 +1,4 @@
-/* Styles for the appliance survey screen. Follows the bill-upload screen's
-   light theme with a green accent, scoped under .appliance-survey. */
-
-.appliance-survey {
+.ApplianceSurvey {
   max-width: 420px;
   margin: 0 auto;
   padding: 24px 20px 48px;
@@ -9,20 +6,20 @@
   text-align: left;
 }
 
-.appliance-survey__title {
+.ApplianceSurvey_title {
   font-size: 1.5rem;
   font-weight: 700;
   margin: 8px 0 4px;
 }
 
-.appliance-survey__subtitle {
+.ApplianceSurvey_subtitle {
   color: #6b7280;
   font-size: 0.9rem;
   margin: 0 0 20px;
 }
 
 /* One appliance entry. */
-.appliance-card {
+.ApplianceCard {
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -33,13 +30,13 @@
   background: #fff;
 }
 
-.appliance-card__row {
+.ApplianceCard_row {
   display: flex;
   align-items: flex-end;
   gap: 10px;
 }
 
-.appliance-card__field {
+.ApplianceCard_field {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -48,16 +45,16 @@
   color: #374151;
 }
 
-.appliance-card__field--grow {
+.ApplianceCard_field__grow {
   flex: 1;
 }
 
-.appliance-card__field--narrow {
+.ApplianceCard_field__narrow {
   max-width: 120px;
 }
 
-.appliance-card__field input,
-.appliance-card__field select {
+.ApplianceCard_field input,
+.ApplianceCard_field select {
   padding: 10px 12px;
   border: 1px solid #d1d5db;
   border-radius: 10px;
@@ -67,14 +64,14 @@
   background: #fff;
 }
 
-.appliance-card__field input:focus,
-.appliance-card__field select:focus {
+.ApplianceCard_field input:focus,
+.ApplianceCard_field select:focus {
   outline: none;
   border-color: #7cc07c;
   box-shadow: 0 0 0 3px rgba(124, 192, 124, 0.25);
 }
 
-.appliance-card__remove {
+.ApplianceCard_remove {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -87,18 +84,18 @@
   cursor: pointer;
 }
 
-.appliance-card__remove svg {
+.ApplianceCard_remove svg {
   width: 18px;
   height: 18px;
 }
 
 /* Inverter / non-inverter selector. */
-.toggle-group {
+.ToggleGroup {
   display: flex;
   gap: 8px;
 }
 
-.toggle {
+.Toggle {
   flex: 1;
   padding: 9px 10px;
   border: 1px solid #d1d5db;
@@ -110,14 +107,14 @@
   cursor: pointer;
 }
 
-.toggle--on {
+.Toggle__on {
   border-color: #7cc07c;
   background: #d9f0d9;
   color: #2f5233;
   font-weight: 600;
 }
 
-.appliance-survey__add {
+.ApplianceSurvey_add {
   width: 100%;
   padding: 12px;
   margin-bottom: 16px;
@@ -130,7 +127,7 @@
   cursor: pointer;
 }
 
-.appliance-survey__submit {
+.ApplianceSurvey_submit {
   width: 100%;
   padding: 13px;
   border: none;
@@ -142,19 +139,19 @@
   cursor: pointer;
 }
 
-.appliance-survey__submit:disabled {
+.ApplianceSurvey_submit:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.appliance-survey__error-list {
+.ApplianceSurvey_errorList {
   margin: 0 0 12px;
   padding-left: 18px;
   color: #b91c1c;
   font-size: 0.85rem;
 }
 
-.appliance-survey__success {
+.ApplianceSurvey_success {
   margin: 0 0 12px;
   color: #15803d;
   font-size: 0.9rem;

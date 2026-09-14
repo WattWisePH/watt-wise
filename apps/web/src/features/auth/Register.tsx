@@ -10,7 +10,7 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { ApiError } from "../../lib/api";
 import { register } from "../../lib/auth";
 import { PasswordField } from "./PasswordField";
-import "./Auth.css";
+import styles from "./Auth.module.css";
 
 export function Register() {
   const [email, setEmail] = useState("");
@@ -53,12 +53,12 @@ export function Register() {
   }
 
   return (
-    <div className="auth">
-      <h1 className="auth__title">Create your account</h1>
-      <p className="auth__subtitle">Turn electricity bills into smarter decisions.</p>
+    <div className={styles.Auth}>
+      <h1 className={styles.Auth_title}>Create your account</h1>
+      <p className={styles.Auth_subtitle}>Turn electricity bills into smarter decisions.</p>
 
-      <form className="auth__form" onSubmit={handleSubmit}>
-        <label className="auth__field">
+      <form className={styles.Auth_form} onSubmit={handleSubmit}>
+        <label className={styles.Auth_field}>
           <span>Email</span>
           <input
             type="email"
@@ -87,19 +87,19 @@ export function Register() {
         />
 
         {errors.length > 0 && (
-          <ul className="auth__errors">
+          <ul className={styles.Auth_errors}>
             {errors.map((msg) => (
               <li key={msg}>{msg}</li>
             ))}
           </ul>
         )}
 
-        <button type="submit" className="auth__submit" disabled={submitting}>
+        <button type="submit" className={styles.Auth_submit} disabled={submitting}>
           {submitting ? "Creating account…" : "Sign up"}
         </button>
       </form>
 
-      <p className="auth__alt">
+      <p className={styles.Auth_alt}>
         Already have an account? <Link to="/login">Sign in</Link>
       </p>
     </div>

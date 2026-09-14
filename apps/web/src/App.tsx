@@ -4,7 +4,7 @@ import { Outlet, useNavigate } from "react-router";
 import { logout } from "./lib/auth";
 import { supabase } from "./lib/supabase";
 import logo from "../public/images/watty-logo.svg";
-import "./App.css";
+import styles from "./App.module.css";
 
 /**
  * App shell: the Watty header plus an Outlet for whichever page matched.
@@ -31,21 +31,21 @@ function App() {
   }
 
   return (
-    <div className="app">
-      <header className="app__header">
+    <div className={styles.App}>
+      <header className={styles.App_header}>
         <button
           onClick={() => {
             navigate("/");
           }}
-          className="app__brand"
+          className={styles.App_brand}
         >
-          <img src={logo} alt="Logo" className="header__logo" />
+          <img src={logo} alt="Logo" className={styles.App_logo} />
           Watty
         </button>
         {signedIn && (
           <button
             type="button"
-            className="app__signout"
+            className={styles.App_signout}
             onClick={handleSignOut}
           >
             Sign out

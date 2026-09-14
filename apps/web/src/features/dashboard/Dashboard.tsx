@@ -1,6 +1,6 @@
 import "material-symbols/rounded.css";
 
-import "./Dashboard.css";
+import styles from "./Dashboard.module.css";
 import { useNavigate } from "react-router";
 
 /**
@@ -11,113 +11,121 @@ export function Dashboard() {
   const navigate = useNavigate();
 
   return (
-    <div className="dashboard">
-      <div className="dashboard__header">
-        <div className="selector">
-          <div className="selector__avatar" />
-          <div className="selector__label">Cafe Marie</div>
+    <div className={styles.Dashboard}>
+      <div className={styles.Dashboard_header}>
+        <div className={styles.Selector}>
+          <div className={styles.Selector_avatar} />
+          <div className={styles.Selector_label}>Cafe Marie</div>
         </div>
         <span className="material-symbols-rounded">notifications</span>
       </div>
-      <div className="dashboard__card dashboard__card--green">
-        <div className="card__header">
-          <h3 className="card__title">Energy Health Score</h3>
-          <div className="health-card__status">Good</div>
+      <div className={`${styles.Dashboard_card} ${styles.Dashboard_card__green}`}>
+        <div className={styles.Card_header}>
+          <h3 className={styles.Card_title}>Energy Health Score</h3>
+          <div className={styles.HealthCard_status}>Good</div>
         </div>
-        <div className="health-card__content">
-          <span className="material-symbols-rounded icon--large icon--filled icon--color-primary">
+        <div className={styles.HealthCard_content}>
+          <span
+            className={`material-symbols-rounded ${styles.Icon__large} ${styles.Icon__filled} ${styles.Icon__colorPrimary}`}
+          >
             favorite
           </span>
-          <p className="health-card__percentage">78%</p>
+          <p className={styles.HealthCard_percentage}>78%</p>
         </div>
       </div>
-      <ul className="dashboard__card quick-links">
-        <li className="quick-links__item">
+      <ul className={`${styles.Dashboard_card} ${styles.QuickLinks}`}>
+        <li className={styles.QuickLinks_item}>
           <span className="material-symbols-rounded">receipt_long</span>
           <p>Bill History</p>
         </li>
-        <li className="quick-links__item">
+        <li className={styles.QuickLinks_item}>
           <span className="material-symbols-rounded">inventory</span>
           <p>My Inventory</p>
         </li>
-        <li className="quick-links__item">
+        <li className={styles.QuickLinks_item}>
           <span className="material-symbols-rounded">priority</span>
           <p>Priority Actions</p>
         </li>
-        <li className="quick-links__item">
+        <li className={styles.QuickLinks_item}>
           <span className="material-symbols-rounded">speed</span>
           <p>Benchmarking</p>
         </li>
-        <li className="quick-links__item icon--filled">
+        <li className={`${styles.QuickLinks_item} ${styles.Icon__filled}`}>
           <span className="material-symbols-rounded">store</span>
           <p>My Properties</p>
         </li>
-        <li className="quick-links__item">
+        <li className={styles.QuickLinks_item}>
           <span className="material-symbols-rounded">handshake</span>
           <p>Partners</p>
         </li>
       </ul>
       <button
-        className="dashboard__button dashboard__button--primary dashboard__button--with-icon"
+        className={`${styles.Dashboard_button} ${styles.Dashboard_button__primary} ${styles.Dashboard_button__withIcon}`}
         onClick={() => navigate("/upload")}
       >
         <span className="material-symbols-rounded">add</span>
         <p>Add a Bill</p>
       </button>
-      <div className="dashboard__card">
-        <div className="card__header">
-          <h3 className="card__title">Priority Actions</h3>
+      <div className={styles.Dashboard_card}>
+        <div className={styles.Card_header}>
+          <h3 className={styles.Card_title}>Priority Actions</h3>
           <span className="material-symbols-rounded">arrow_circle_right</span>
         </div>
-        <ul className="priority-list">
-          <li className="priority-list__item">
-            <div className="priority-list__indicator priority-list__indicator--high" />
-            <p className="text--muted priority-list__text">
+        <ul className={styles.PriorityList}>
+          <li className={styles.PriorityList_item}>
+            <div
+              className={`${styles.PriorityList_indicator} ${styles.PriorityList_indicator__high}`}
+            />
+            <p className={`${styles.Text_muted} ${styles.PriorityList_text}`}>
               Your evening usage is higher than similar cafes.
             </p>
           </li>
-          <li className="priority-list__item">
-            <div className="priority-list__indicator priority-list__indicator--med" />
-            <p className="text--muted priority-list__text">
+          <li className={styles.PriorityList_item}>
+            <div
+              className={`${styles.PriorityList_indicator} ${styles.PriorityList_indicator__med}`}
+            />
+            <p className={`${styles.Text_muted} ${styles.PriorityList_text}`}>
               Non-inverter appliances may be driving up costs.
             </p>
           </li>
         </ul>
       </div>
-      <div className="dashboard__card">
-        <div className="card__header">
-          <h3 className="card__title">Monthly Bill Trend</h3>
+      <div className={styles.Dashboard_card}>
+        <div className={styles.Card_header}>
+          <h3 className={styles.Card_title}>Monthly Bill Trend</h3>
           <span className="material-symbols-rounded">info</span>
         </div>
-        <div className="monthly-card__placeholder text--muted">placeholder</div>
+        <div className={`${styles.MonthlyCard_placeholder} ${styles.Text_muted}`}>
+          placeholder
+        </div>
       </div>
-      <div className="stats">
-        <div className="dashboard__card stats__card">
-          <p className="stats__label text--muted">This Month</p>
+      <div className={styles.Stats}>
+        <div className={`${styles.Dashboard_card} ${styles.Stats_card}`}>
+          <p className={`${styles.Stats_label} ${styles.Text_muted}`}>This Month</p>
           <div>
-            <span className="stats__value">18,236</span>
-            <span className="stats__label text--muted">pesos</span>
+            <span className={styles.Stats_value}>18,236</span>
+            <span className={`${styles.Stats_label} ${styles.Text_muted}`}>pesos</span>
           </div>
         </div>
-        <div className="dashboard__card stats__card">
-          <p className="stats__label text--muted">vs Last Month</p>
+        <div className={`${styles.Dashboard_card} ${styles.Stats_card}`}>
+          <p className={`${styles.Stats_label} ${styles.Text_muted}`}>vs Last Month</p>
           <div>
-            <span className="stats__value">8.6%</span>
-            <span className="stats__label text--muted">increase</span>
+            <span className={styles.Stats_value}>8.6%</span>
+            <span className={`${styles.Stats_label} ${styles.Text_muted}`}>increase</span>
           </div>
         </div>
-        <div className="dashboard__card stats__card">
-          <p className="stats__label text--muted">Total Consumption</p>
+        <div className={`${styles.Dashboard_card} ${styles.Stats_card}`}>
+          <p className={`${styles.Stats_label} ${styles.Text_muted}`}>Total Consumption</p>
           <div>
-            <span className="stats__value">312</span>
-            <span className="stats__label text--muted">kWh</span>
+            <span className={styles.Stats_value}>312</span>
+            <span className={`${styles.Stats_label} ${styles.Text_muted}`}>kWh</span>
           </div>
         </div>
-        <div className="dashboard__card stats__card">
-          <p className="stats__label text--muted">Cost per kWh</p>
+        <div className={`${styles.Dashboard_card} ${styles.Stats_card}`}>
+          <p className={`${styles.Stats_label} ${styles.Text_muted}`}>Cost per kWh</p>
           <div>
-            <span className="stats__value">5.85</span>
-            <span className="stats__label text--muted">pesos</span>
+            <span className={styles.Stats_value}>5.85</span>
+            <span className={`${styles.Stats_label} ${styles.Text_muted}`}>pesos</span>
           </div>
         </div>
       </div>

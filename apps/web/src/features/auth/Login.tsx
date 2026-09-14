@@ -10,7 +10,7 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { ApiError } from "../../lib/api";
 import { login } from "../../lib/auth";
 import { PasswordField } from "./PasswordField";
-import "./Auth.css";
+import styles from "./Auth.module.css";
 
 export function Login() {
   const [email, setEmail] = useState("");
@@ -41,12 +41,12 @@ export function Login() {
   }
 
   return (
-    <div className="auth">
-      <h1 className="auth__title">Welcome back</h1>
-      <p className="auth__subtitle">Sign in to see your energy insights.</p>
+    <div className={styles.Auth}>
+      <h1 className={styles.Auth_title}>Welcome back</h1>
+      <p className={styles.Auth_subtitle}>Sign in to see your energy insights.</p>
 
-      <form className="auth__form" onSubmit={handleSubmit}>
-        <label className="auth__field">
+      <form className={styles.Auth_form} onSubmit={handleSubmit}>
+        <label className={styles.Auth_field}>
           <span>Email</span>
           <input
             type="email"
@@ -66,19 +66,19 @@ export function Login() {
         />
 
         {errors.length > 0 && (
-          <ul className="auth__errors">
+          <ul className={styles.Auth_errors}>
             {errors.map((msg) => (
               <li key={msg}>{msg}</li>
             ))}
           </ul>
         )}
 
-        <button type="submit" className="auth__submit" disabled={submitting}>
+        <button type="submit" className={styles.Auth_submit} disabled={submitting}>
           {submitting ? "Signing in…" : "Sign in"}
         </button>
       </form>
 
-      <p className="auth__alt">
+      <p className={styles.Auth_alt}>
         No account yet? <Link to="/register">Register</Link>
       </p>
     </div>

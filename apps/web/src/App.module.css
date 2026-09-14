@@ -1,12 +1,9 @@
-/* App shell styling. Feature-specific styles live with their feature
-   (e.g. features/bill-upload/BillUpload.css). */
-
-.app {
+.App {
   min-height: 100vh;
   background: var(--background);
 }
 
-.app__header {
+.App_header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -15,13 +12,13 @@
   background: white;
 }
 
-.header__logo {
+.App_logo {
   height: 42px;
   width: 42px;
   margin: -12px 0px;
 }
 
-.app__signout {
+.App_signout {
   padding: 6px 12px;
   border: 1px solid var(--outline);
   border-radius: 8px;
@@ -32,11 +29,11 @@
   cursor: pointer;
 }
 
-.app__signout:hover {
+.App_signout:hover {
   background: #f3f4f6;
 }
 
-.app__brand {
+.App_brand {
   font-weight: 700;
   font-size: 1.1rem;
   color: var(--text-primary);

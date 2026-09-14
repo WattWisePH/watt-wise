@@ -1,9 +1,8 @@
-/* block__elem--mod */
 p {
   margin: 0;
 }
 
-.dashboard {
+.Dashboard {
   max-width: 480px;
   margin: 0 auto;
   padding: 12px;
@@ -14,13 +13,13 @@ p {
   background-color: var(--background);
 }
 
-.dashboard__header {
+.Dashboard_header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.dashboard__card {
+.Dashboard_card {
   padding: 16px;
   border-radius: 24px;
   background-color: var(--bg-surface);
@@ -29,35 +28,35 @@ p {
   gap: 4px;
 }
 
-.dashboard__card--green {
+.Dashboard_card__green {
   background-color: var(--bg-primary);
 }
 
-.dashboard__card--secondary {
+.Dashboard_card__secondary {
   background-color: var(--bg-secondary);
   color: var(--text-on-secondary);
 }
 
-.card__header {
+.Card_header {
   display: flex;
   align-items: center;
 }
 
-.card__title {
+.Card_title {
   font-size: 20px;
   font-weight: bold;
   width: 100%;
   margin: 0px;
 }
 
-.dashboard__button--with-icon {
+.Dashboard_button__withIcon {
   display: flex;
   gap: 8px;
   align-items: center;
   justify-content: center;
 }
 
-.dashboard__button {
+.Dashboard_button {
   border: none;
   cursor: pointer;
   padding: 16px;
@@ -68,17 +67,17 @@ p {
   transition: 100ms all;
 }
 
-.dashboard__button:active {
+.Dashboard_button:active {
   transform: scale(0.98);
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
 }
 
-.dashboard__button--primary {
+.Dashboard_button__primary {
   background-color: var(--bg-secondary);
   color: var(--text-on-secondary);
 }
 
-.selector {
+.Selector {
   background-color: white;
   padding: 8px;
   border-radius: var(--radius-large);
@@ -89,31 +88,31 @@ p {
   padding: 8px;
 }
 
-.selector__label {
+.Selector_label {
   font-size: 16px;
   font-weight: bold;
   padding: 0px 4px;
 }
 
-.selector__avatar {
+.Selector_avatar {
   height: 32px;
   width: 32px;
   background-color: var(--bg-primary);
   border-radius: 9999px;
 }
 
-.health-card__content {
+.HealthCard_content {
   display: flex;
   gap: 8px;
   align-items: center;
 }
 
-.health-card__percentage {
+.HealthCard_percentage {
   font-size: 28px;
   line-height: 16px;
 }
 
-.health-card__status {
+.HealthCard_status {
   border-radius: var(--radius-medium);
   background-color: var(--text-on-primary);
   color: var(--background);
@@ -123,20 +122,20 @@ p {
   align-items: center;
 }
 
-.icon--large {
+.Icon__large {
   font-size: 28px !important;
   font-variation-settings: "opsz" 48;
 }
 
-.icon--filled {
+.Icon__filled {
   font-variation-settings: "FILL" 100;
 }
 
-.icon--color-primary {
+.Icon__colorPrimary {
   color: var(--text-on-primary);
 }
 
-.quick-links {
+.QuickLinks {
   width: 100%;
   display: grid;
   grid: auto / auto auto auto;
@@ -144,7 +143,7 @@ p {
   margin: 0px;
 }
 
-.quick-links__item {
+.QuickLinks_item {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -158,11 +157,11 @@ p {
   border-radius: var(--radius-medium);
 }
 
-.quick-links__item:hover {
+.QuickLinks_item:hover {
   background-color: var(--bg-surface-hover);
 }
 
-.priority-list {
+.PriorityList {
   display: flex;
   flex-direction: column;
   margin: 0;
@@ -170,13 +169,13 @@ p {
   padding: 0;
 }
 
-.priority-list__item {
+.PriorityList_item {
   display: flex;
   gap: 4px;
   align-items: center;
 }
 
-.priority-list__text {
+.PriorityList_text {
   line-clamp: 1;
   overflow: hidden;
   font-size: 16px;
@@ -186,23 +185,23 @@ p {
   -webkit-line-clamp: 1;
 }
 
-.priority-list__indicator {
+.PriorityList_indicator {
   height: 12px;
   width: 12px;
   border-radius: 50%;
 }
-.priority-list__indicator--high {
+.PriorityList_indicator__high {
   background-color: var(--bg-danger);
 }
-.priority-list__indicator--med {
+.PriorityList_indicator__med {
   background-color: var(--bg-warning);
 }
 
-.text--muted {
+.Text_muted {
   color: var(--text-muted);
 }
 
-.monthly-card__placeholder {
+.MonthlyCard_placeholder {
   background-color: var(--text-muted);
   opacity: 0.8;
   color: var(--text-on-secondary);
@@ -213,7 +212,7 @@ p {
   align-items: center;
 }
 
-.stats {
+.Stats {
   width: 100%;
   display: grid;
   grid: auto / auto auto;
@@ -221,18 +220,18 @@ p {
   margin: 0px;
 }
 
-.stats__card {
+.Stats_card {
   height: 96px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.stats__label {
+.Stats_label {
   font-size: 14px;
 }
 
-.stats__value {
+.Stats_value {
   font-size: 24px;
   font-weight: bold;
   line-height: 16px;

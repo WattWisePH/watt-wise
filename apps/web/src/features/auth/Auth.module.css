@@ -2,7 +2,7 @@
    Intentionally minimal — the visual design is a separate pass, so this
    only provides readable structure to build on. */
 
-.auth {
+.Auth {
   max-width: 360px;
   margin: 0 auto;
   padding: 40px 20px;
@@ -10,25 +10,25 @@
   text-align: left;
 }
 
-.auth__title {
+.Auth_title {
   font-size: 1.5rem;
   font-weight: 700;
   margin: 0 0 4px;
 }
 
-.auth__subtitle {
+.Auth_subtitle {
   color: #6b7280;
   font-size: 0.9rem;
   margin: 0 0 24px;
 }
 
-.auth__form {
+.Auth_form {
   display: flex;
   flex-direction: column;
   gap: 14px;
 }
 
-.auth__field {
+.Auth_field {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -37,7 +37,7 @@
   color: #374151;
 }
 
-.auth__field input {
+.Auth_field input {
   padding: 10px 12px;
   border: 1px solid #d1d5db;
   border-radius: 10px;
@@ -47,25 +47,25 @@
   background: #fff;
 }
 
-.auth__field input:focus {
+.Auth_field input:focus {
   outline: none;
   border-color: #7cc07c;
   box-shadow: 0 0 0 3px rgba(124, 192, 124, 0.25);
 }
 
 /* Password input with its reveal toggle sitting inside the field. */
-.auth__password {
+.Auth_password {
   position: relative;
   display: flex;
 }
 
-.auth__password input {
+.Auth_password input {
   flex: 1;
   /* Room for the toggle so long values don't run underneath it. */
   padding-right: 44px;
 }
 
-.auth__reveal {
+.Auth_reveal {
   position: absolute;
   top: 50%;
   right: 6px;
@@ -83,17 +83,17 @@
   cursor: pointer;
 }
 
-.auth__reveal:hover {
+.Auth_reveal:hover {
   background: #f3f4f6;
   color: #374151;
 }
 
-.auth__reveal svg {
+.Auth_reveal svg {
   width: 19px;
   height: 19px;
 }
 
-.auth__submit {
+.Auth_submit {
   margin-top: 6px;
   padding: 13px;
   border: none;
@@ -105,26 +105,26 @@
   cursor: pointer;
 }
 
-.auth__submit:disabled {
+.Auth_submit:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.auth__errors {
+.Auth_errors {
   margin: 0;
   padding-left: 18px;
   color: #b91c1c;
   font-size: 0.85rem;
 }
 
-.auth__alt {
+.Auth_alt {
   margin-top: 18px;
   font-size: 0.85rem;
   color: #6b7280;
   text-align: center;
 }
 
-.auth__alt a {
+.Auth_alt a {
   color: #2f5233;
   font-weight: 600;
 }

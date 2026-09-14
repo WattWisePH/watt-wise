@@ -1,8 +1,7 @@
 /* Styles for the bill upload / input screen.
-   Loosely follows the mockup's light theme with a green accent. Scoped
-   under .bill-upload so it won't collide with other feature styles. */
+   Loosely follows the mockup's light theme with a green accent. */
 
-.bill-upload {
+.BillUpload {
   max-width: 420px;
   margin: 0 auto;
   padding: 24px 20px 48px;
@@ -10,14 +9,14 @@
   text-align: left;
 }
 
-.bill-upload__title {
+.BillUpload_title {
   font-size: 1.6rem;
   font-weight: 700;
   text-align: center;
   margin: 8px 0 4px;
 }
 
-.bill-upload__subtitle {
+.BillUpload_subtitle {
   text-align: center;
   color: #6b7280;
   font-size: 0.9rem;
@@ -25,7 +24,7 @@
 }
 
 /* Dashed dropzone box, matching the mockup's upload area. */
-.dropzone {
+.Dropzone {
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -42,15 +41,15 @@
     border-color 0.15s ease;
 }
 
-.dropzone:hover {
+.Dropzone:hover {
   background: #e4f1e4;
   border-color: #7cc07c;
 }
 
 /* Scanning takes tens of seconds, so the whole dropzone shows it — a small
    label change is easy to miss while waiting. */
-.dropzone--scanning,
-.dropzone--scanning:hover {
+.Dropzone__scanning,
+.Dropzone__scanning:hover {
   background: #e4f1e4;
   border-style: solid;
   border-color: #7cc07c;
@@ -61,7 +60,7 @@
   animation: dropzone-breathe 1.8s ease-in-out infinite;
 }
 
-.dropzone__spinner {
+.Dropzone_spinner {
   width: 30px;
   height: 30px;
   color: #2f5233;
@@ -89,41 +88,41 @@
 /* Motion is decoration here: the label and the status message already say
    what is happening, so both animations can simply stop. */
 @media (prefers-reduced-motion: reduce) {
-  .dropzone--scanning,
-  .dropzone__spinner {
+  .Dropzone__scanning,
+  .Dropzone_spinner {
     animation: none;
   }
 }
 
-.dropzone__icon {
+.Dropzone_icon {
   width: 28px;
   height: 28px;
 }
 
-.dropzone__label {
+.Dropzone_label {
   font-weight: 600;
   font-size: 0.95rem;
 }
 
-.dropzone__hint {
+.Dropzone_hint {
   font-size: 0.75rem;
   color: #6b7280;
 }
 
 /* Manual entry form. */
-.bill-form {
+.BillForm {
   display: flex;
   flex-direction: column;
   gap: 14px;
   margin-top: 20px;
 }
 
-.bill-form__row {
+.BillForm_row {
   display: flex;
   gap: 12px;
 }
 
-.bill-form__field {
+.BillForm_field {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -133,7 +132,7 @@
   color: #374151;
 }
 
-.bill-form__field input {
+.BillForm_field input {
   padding: 10px 12px;
   border: 1px solid #d1d5db;
   border-radius: 10px;
@@ -143,13 +142,13 @@
   background: #fff;
 }
 
-.bill-form__field input:focus {
+.BillForm_field input:focus {
   outline: none;
   border-color: #7cc07c;
   box-shadow: 0 0 0 3px rgba(124, 192, 124, 0.25);
 }
 
-.bill-form__back {
+.BillForm_back {
   padding: 8px 16px;
   border: 1px solid var(--outline);
   border-radius: var(--radius-medium);
@@ -159,11 +158,11 @@
   cursor: pointer;
 }
 
-.bill-form__back:hover {
+.BillForm_back:hover {
   background-color: var(--bg-surface);
 }
 
-.bill-form__submit {
+.BillForm_submit {
   margin-top: 6px;
   padding: 13px;
   border: none;
@@ -175,31 +174,31 @@
   cursor: pointer;
 }
 
-.bill-form__submit:disabled {
+.BillForm_submit:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
 /* Feedback messages. */
-.bill-upload__error,
-.bill-upload__error-list {
+.BillUpload_error,
+.BillUpload_errorList {
   color: #b91c1c;
   font-size: 0.85rem;
 }
 
-.bill-upload__error-list {
+.BillUpload_errorList {
   margin: 0;
   padding-left: 18px;
 }
 
-.bill-upload__success {
+.BillUpload_success {
   color: #15803d;
   font-size: 0.9rem;
   font-weight: 600;
 }
 
 /* Success block: confirmation plus the optional next onboarding step. */
-.bill-upload__saved {
+.BillUpload_saved {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -209,7 +208,7 @@
   background: #eef7ee;
 }
 
-.bill-upload__next {
+.BillUpload_next {
   align-self: flex-start;
   padding: 9px 14px;
   border-radius: 10px;
@@ -220,12 +219,12 @@
   text-decoration: none;
 }
 
-.bill-upload__next:hover {
+.BillUpload_next:hover {
   background: #24401f;
 }
 
 /* Note shown after an OCR scan (auto-filled / couldn't read). */
-.bill-upload__scan-note {
+.BillUpload_scanNote {
   margin-top: 10px;
   padding: 8px 12px;
   border-radius: 10px;
@@ -235,7 +234,7 @@
 }
 
 /* Accessible hidden native file input (triggered by the dropzone). */
-.visually-hidden {
+.VisuallyHidden {
   position: absolute;
   width: 1px;
   height: 1px;

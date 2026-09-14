@@ -23,7 +23,7 @@ import {
   type EstablishmentType,
   type Provider,
 } from "../../lib/establishments";
-import "./EstablishmentSetup.css";
+import styles from "./EstablishmentSetup.module.css";
 
 export function EstablishmentSetup() {
   const [name, setName] = useState("");
@@ -103,15 +103,15 @@ export function EstablishmentSetup() {
   }
 
   return (
-    <div className="establishment-setup">
-      <h1 className="establishment-setup__title">Tell us about your place</h1>
-      <p className="establishment-setup__subtitle">
+    <div className={styles.EstablishmentSetup}>
+      <h1 className={styles.EstablishmentSetup_title}>Tell us about your place</h1>
+      <p className={styles.EstablishmentSetup_subtitle}>
         These details let Watty compare your usage against similar
         establishments and read your bills correctly.
       </p>
 
-      <form className="establishment-setup__form" onSubmit={handleSubmit}>
-        <label className="establishment-setup__field">
+      <form className={styles.EstablishmentSetup_form} onSubmit={handleSubmit}>
+        <label className={styles.EstablishmentSetup_field}>
           <span>Name</span>
           <input
             type="text"
@@ -123,7 +123,7 @@ export function EstablishmentSetup() {
           />
         </label>
 
-        <label className="establishment-setup__field">
+        <label className={styles.EstablishmentSetup_field}>
           <span>Type</span>
           <select
             value={typeId}
@@ -142,10 +142,10 @@ export function EstablishmentSetup() {
 
         {/* Optional: it feeds benchmarking against nearby places, which
             falls back to a wider comparison when it's missing. */}
-        <label className="establishment-setup__field">
+        <label className={styles.EstablishmentSetup_field}>
           <span>
             Address{" "}
-            <span className="establishment-setup__optional">(optional)</span>
+            <span className={styles.EstablishmentSetup_optional}>(optional)</span>
           </span>
           <input
             type="text"
@@ -156,7 +156,7 @@ export function EstablishmentSetup() {
           />
         </label>
 
-        <label className="establishment-setup__field">
+        <label className={styles.EstablishmentSetup_field}>
           <span>Electric utility</span>
           <select
             value={providerId}
@@ -173,13 +173,13 @@ export function EstablishmentSetup() {
               </option>
             ))}
           </select>
-          <small className="establishment-setup__hint">
+          <small className={styles.EstablishmentSetup_hint}>
             The company named on your electricity bill.
           </small>
         </label>
 
         {errors.length > 0 && (
-          <ul className="establishment-setup__errors">
+          <ul className={styles.EstablishmentSetup_errors}>
             {errors.map((msg) => (
               <li key={msg}>{msg}</li>
             ))}
@@ -188,7 +188,7 @@ export function EstablishmentSetup() {
 
         <button
           type="submit"
-          className="establishment-setup__submit"
+          className={styles.EstablishmentSetup_submit}
           disabled={submitting || loading}
         >
           {submitting ? "Saving…" : "Continue"}

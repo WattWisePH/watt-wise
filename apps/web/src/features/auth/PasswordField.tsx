@@ -10,7 +10,7 @@
  */
 
 import { useId, useState } from "react";
-import "./Auth.css";
+import styles from "./Auth.module.css";
 
 interface PasswordFieldProps {
   label: string;
@@ -36,10 +36,10 @@ export function PasswordField({
   const inputId = useId();
 
   return (
-    <div className="auth__field">
+    <div className={styles.Auth_field}>
       <label htmlFor={inputId}>{label}</label>
 
-      <div className="auth__password">
+      <div className={styles.Auth_password}>
         <input
           id={inputId}
           type={visible ? "text" : "password"}
@@ -54,7 +54,7 @@ export function PasswordField({
         {/* type="button" matters: inside a form, a bare button submits it. */}
         <button
           type="button"
-          className="auth__reveal"
+          className={styles.Auth_reveal}
           onClick={() => setVisible((shown) => !shown)}
           aria-label={visible ? `Hide ${label.toLowerCase()}` : `Show ${label.toLowerCase()}`}
           aria-pressed={visible}

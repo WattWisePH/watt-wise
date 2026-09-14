@@ -38,16 +38,16 @@ export const NavigationBar = () => {
           return (
             <li key={navItem.route}>
               <button
-                className={`${navStyles.NavBar_menuButton} ${isSelected ? navStyles.NavBar_menuButton___selected : ""}`}
+                className={`${navStyles.NavBar_menuButton} ${isSelected ? navStyles.NavBar_menuButton__selected : ""}`}
                 onClick={() => {
                   handleRedirect(navItem.route);
                 }}
               >
                 <div
-                  className={`${navStyles.NavBar_menuIconContainer} ${isSelected ? navStyles.NavBar_menuIconContainer___selected : ""}`}
+                  className={`${navStyles.NavBar_menuIconContainer} ${isSelected ? navStyles.NavBar_menuIconContainer__selected : ""}`}
                 >
                   <span
-                    className={`material-symbols-rounded ${navStyles.NavBar_menuicon} ${isSelected ? navStyles.NavBar_menuicon___selected : ""}`}
+                    className={`material-symbols-rounded ${navStyles.NavBar_menuicon} ${isSelected ? navStyles.NavBar_menuicon__selected : ""}`}
                   >
                     {navItem.materialIcon}
                   </span>
