@@ -1,8 +1,9 @@
-import { GaugeIcon, LightningIcon, ScalesIcon } from "@phosphor-icons/react";
+import { GaugeIcon, ScalesIcon } from "@phosphor-icons/react";
 
 import styles from "../Insights.module.css";
 import duotone from "../../../styles/DuotoneIcon.module.css";
 import { HealthScoreGauge } from "../../../components/HealthScoreGauge";
+import { ComparisonBar } from "../../../components/ComparisonBar";
 
 export const HealthScore = () => {
   return (
@@ -26,13 +27,7 @@ export const HealthScore = () => {
       {/* Benchmark */}
       <section className={styles.Insights_section}>
         <div>
-          <h1 className={styles.Insights_sectionTitle}>
-            Benchmark
-            <GaugeIcon
-              size={20}
-              className={`${duotone.navy} ${styles.Insights_titleIcon}`}
-            />
-          </h1>
+          <h1 className={styles.Insights_sectionTitle}>Benchmark</h1>
           <p className={`${styles.Insights_sectionSubtitle}`}>
             See how you compare to other users.
           </p>
@@ -48,17 +43,17 @@ export const HealthScore = () => {
         </div>
         <div className={styles.Insights_card}>
           <div className={styles.Insights_cardTitle}>
-            <ScalesIcon
+            <GaugeIcon
               size={20}
               className={`${duotone.navy} ${styles.Insights_cardIcon}`}
             />
             Comparison Bar
           </div>
-          <div className={styles.Comparison_placeholder}>placeholder</div>
+          <ComparisonBar value={400} average={265} valueLabel="Cafe Marie" />
         </div>
         <div className={styles.Insights_card}>
           <div className={styles.Insights_cardTitle}>
-            <LightningIcon
+            <ScalesIcon
               size={20}
               className={`${duotone.amber} ${styles.Insights_cardIcon}`}
             />

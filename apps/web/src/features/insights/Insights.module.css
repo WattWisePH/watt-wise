@@ -118,13 +118,6 @@
   color: var(--text-secondary);
 }
 
-.Comparison_placeholder {
-  display: flex;
-  justify-content: center;
-  opacity: 0.8;
-  font-size: 12px;
-}
-
 .AverageConsumption_table,
 td {
   border-collapse: collapse;
