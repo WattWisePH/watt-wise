@@ -7,6 +7,7 @@
 
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
+import { EnvelopeSimpleIcon, ArrowRightIcon } from "@phosphor-icons/react";
 import { ApiError } from "../../lib/api";
 import { register } from "../../lib/auth";
 import { PasswordField } from "./PasswordField";
@@ -59,7 +60,10 @@ export function Register() {
 
       <form className={styles.Auth_form} onSubmit={handleSubmit}>
         <label className={styles.Auth_field}>
-          <span>Email</span>
+          <span className={styles.Auth_fieldLabel}>
+            <EnvelopeSimpleIcon size={16} />
+            Email
+          </span>
           <input
             type="email"
             value={email}
@@ -96,6 +100,7 @@ export function Register() {
 
         <button type="submit" className={styles.Auth_submit} disabled={submitting}>
           {submitting ? "Creating account…" : "Sign up"}
+          {!submitting && <ArrowRightIcon size={18} weight="bold" />}
         </button>
       </form>
 

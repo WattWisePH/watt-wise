@@ -1,11 +1,10 @@
-/* Styles for the bill upload / input screen.
-   Loosely follows the mockup's light theme with a green accent. */
+/* Styles for the bill upload / input screen. */
 
 .BillUpload {
   max-width: 420px;
   margin: 0 auto;
   padding: 24px 20px 48px;
-  color: #1a1a1a;
+  color: var(--text);
   text-align: left;
 }
 
@@ -18,23 +17,23 @@
 
 .BillUpload_subtitle {
   text-align: center;
-  color: #6b7280;
+  color: var(--text-muted);
   font-size: 0.9rem;
   margin: 0 0 20px;
 }
 
-/* Dashed dropzone box, matching the mockup's upload area. */
+/* Dashed dropzone box. */
 .Dropzone {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding: 28px 16px;
-  border: 2px dashed #9bcf9b;
-  border-radius: 14px;
-  background: #eef7ee;
-  color: #2f5233;
+  gap: 8px;
+  padding: 24px 16px;
+  border: 2px dashed var(--bg-primary-hover);
+  border-radius: var(--radius-large);
+  background: var(--bg-success);
+  color: var(--text-on-success);
   cursor: pointer;
   transition:
     background 0.15s ease,
@@ -42,17 +41,16 @@
 }
 
 .Dropzone:hover {
-  background: #e4f1e4;
-  border-color: #7cc07c;
+  background: var(--bg-primary);
 }
 
 /* Scanning takes tens of seconds, so the whole dropzone shows it — a small
    label change is easy to miss while waiting. */
 .Dropzone__scanning,
 .Dropzone__scanning:hover {
-  background: #e4f1e4;
+  background: var(--bg-primary);
   border-style: solid;
-  border-color: #7cc07c;
+  border-color: var(--bg-primary-hover);
   cursor: progress;
   /* The button is disabled while scanning; keep it at full strength anyway,
      since dimming would read as "nothing is happening". */
@@ -63,7 +61,7 @@
 .Dropzone_spinner {
   width: 30px;
   height: 30px;
-  color: #2f5233;
+  color: var(--text-on-primary);
   animation: dropzone-spin 0.9s linear infinite;
 }
 
@@ -78,10 +76,10 @@
 @keyframes dropzone-breathe {
   0%,
   100% {
-    border-color: #9bcf9b;
+    border-color: var(--bg-primary-hover);
   }
   50% {
-    border-color: #4e9e4e;
+    border-color: var(--primary-600);
   }
 }
 
@@ -106,14 +104,15 @@
 
 .Dropzone_hint {
   font-size: 0.75rem;
-  color: #6b7280;
+  color: var(--text-on-success);
+  opacity: 0.8;
 }
 
 /* Manual entry form. */
 .BillForm {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
   margin-top: 20px;
 }
 
@@ -127,46 +126,67 @@
   flex-direction: column;
   gap: 4px;
   flex: 1;
+  min-width: 0;
   font-size: 0.8rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--text);
+}
+
+.BillForm_fieldLabel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.BillForm_fieldLabel svg {
+  color: var(--text-muted);
 }
 
 .BillForm_field input {
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 10px;
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--outline);
+  border-radius: var(--radius-medium);
   font-size: 0.95rem;
   font-weight: 400;
-  color: #1a1a1a;
-  background: #fff;
+  color: var(--text);
+  background: var(--bg-surface);
 }
 
 .BillForm_field input:focus {
   outline: none;
-  border-color: #7cc07c;
-  box-shadow: 0 0 0 3px rgba(124, 192, 124, 0.25);
+  border-color: var(--bg-primary-hover);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--bg-primary-hover) 30%, transparent);
 }
 
 .BillForm_back {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   padding: 8px 16px;
-  border: 1px solid var(--outline);
+  border: none;
   border-radius: var(--radius-medium);
-  background: var(--bg-background);
+  background: transparent;
   color: var(--text);
   font-weight: bold;
   cursor: pointer;
 }
 
 .BillForm_back:hover {
-  background-color: var(--bg-surface);
+  background-color: var(--bg-surface-hover);
 }
 
 .BillForm_submit {
-  margin-top: 6px;
+  margin-top: 8px;
   padding: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-medium);
   background: var(--bg-secondary);
   color: var(--text-on-secondary);
   font-size: 1rem;
@@ -186,7 +206,7 @@
 /* Feedback messages. */
 .BillUpload_error,
 .BillUpload_errorList {
-  color: #b91c1c;
+  color: var(--danger-600);
   font-size: 0.85rem;
 }
 
@@ -196,7 +216,7 @@
 }
 
 .BillUpload_success {
-  color: #15803d;
+  color: var(--text-primary);
   font-size: 0.9rem;
   font-weight: 600;
 }
@@ -205,35 +225,37 @@
 .BillUpload_saved {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 12px;
-  border: 1px solid #9bcf9b;
-  border-radius: 12px;
-  background: #eef7ee;
+  gap: 12px;
+  padding: 16px;
+  border-radius: var(--radius-large);
+  background: var(--bg-success);
 }
 
 .BillUpload_next {
   align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 6px;
   padding: 9px 14px;
-  border-radius: 10px;
-  background: #2f5233;
-  color: #fff;
+  border-radius: var(--radius-medium);
+  background: var(--bg-primary);
+  color: var(--text-on-primary);
   font-size: 0.85rem;
   font-weight: 600;
   text-decoration: none;
 }
 
 .BillUpload_next:hover {
-  background: #24401f;
+  background: var(--bg-primary-hover);
 }
 
 /* Note shown after an OCR scan (auto-filled / couldn't read). */
 .BillUpload_scanNote {
   margin-top: 10px;
   padding: 8px 12px;
-  border-radius: 10px;
-  background: #eef7ee;
-  color: #2f5233;
+  border-radius: var(--radius-medium);
+  background: var(--bg-surface);
+  color: var(--text);
   font-size: 0.82rem;
 }
 

@@ -10,6 +10,7 @@
  */
 
 import { useId, useState } from "react";
+import { LockIcon } from "@phosphor-icons/react";
 import styles from "./Auth.module.css";
 
 interface PasswordFieldProps {
@@ -37,7 +38,10 @@ export function PasswordField({
 
   return (
     <div className={styles.Auth_field}>
-      <label htmlFor={inputId}>{label}</label>
+      <label htmlFor={inputId} className={styles.Auth_fieldLabel}>
+        <LockIcon size={16} />
+        {label}
+      </label>
 
       <div className={styles.Auth_password}>
         <input

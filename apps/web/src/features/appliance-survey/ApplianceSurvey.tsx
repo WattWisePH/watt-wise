@@ -16,6 +16,7 @@
  */
 
 import { useEffect, useState } from "react";
+import { PlusIcon, TrashIcon, ArrowRightIcon } from "@phosphor-icons/react";
 import { ApiError, saveAppliances, type ApplianceDraft } from "../../lib/api";
 import {
   fetchApplianceOptions,
@@ -221,13 +222,7 @@ export function ApplianceSurvey() {
                     onClick={() => removeCard(index)}
                     aria-label={`Remove appliance ${index + 1}`}
                   >
-                    {/* Trash icon (inline SVG, not emoji, per project convention). */}
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <path
-                        fill="currentColor"
-                        d="M7 21a2 2 0 0 1-2-2V6H4V4h5V3h6v1h5v2h-1v13a2 2 0 0 1-2 2H7Zm2-4h2V8H9v9Zm4 0h2V8h-2v9Z"
-                      />
-                    </svg>
+                    <TrashIcon size={18} weight="regular" />
                   </button>
                 )}
               </div>
@@ -284,7 +279,8 @@ export function ApplianceSurvey() {
           className={styles.ApplianceSurvey_add}
           onClick={addCard}
         >
-          + Add Appliance
+          <PlusIcon size={18} weight="bold" />
+          Add Appliance
         </button>
 
         {errors.length > 0 && (
@@ -304,6 +300,7 @@ export function ApplianceSurvey() {
           disabled={submitting}
         >
           {submitting ? "Saving…" : "Next"}
+          {!submitting && <ArrowRightIcon size={18} weight="bold" />}
         </button>
       </form>
     </div>

@@ -13,6 +13,13 @@
 
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import {
+  StorefrontIcon,
+  TagIcon,
+  MapPinIcon,
+  PlugIcon,
+  ArrowRightIcon,
+} from "@phosphor-icons/react";
 
 import { ApiError } from "../../lib/api";
 import {
@@ -112,7 +119,10 @@ export function EstablishmentSetup() {
 
       <form className={styles.EstablishmentSetup_form} onSubmit={handleSubmit}>
         <label className={styles.EstablishmentSetup_field}>
-          <span>Name</span>
+          <span className={styles.EstablishmentSetup_fieldLabel}>
+            <StorefrontIcon size={16} />
+            Name
+          </span>
           <input
             type="text"
             value={name}
@@ -124,7 +134,10 @@ export function EstablishmentSetup() {
         </label>
 
         <label className={styles.EstablishmentSetup_field}>
-          <span>Type</span>
+          <span className={styles.EstablishmentSetup_fieldLabel}>
+            <TagIcon size={16} />
+            Type
+          </span>
           <select
             value={typeId}
             onChange={(e) => setTypeId(e.target.value)}
@@ -143,7 +156,8 @@ export function EstablishmentSetup() {
         {/* Optional: it feeds benchmarking against nearby places, which
             falls back to a wider comparison when it's missing. */}
         <label className={styles.EstablishmentSetup_field}>
-          <span>
+          <span className={styles.EstablishmentSetup_fieldLabel}>
+            <MapPinIcon size={16} />
             Address{" "}
             <span className={styles.EstablishmentSetup_optional}>(optional)</span>
           </span>
@@ -157,7 +171,10 @@ export function EstablishmentSetup() {
         </label>
 
         <label className={styles.EstablishmentSetup_field}>
-          <span>Electric utility</span>
+          <span className={styles.EstablishmentSetup_fieldLabel}>
+            <PlugIcon size={16} />
+            Electric utility
+          </span>
           <select
             value={providerId}
             onChange={(e) => setProviderId(e.target.value)}
@@ -192,6 +209,7 @@ export function EstablishmentSetup() {
           disabled={submitting || loading}
         >
           {submitting ? "Saving…" : "Continue"}
+          {!submitting && <ArrowRightIcon size={18} weight="bold" />}
         </button>
       </form>
     </div>
