@@ -29,24 +29,26 @@ export const Profile = () => {
           <p className={styles.Profile_sectionSubtitle}>email@example.com</p>
         </div>
       </section>
-      {/* Properties */}
+      {/* Establishments */}
       <section className={styles.Profile_section}>
         <div>
-          <h3 className={styles.Profile_sectionTitle}>My Properties</h3>
+          <h3 className={styles.Profile_sectionTitle}>My Establishments</h3>
           <p className={styles.Profile_sectionSubtitle}>
-            Change to one of your existing properties or add a new one.
+            Change to one of your existing establishments or add a new one.
           </p>
         </div>
-        <ul className={styles.PropertiesList_container}>
+        <ul className={styles.EstablishmentsList_container}>
           <li>
             <button
-              className={`${styles.PropertiesList_button} ${styles.PropertiesList_button__active}`}
+              className={`${styles.EstablishmentsList_button} ${styles.EstablishmentsList_button__active}`}
             >
-              <div className={styles.PropertiesList_icon}>
+              <div className={styles.EstablishmentsList_icon}>
                 <CoffeeIcon size={20} />
               </div>
-              <div className={styles.PropertiesList_propertyContent}>
-                <p className={styles.PropertiesList_propertyName}>Cafe Marie</p>
+              <div className={styles.EstablishmentsList_establishmentContent}>
+                <p className={styles.EstablishmentsList_establishmentName}>
+                  Cafe Marie
+                </p>
                 <p>Jaro, Iloilo</p>
               </div>
               Selected
@@ -54,13 +56,15 @@ export const Profile = () => {
             </button>
           </li>
           <li>
-            <button className={styles.PropertiesList_button}>
+            <button className={styles.EstablishmentsList_button}>
               {" "}
-              <div className={styles.PropertiesList_icon}>
+              <div className={styles.EstablishmentsList_icon}>
                 <HouseIcon size={20} />
               </div>
-              <div className={styles.PropertiesList_propertyContent}>
-                <p className={styles.PropertiesList_propertyName}>Home</p>
+              <div className={styles.EstablishmentsList_establishmentContent}>
+                <p className={styles.EstablishmentsList_establishmentName}>
+                  Home
+                </p>
                 <p>Iloilo City</p>
               </div>
               <CaretRightIcon size={20} />
@@ -68,7 +72,7 @@ export const Profile = () => {
           </li>
           <li>
             <button
-              className={`${styles.PropertiesList_button} ${styles.PropertiesList_button__add}`}
+              className={`${styles.EstablishmentsList_button} ${styles.EstablishmentsList_button__add}`}
             >
               Add New Property
             </button>

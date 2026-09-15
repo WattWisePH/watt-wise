@@ -33,7 +33,11 @@ export function Dashboard() {
         <div className={styles.Selector}>
           <CoffeeIcon size={24} className={duotone.navy} />
           <div className={styles.Selector_label}>Cafe Marie</div>
-          <CaretDownIcon size={16} weight="bold" className={styles.Selector_caret} />
+          <CaretDownIcon
+            size={16}
+            weight="bold"
+            className={styles.Selector_caret}
+          />
         </div>
         <BellIcon size={24} className={duotone.amber} />
       </div>
@@ -61,7 +65,7 @@ export function Dashboard() {
         </li>
         <li className={styles.QuickLinks_item}>
           <StorefrontIcon size={24} className={duotone.green} />
-          <p>My Properties</p>
+          <p>My Establishments</p>
         </li>
         <li className={styles.QuickLinks_item}>
           <HandshakeIcon size={24} className={duotone.navy} />

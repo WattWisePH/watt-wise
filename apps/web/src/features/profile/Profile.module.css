@@ -41,7 +41,7 @@
   gap: 8px;
 }
 
-.PropertiesList_container {
+.EstablishmentsList_container {
   list-style: none;
   padding-left: 0;
   margin: 0;
@@ -50,7 +50,7 @@
   gap: 4px;
 }
 
-.PropertiesList_button {
+.EstablishmentsList_button {
   border: none;
   width: 100%;
   font-size: 14px;
@@ -65,21 +65,21 @@
   cursor: pointer;
 }
 
-.PropertiesList_button:hover {
+.EstablishmentsList_button:hover {
   background-color: var(--bg-surface-hover);
 }
 
-.PropertiesList_button__active {
+.EstablishmentsList_button__active {
   background-color: var(--bg-primary);
   color: var(--text-on-primary);
 }
 
-.PropertiesList_button__active:hover {
+.EstablishmentsList_button__active:hover {
   background-color: var(--bg-primary-hover);
   color: var(--text-on-primary);
 }
 
-.PropertiesList_button__add {
+.EstablishmentsList_button__add {
   text-align: center;
   font-weight: 600;
   color: var(--text-muted);
@@ -88,20 +88,20 @@
   justify-content: center;
   padding: 12px 8px;
 }
-.PropertiesList_button__add:hover {
+.EstablishmentsList_button__add:hover {
   background-color: var(--bg-surface);
 }
 
-.PropertiesList_propertyName {
+.EstablishmentsList_establishmentName {
   font-weight: bold;
   color: var(--text);
 }
 
-.PropertiesList_propertyContent {
+.EstablishmentsList_establishmentContent {
   width: 100%;
 }
 
-.PropertiesList_icon {
+.EstablishmentsList_icon {
   padding: 4px;
   background-color: var(--background);
   border-radius: var(--radius-medium);
