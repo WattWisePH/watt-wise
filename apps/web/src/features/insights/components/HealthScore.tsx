@@ -1,4 +1,12 @@
+import {
+  HeartIcon,
+  GaugeIcon,
+  LightningIcon,
+  ScalesIcon,
+} from "@phosphor-icons/react";
+
 import styles from "../Insights.module.css";
+import duotone from "../../../styles/DuotoneIcon.module.css";
 
 export const HealthScore = () => {
   return (
@@ -15,7 +23,12 @@ export const HealthScore = () => {
           className={`${styles.Insights_card} ${styles.Insights_card__primary}`}
         >
           <div className={styles.HealthCard_topRow}>
-            <p className={styles.HealthCard_value}>78%</p>
+            <div className={styles.HealthCard_valueRow}>
+              <HeartIcon
+                className={`${duotone.green} ${styles.HealthCard_icon}`}
+              />
+              <p className={styles.HealthCard_value}>78%</p>
+            </div>
             <div className={styles.HealthCard_badge}>Good</div>
           </div>
           <div className={styles.ProgressBar_container}>
@@ -27,7 +40,13 @@ export const HealthScore = () => {
       {/* Benchmark */}
       <section className={styles.Insights_section}>
         <div>
-          <h1 className={styles.Insights_sectionTitle}>Benchmark</h1>
+          <h1 className={styles.Insights_sectionTitle}>
+            Benchmark
+            <GaugeIcon
+              size={20}
+              className={`${duotone.navy} ${styles.Insights_titleIcon}`}
+            />
+          </h1>
           <p className={`${styles.Insights_sectionSubtitle}`}>
             See how you compare to other users.
           </p>
@@ -42,11 +61,21 @@ export const HealthScore = () => {
           </p>
         </div>
         <div className={styles.Insights_card}>
-          <div className={styles.Insights_cardTitle}>Comparison Bar</div>
+          <div className={styles.Insights_cardTitle}>
+            <ScalesIcon
+              size={20}
+              className={`${duotone.navy} ${styles.Insights_cardIcon}`}
+            />
+            Comparison Bar
+          </div>
           <div className={styles.Comparison_placeholder}>placeholder</div>
         </div>
         <div className={styles.Insights_card}>
           <div className={styles.Insights_cardTitle}>
+            <LightningIcon
+              size={20}
+              className={`${duotone.amber} ${styles.Insights_cardIcon}`}
+            />
             Average KWH Consumption this Month
           </div>
           <table className={styles.AverageConsumption_table}>

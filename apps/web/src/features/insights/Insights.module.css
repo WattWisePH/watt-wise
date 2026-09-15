@@ -14,6 +14,16 @@
   margin: 0;
 }
 
+.Insights_titleIcon {
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+.Insights_cardIcon {
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
 .Insights_section {
   padding-bottom: 12px;
   display: flex;
@@ -40,6 +50,9 @@
   font-weight: bold;
   margin: 0;
   line-height: 18px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .Insights_card__primary {
@@ -49,6 +62,21 @@
 .HealthCard_topRow {
   display: flex;
   justify-content: space-between;
+}
+
+.HealthCard_valueRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.HealthCard_icon {
+  font-size: 32px !important;
+}
+
+.HealthCard_icon path:first-child {
+  fill: var(--primary-400);
+  opacity: 1;
 }
 
 .HealthCard_value {
@@ -151,7 +179,7 @@ td {
   display: flex;
   padding-top: 16px;
   justify-content: space-between;
-  gap: 16px;
+  gap: 8px;
 }
 
 .PriorityAction_button {
@@ -165,6 +193,8 @@ td {
   justify-content: center;
   cursor: pointer;
   align-items: center;
+  transition: all;
+  transition-duration: 100ms;
 }
 
 .PriorityAction_icon {
@@ -176,7 +206,15 @@ td {
   color: var(--text-on-primary);
 }
 
+.PriorityAction_button__action:hover {
+  background-color: var(--bg-primary-hover);
+}
+
 .PriorityAction_button__dismiss {
   background-color: var(--bg-surface);
   color: var(--text-muted);
+}
+
+.PriorityAction_button__dismiss:hover {
+  background-color: var(--bg-surface-hover);
 }
