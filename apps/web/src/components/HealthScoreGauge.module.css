@@ -34,10 +34,7 @@
   font-weight: normal;
   width: 100%;
   margin: 0;
-}
-
-.HealthScoreGauge_title__scoreShown {
-  margin-bottom: -8px;
+  line-height: 20px;
 }
 
 .HealthScoreGauge_badge {
@@ -105,11 +102,11 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 2px;
-  flex-shrink: 0;
 }
 
 .HealthScoreGauge_valueRow {
   display: flex;
+  flex-wrap: wrap;
   align-items: end;
   gap: 8px;
 }

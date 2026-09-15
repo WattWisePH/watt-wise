@@ -80,9 +80,7 @@ export function HealthScoreGauge({
         <div className={styles.HealthScoreGauge_info}>
           {showTitle && (
             <div className={styles.HealthScoreGauge_header}>
-              <h3
-                className={`${styles.HealthScoreGauge_title} ${showScore ? styles.HealthScoreGauge_title__scoreShown : ""}`}
-              >
+              <h3 className={`${styles.HealthScoreGauge_title}`}>
                 Energy Health Score
               </h3>
             </div>
