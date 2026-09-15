@@ -30,14 +30,15 @@ export function Dashboard() {
         </div>
         <BellIcon size={24} />
       </div>
-      <div className={`${styles.Dashboard_card} ${styles.Dashboard_card__green}`}>
+      <div
+        className={`${styles.Dashboard_card} ${styles.Dashboard_card__green}`}
+      >
         <div className={styles.Card_header}>
           <h3 className={styles.Card_title}>Energy Health Score</h3>
           <div className={styles.HealthCard_status}>Good</div>
         </div>
         <div className={styles.HealthCard_content}>
           <HeartIcon
-            weight="fill"
             className={`${styles.Icon__large} ${styles.Icon__colorPrimary}`}
           />
           <p className={styles.HealthCard_percentage}>78%</p>
@@ -61,7 +62,7 @@ export function Dashboard() {
           <p>Benchmarking</p>
         </li>
         <li className={styles.QuickLinks_item}>
-          <StorefrontIcon size={24} weight="fill" />
+          <StorefrontIcon size={24} />
           <p>My Properties</p>
         </li>
         <li className={styles.QuickLinks_item}>
@@ -105,37 +106,55 @@ export function Dashboard() {
           <h3 className={styles.Card_title}>Monthly Bill Trend</h3>
           <InfoIcon size={24} />
         </div>
-        <div className={`${styles.MonthlyCard_placeholder} ${styles.Text_muted}`}>
+        <div
+          className={`${styles.MonthlyCard_placeholder} ${styles.Text_muted}`}
+        >
           placeholder
         </div>
       </div>
       <div className={styles.Stats}>
         <div className={`${styles.Dashboard_card} ${styles.Stats_card}`}>
-          <p className={`${styles.Stats_label} ${styles.Text_muted}`}>This Month</p>
+          <p className={`${styles.Stats_label} ${styles.Text_muted}`}>
+            This Month
+          </p>
           <div>
             <span className={styles.Stats_value}>18,236</span>
-            <span className={`${styles.Stats_label} ${styles.Text_muted}`}>pesos</span>
+            <span className={`${styles.Stats_label} ${styles.Text_muted}`}>
+              pesos
+            </span>
           </div>
         </div>
         <div className={`${styles.Dashboard_card} ${styles.Stats_card}`}>
-          <p className={`${styles.Stats_label} ${styles.Text_muted}`}>vs Last Month</p>
+          <p className={`${styles.Stats_label} ${styles.Text_muted}`}>
+            vs Last Month
+          </p>
           <div>
             <span className={styles.Stats_value}>8.6%</span>
-            <span className={`${styles.Stats_label} ${styles.Text_muted}`}>increase</span>
+            <span className={`${styles.Stats_label} ${styles.Text_muted}`}>
+              increase
+            </span>
           </div>
         </div>
         <div className={`${styles.Dashboard_card} ${styles.Stats_card}`}>
-          <p className={`${styles.Stats_label} ${styles.Text_muted}`}>Total Consumption</p>
+          <p className={`${styles.Stats_label} ${styles.Text_muted}`}>
+            Total Consumption
+          </p>
           <div>
             <span className={styles.Stats_value}>312</span>
-            <span className={`${styles.Stats_label} ${styles.Text_muted}`}>kWh</span>
+            <span className={`${styles.Stats_label} ${styles.Text_muted}`}>
+              kWh
+            </span>
           </div>
         </div>
         <div className={`${styles.Dashboard_card} ${styles.Stats_card}`}>
-          <p className={`${styles.Stats_label} ${styles.Text_muted}`}>Cost per kWh</p>
+          <p className={`${styles.Stats_label} ${styles.Text_muted}`}>
+            Cost per kWh
+          </p>
           <div>
             <span className={styles.Stats_value}>5.85</span>
-            <span className={`${styles.Stats_label} ${styles.Text_muted}`}>pesos</span>
+            <span className={`${styles.Stats_label} ${styles.Text_muted}`}>
+              pesos
+            </span>
           </div>
         </div>
       </div>

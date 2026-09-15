@@ -51,7 +51,6 @@ export const NavigationBar = () => {
                   className={`${navStyles.NavBar_menuIconContainer} ${isSelected ? navStyles.NavBar_menuIconContainer__selected : ""}`}
                 >
                   <NavIcon
-                    weight={isSelected ? "fill" : "regular"}
                     className={`${navStyles.NavBar_menuicon} ${isSelected ? navStyles.NavBar_menuicon__selected : ""}`}
                   />
                 </div>
