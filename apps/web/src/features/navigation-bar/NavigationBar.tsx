@@ -37,7 +37,7 @@ export const NavigationBar = () => {
       icon: UserIcon,
       itemName: "Profile",
       route: "/profile",
-      tint: "neutral",
+      tint: "navy",
     },
   ];
   const { pathname } = useLocation();
