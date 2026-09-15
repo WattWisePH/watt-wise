@@ -28,41 +28,42 @@
   border-radius: var(--radius-medium);
   padding: 4px 0px;
   width: 5rem;
+  transition: background-color 200ms;
+}
+
+.NavBar_menuButton:hover {
+  background-color: var(--bg-surface-hover);
 }
 
 .NavBar_menuButton__selected {
-  color: var(--text-secondary);
   font-weight: bold;
 }
 
 .NavBar_menuIconContainer {
   padding: 2px 4px;
   margin: 0px 8px;
-  border-radius: 999px;
-  transition: all;
-  transition-duration: 200ms;
-}
-
-.NavBar_menuButton:hover .NavBar_menuIconContainer {
-  background-color: var(--bg-surface-hover);
-}
-
-.NavBar_menuIconContainer__selected {
-  background-color: var(--bg-secondary);
-}
-
-.NavBar_menuButton:hover .NavBar_menuIconContainer__selected {
-  background-color: var(--bg-secondary-hover);
 }
 
 .NavBar_menuicon {
   font-size: 24px !important;
 }
 
-.NavBar_menuicon__selected {
-  color: var(--text-on-secondary);
-}
-
 .NavBar_menuName {
   font-size: 12px;
+}
+
+.NavBar_menuName__navy {
+  color: var(--secondary-800);
+}
+
+.NavBar_menuName__amber {
+  color: var(--warning-700);
+}
+
+.NavBar_menuName__green {
+  color: var(--primary-800);
+}
+
+.NavBar_menuName__neutral {
+  color: var(--neutral-700);
 }

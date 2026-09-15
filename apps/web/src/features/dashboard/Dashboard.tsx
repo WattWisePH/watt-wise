@@ -1,4 +1,5 @@
 import styles from "./Dashboard.module.css";
+import duotone from "../../styles/DuotoneIcon.module.css";
 import { useNavigate } from "react-router";
 import {
   BellIcon,
@@ -28,7 +29,7 @@ export function Dashboard() {
           <div className={styles.Selector_avatar} />
           <div className={styles.Selector_label}>Cafe Marie</div>
         </div>
-        <BellIcon size={24} />
+        <BellIcon size={24} className={duotone.amber} />
       </div>
       <div
         className={`${styles.Dashboard_card} ${styles.Dashboard_card__green}`}
@@ -39,34 +40,34 @@ export function Dashboard() {
         </div>
         <div className={styles.HealthCard_content}>
           <HeartIcon
-            className={`${styles.Icon__large} ${styles.Icon__colorPrimary}`}
+            className={`${styles.Icon__large} ${duotone.green} ${styles.HealthCard_icon}`}
           />
           <p className={styles.HealthCard_percentage}>78%</p>
         </div>
       </div>
       <ul className={`${styles.Dashboard_card} ${styles.QuickLinks}`}>
         <li className={styles.QuickLinks_item}>
-          <ReceiptIcon size={24} />
+          <ReceiptIcon size={24} className={duotone.green} />
           <p>Bill History</p>
         </li>
         <li className={styles.QuickLinks_item}>
-          <ClipboardTextIcon size={24} />
+          <ClipboardTextIcon size={24} className={duotone.navy} />
           <p>My Inventory</p>
         </li>
         <li className={styles.QuickLinks_item}>
-          <CheckSquareIcon size={24} />
+          <CheckSquareIcon size={24} className={duotone.green} />
           <p>Priority Actions</p>
         </li>
         <li className={styles.QuickLinks_item}>
-          <GaugeIcon size={24} />
+          <GaugeIcon size={24} className={duotone.navy} />
           <p>Benchmarking</p>
         </li>
         <li className={styles.QuickLinks_item}>
-          <StorefrontIcon size={24} />
+          <StorefrontIcon size={24} className={duotone.green} />
           <p>My Properties</p>
         </li>
         <li className={styles.QuickLinks_item}>
-          <HandshakeIcon size={24} />
+          <HandshakeIcon size={24} className={duotone.navy} />
           <p>Partners</p>
         </li>
       </ul>

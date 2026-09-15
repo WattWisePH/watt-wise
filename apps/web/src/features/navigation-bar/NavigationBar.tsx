@@ -1,4 +1,5 @@
 import navStyles from "./NavigationBar.module.css";
+import duotone from "../../styles/DuotoneIcon.module.css";
 import { useNavigate, useLocation } from "react-router";
 import {
   HouseIcon,
@@ -8,22 +9,36 @@ import {
   type Icon,
 } from "@phosphor-icons/react";
 
+type NavTint = "navy" | "amber" | "green" | "neutral";
+
 interface NavBarItem {
   icon: Icon;
   itemName: string;
   route: string;
+  tint: NavTint;
 }
 
 export const NavigationBar = () => {
   const navBarItems: NavBarItem[] = [
-    { icon: HouseIcon, itemName: "Home", route: "/dashboard" },
-    { icon: LightbulbIcon, itemName: "Insights", route: "/insights" },
+    { icon: HouseIcon, itemName: "Home", route: "/dashboard", tint: "navy" },
+    {
+      icon: LightbulbIcon,
+      itemName: "Insights",
+      route: "/insights",
+      tint: "amber",
+    },
     {
       icon: LeafIcon,
       itemName: "Simulator",
       route: "/simulator",
+      tint: "green",
     },
-    { icon: UserIcon, itemName: "Profile", route: "/profile" },
+    {
+      icon: UserIcon,
+      itemName: "Profile",
+      route: "/profile",
+      tint: "neutral",
+    },
   ];
   const { pathname } = useLocation();
   const currentRoute = pathname.split("/")[1];
@@ -39,6 +54,7 @@ export const NavigationBar = () => {
         {navBarItems.map((navItem) => {
           const isSelected = currentRoute === navItem.route.split("/")[1];
           const NavIcon = navItem.icon;
+          const tintClass = duotone[navItem.tint];
           return (
             <li key={navItem.route}>
               <button
@@ -47,15 +63,18 @@ export const NavigationBar = () => {
                   handleRedirect(navItem.route);
                 }}
               >
-                <div
-                  className={`${navStyles.NavBar_menuIconContainer} ${isSelected ? navStyles.NavBar_menuIconContainer__selected : ""}`}
-                >
+                <div className={navStyles.NavBar_menuIconContainer}>
                   <NavIcon
-                    className={`${navStyles.NavBar_menuicon} ${isSelected ? navStyles.NavBar_menuicon__selected : ""}`}
+                    weight={isSelected ? "duotone" : "regular"}
+                    className={`${navStyles.NavBar_menuicon} ${isSelected ? tintClass : ""}`}
                   />
                 </div>
 
-                <p className={navStyles.NavBar_menuName}>{navItem.itemName}</p>
+                <p
+                  className={`${navStyles.NavBar_menuName} ${isSelected ? navStyles[`NavBar_menuName__${navItem.tint}`] : ""}`}
+                >
+                  {navItem.itemName}
+                </p>
               </button>
             </li>
           );

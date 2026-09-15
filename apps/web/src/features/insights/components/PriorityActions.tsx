@@ -1,4 +1,5 @@
 import styles from "../Insights.module.css";
+import duotone from "../../../styles/DuotoneIcon.module.css";
 import type { PriorityActionData } from "../types";
 import { CheckIcon, XIcon } from "@phosphor-icons/react";
 
@@ -55,13 +56,17 @@ export const PriorityActions = () => {
                   <button
                     className={`${styles.PriorityAction_button} ${styles.PriorityAction_button__action}`}
                   >
-                    <CheckIcon className={styles.PriorityAction_icon} />
+                    <CheckIcon
+                      className={`${styles.PriorityAction_icon} ${duotone.green}`}
+                    />
                     Action Taken
                   </button>
                   <button
                     className={`${styles.PriorityAction_button} ${styles.PriorityAction_button__dismiss}`}
                   >
-                    <XIcon className={styles.PriorityAction_icon} />
+                    <XIcon
+                      className={`${styles.PriorityAction_icon} ${duotone.neutral}`}
+                    />
                     Dismiss
                   </button>
                 </div>

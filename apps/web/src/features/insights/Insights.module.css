@@ -177,6 +177,6 @@ td {
 }
 
 .PriorityAction_button__dismiss {
-  background-color: var(--bg-secondary);
-  color: var(--text-on-secondary);
+  background-color: var(--bg-surface);
+  color: var(--text-muted);
 }

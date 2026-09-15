@@ -16,7 +16,7 @@ export const SimulatorItemToggle = ({
   return (
     <div onClick={handleToggle} className={styles.SimulatorItem_container}>
       <div className={styles.SimulatorItem_icon}>
-        <ItemIcon />
+        <ItemIcon className={item.iconTint} />
       </div>
       <div className={styles.SimulatorItem_contentLayout}>
         <div className={styles.SimulatorItem_label}>{item.label}</div>

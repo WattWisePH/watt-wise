@@ -1,4 +1,5 @@
 import styles from "./Simulator.module.css";
+import duotone from "../../styles/DuotoneIcon.module.css";
 import type { SimulatorItem } from "./types";
 import { useEffect, useState } from "react";
 import { SimulatorItemToggle } from "./components/SimulatorItemToggle";
@@ -14,24 +15,28 @@ export const Simulator = () => {
     {
       id: 0,
       icon: SnowflakeIcon,
+      iconTint: duotone.navy,
       label: "Switch to inverter AC",
       estSavings: 1450,
     },
     {
       id: 1,
       icon: HourglassIcon,
+      iconTint: duotone.amber,
       label: "Optimize operating hours",
       estSavings: 950,
     },
     {
       id: 2,
       icon: PackageIcon,
+      iconTint: duotone.green,
       label: "Replace old refrigerator",
       estSavings: 750,
     },
     {
       id: 3,
       icon: PlugIcon,
+      iconTint: duotone.amber,
       label: "Reduce idle appliance usage",
       estSavings: 350,
     },

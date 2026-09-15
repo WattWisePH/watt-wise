@@ -1,0 +1,43 @@
+/*
+ * Phosphor's duotone weight ships as two <path>s: the first is a soft
+ * background shape (rendered at 20% opacity), the second is the full-opacity
+ * detail/outline. Left alone, both inherit the same `currentColor`, so the
+ * "two tones" are really just one color at two opacities. These classes
+ * override both paths directly to use genuinely distinct brand colors.
+ */
+
+.green path:first-child {
+  fill: var(--primary-300);
+  opacity: 1;
+}
+
+.green path:last-child {
+  fill: var(--primary-800);
+}
+
+.navy path:first-child {
+  fill: var(--secondary-300);
+  opacity: 1;
+}
+
+.navy path:last-child {
+  fill: var(--secondary-800);
+}
+
+.amber path:first-child {
+  fill: var(--warning-300);
+  opacity: 1;
+}
+
+.amber path:last-child {
+  fill: var(--warning-700);
+}
+
+.neutral path:first-child {
+  fill: var(--neutral-200);
+  opacity: 1;
+}
+
+.neutral path:last-child {
+  fill: var(--neutral-600);
+}

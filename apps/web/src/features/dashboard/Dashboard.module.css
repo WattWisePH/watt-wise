@@ -122,12 +122,13 @@ p {
   align-items: center;
 }
 
-.Icon__large {
-  font-size: 28px !important;
+.HealthCard_icon path:first-child {
+  fill: var(--primary-400);
+  opacity: 1;
 }
 
-.Icon__colorPrimary {
-  color: var(--text-on-primary);
+.Icon__large {
+  font-size: 28px !important;
 }
 
 .QuickLinks {
