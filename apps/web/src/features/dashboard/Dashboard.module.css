@@ -78,27 +78,26 @@ p {
 }
 
 .Selector {
-  background-color: white;
-  padding: 8px;
+  background-color: var(--bg-surface);
+  color: var(--text);
   border-radius: var(--radius-large);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 2px;
   padding: 8px;
+  cursor: pointer;
+  user-select: none;
 }
 
 .Selector_label {
-  font-size: 16px;
-  font-weight: bold;
+  font-size: 14px;
+  font-weight: 600;
   padding: 0px 4px;
 }
 
-.Selector_avatar {
-  height: 32px;
-  width: 32px;
-  background-color: var(--bg-primary);
-  border-radius: 9999px;
+.Selector_caret {
+  color: var(--text-muted);
+  margin-left: -2px;
 }
 
 .HealthCard_content {

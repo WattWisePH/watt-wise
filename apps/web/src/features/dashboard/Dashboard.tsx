@@ -11,6 +11,8 @@ import {
   InfoIcon,
   SealWarningIcon,
   WarningIcon,
+  CaretDownIcon,
+  CoffeeIcon,
 } from "@phosphor-icons/react";
 
 import styles from "./Dashboard.module.css";
@@ -29,8 +31,9 @@ export function Dashboard() {
     <div className={styles.Dashboard}>
       <div className={styles.Dashboard_header}>
         <div className={styles.Selector}>
-          <div className={styles.Selector_avatar} />
+          <CoffeeIcon size={24} className={duotone.navy} />
           <div className={styles.Selector_label}>Cafe Marie</div>
+          <CaretDownIcon size={16} weight="bold" className={styles.Selector_caret} />
         </div>
         <BellIcon size={24} className={duotone.amber} />
       </div>
