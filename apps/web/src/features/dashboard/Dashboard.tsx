@@ -1,9 +1,9 @@
 import styles from "./Dashboard.module.css";
 import duotone from "../../styles/DuotoneIcon.module.css";
 import { useNavigate } from "react-router";
+import { HealthScoreGauge } from "../../components/HealthScoreGauge";
 import {
   BellIcon,
-  HeartIcon,
   ReceiptIcon,
   ClipboardTextIcon,
   CheckSquareIcon,
@@ -31,20 +31,11 @@ export function Dashboard() {
         </div>
         <BellIcon size={24} className={duotone.amber} />
       </div>
-      <div
-        className={`${styles.Dashboard_card} ${styles.Dashboard_card__green}`}
-      >
-        <div className={styles.Card_header}>
-          <h3 className={styles.Card_title}>Energy Health Score</h3>
-          <div className={styles.HealthCard_status}>Good</div>
-        </div>
-        <div className={styles.HealthCard_content}>
-          <HeartIcon
-            className={`${styles.Icon__large} ${duotone.green} ${styles.HealthCard_icon}`}
-          />
-          <p className={styles.HealthCard_percentage}>78%</p>
-        </div>
-      </div>
+      <HealthScoreGauge
+        score={78}
+        label="Good"
+        insight="Better than 65% of similar cafes"
+      />
       <ul className={`${styles.Dashboard_card} ${styles.QuickLinks}`}>
         <li className={styles.QuickLinks_item}>
           <ReceiptIcon size={24} className={duotone.green} />

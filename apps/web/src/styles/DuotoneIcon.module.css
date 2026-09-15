@@ -41,3 +41,12 @@
 .neutral path:last-child {
   fill: var(--neutral-600);
 }
+
+.red path:first-child {
+  fill: var(--danger-300);
+  opacity: 1;
+}
+
+.red path:last-child {
+  fill: var(--danger-800);
+}

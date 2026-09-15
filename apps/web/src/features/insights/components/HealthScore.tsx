@@ -1,12 +1,8 @@
-import {
-  HeartIcon,
-  GaugeIcon,
-  LightningIcon,
-  ScalesIcon,
-} from "@phosphor-icons/react";
+import { GaugeIcon, LightningIcon, ScalesIcon } from "@phosphor-icons/react";
 
 import styles from "../Insights.module.css";
 import duotone from "../../../styles/DuotoneIcon.module.css";
+import { HealthScoreGauge } from "../../../components/HealthScoreGauge";
 
 export const HealthScore = () => {
   return (
@@ -19,22 +15,12 @@ export const HealthScore = () => {
             Calculated based on your bills and appliances.
           </p>
         </div>
-        <div
-          className={`${styles.Insights_card} ${styles.Insights_card__primary}`}
-        >
-          <div className={styles.HealthCard_topRow}>
-            <div className={styles.HealthCard_valueRow}>
-              <HeartIcon
-                className={`${duotone.green} ${styles.HealthCard_icon}`}
-              />
-              <p className={styles.HealthCard_value}>78%</p>
-            </div>
-            <div className={styles.HealthCard_badge}>Good</div>
-          </div>
-          <div className={styles.ProgressBar_container}>
-            <div className={styles.ProgressBar_value} />
-          </div>
-        </div>
+        <HealthScoreGauge
+          score={78}
+          label="Good"
+          showTitle={false}
+          insight="Better than 65% of similar cafes"
+        />
       </section>
 
       {/* Benchmark */}

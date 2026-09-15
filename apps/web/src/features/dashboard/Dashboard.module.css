@@ -114,8 +114,10 @@ p {
 
 .HealthCard_status {
   border-radius: var(--radius-medium);
-  background-color: var(--text-on-primary);
-  color: var(--background);
+  border: 2px solid var(--text-on-primary);
+  color: var(--text-on-primary);
+  font-weight: bold;
+  text-transform: uppercase;
   padding: 4px 8px;
   font-size: 12px;
   display: flex;
