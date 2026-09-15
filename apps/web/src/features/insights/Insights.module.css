@@ -118,21 +118,79 @@
   color: var(--text-secondary);
 }
 
-.AverageConsumption_table,
-td {
-  border-collapse: collapse;
-  padding: 8px;
-  text-align: center;
-  font-size: 16px;
+.AverageConsumption_list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.AverageConsumption_table th {
-  color: var(--text-secondary);
-  border-bottom: 1px solid var(--outline);
+.AverageConsumption_row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.AverageConsumption_rowHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.AverageConsumption_rowLabel {
+  font-weight: 600;
+}
+
+.AverageConsumption_rowMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .AverageConsumption_number {
-  text-align: end;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.AverageConsumption_delta {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+.AverageConsumption_delta[data-trend="up"] {
+  background-color: var(--bg-danger);
+  color: var(--text-on-danger);
+}
+
+.AverageConsumption_delta[data-trend="down"] {
+  background-color: var(--bg-success);
+  color: var(--text-on-success);
+}
+
+.AverageConsumption_barTrack {
+  height: 8px;
+  border-radius: var(--radius-large);
+  background-color: var(--outline);
+  overflow: hidden;
+}
+
+.AverageConsumption_barFill {
+  height: 100%;
+  border-radius: var(--radius-large);
+  background-color: var(--text-muted);
+}
+
+.AverageConsumption_barFill[data-trend="down"] {
+  background-color: var(--primary-400);
+}
+
+.AverageConsumption_barFill[data-trend="up"] {
+  background-color: var(--bg-danger);
 }
 
 .PriorityAction_actionList {

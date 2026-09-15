@@ -1,9 +1,16 @@
-import { GaugeIcon, ScalesIcon } from "@phosphor-icons/react";
+import { ChartBarIcon, GaugeIcon } from "@phosphor-icons/react";
 
 import styles from "../Insights.module.css";
 import duotone from "../../../styles/DuotoneIcon.module.css";
 import { HealthScoreGauge } from "../../../components/HealthScoreGauge";
 import { ComparisonBar } from "../../../components/ComparisonBar";
+import { ConsumptionComparison } from "./ConsumptionComparison";
+import type { ConsumptionRow } from "../types";
+
+const consumptionRows: ConsumptionRow[] = [
+  { label: "Average Cafe", value: 265, isAverage: true },
+  { label: "Cafe Marie", value: 312 },
+];
 
 export const HealthScore = () => {
   return (
@@ -49,34 +56,17 @@ export const HealthScore = () => {
             />
             Comparison Bar
           </div>
-          <ComparisonBar value={400} average={265} valueLabel="Cafe Marie" />
+          <ComparisonBar value={312} average={265} valueLabel="Cafe Marie" />
         </div>
         <div className={styles.Insights_card}>
           <div className={styles.Insights_cardTitle}>
-            <ScalesIcon
+            <ChartBarIcon
               size={20}
               className={`${duotone.amber} ${styles.Insights_cardIcon}`}
             />
             Average KWH Consumption this Month
           </div>
-          <table className={styles.AverageConsumption_table}>
-            <thead>
-              <tr>
-                <th>Building</th>
-                <th>Monthly Consumption</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Cafes</td>
-                <td className={styles.AverageConsumption_number}>265 kWh</td>
-              </tr>
-              <tr>
-                <td>Cafe Marie</td>
-                <td className={styles.AverageConsumption_number}>312 kWh</td>
-              </tr>
-            </tbody>
-          </table>
+          <ConsumptionComparison rows={consumptionRows} />
         </div>
       </section>
     </div>
