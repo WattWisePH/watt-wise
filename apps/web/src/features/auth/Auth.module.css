@@ -98,11 +98,15 @@
   padding: 13px;
   border: none;
   border-radius: 12px;
-  background: #111;
-  color: #fff;
+  background: var(--bg-secondary);
+  color: var(--text-on-secondary);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
+}
+
+.Auth_submit:hover:not(:disabled) {
+  background: var(--bg-secondary-hover);
 }
 
 .Auth_submit:disabled {
