@@ -79,18 +79,22 @@ export const HealthScore = () => {
             Average KWH Consumption this Month
           </div>
           <table className={styles.AverageConsumption_table}>
-            <tr>
-              <th>Building</th>
-              <th>Monthly Consumption</th>
-            </tr>
-            <tr>
-              <td>Cafes</td>
-              <td className={styles.AverageConsumption_number}>265 kWh</td>
-            </tr>
-            <tr>
-              <td>Cafe Marie</td>
-              <td className={styles.AverageConsumption_number}>312 kWh</td>
-            </tr>
+            <thead>
+              <tr>
+                <th>Building</th>
+                <th>Monthly Consumption</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Cafes</td>
+                <td className={styles.AverageConsumption_number}>265 kWh</td>
+              </tr>
+              <tr>
+                <td>Cafe Marie</td>
+                <td className={styles.AverageConsumption_number}>312 kWh</td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </section>
