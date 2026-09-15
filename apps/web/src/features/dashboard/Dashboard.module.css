@@ -183,18 +183,6 @@ p {
   -webkit-line-clamp: 1;
 }
 
-.PriorityList_indicator {
-  height: 12px;
-  width: 12px;
-  border-radius: 50%;
-}
-.PriorityList_indicator__high {
-  background-color: var(--bg-danger);
-}
-.PriorityList_indicator__med {
-  background-color: var(--bg-warning);
-}
-
 .Text_muted {
   color: var(--text-muted);
 }

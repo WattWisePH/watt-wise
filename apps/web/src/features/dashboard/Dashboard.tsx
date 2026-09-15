@@ -1,7 +1,3 @@
-import styles from "./Dashboard.module.css";
-import duotone from "../../styles/DuotoneIcon.module.css";
-import { useNavigate } from "react-router";
-import { HealthScoreGauge } from "../../components/HealthScoreGauge";
 import {
   BellIcon,
   ReceiptIcon,
@@ -13,7 +9,14 @@ import {
   PlusIcon,
   ArrowCircleRightIcon,
   InfoIcon,
+  SealWarningIcon,
+  WarningIcon,
 } from "@phosphor-icons/react";
+
+import styles from "./Dashboard.module.css";
+import duotone from "../../styles/DuotoneIcon.module.css";
+import { useNavigate } from "react-router";
+import { HealthScoreGauge } from "../../components/HealthScoreGauge";
 
 /**
  * Energy dashboard component. This is what the user first sees when logged in.
@@ -76,17 +79,13 @@ export function Dashboard() {
         </div>
         <ul className={styles.PriorityList}>
           <li className={styles.PriorityList_item}>
-            <div
-              className={`${styles.PriorityList_indicator} ${styles.PriorityList_indicator__high}`}
-            />
+            <SealWarningIcon size={18} className={`${duotone.red}`} />
             <p className={`${styles.Text_muted} ${styles.PriorityList_text}`}>
               Your evening usage is higher than similar cafes.
             </p>
           </li>
           <li className={styles.PriorityList_item}>
-            <div
-              className={`${styles.PriorityList_indicator} ${styles.PriorityList_indicator__med}`}
-            />
+            <WarningIcon size={18} className={duotone.amber} />
             <p className={`${styles.Text_muted} ${styles.PriorityList_text}`}>
               Non-inverter appliances may be driving up costs.
             </p>
