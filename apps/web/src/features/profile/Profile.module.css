@@ -119,6 +119,7 @@
 
 .AccountOptions_button {
   border: none;
+  height: 48px;
   width: 100%;
   font-size: 14px;
   text-align: start;

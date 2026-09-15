@@ -97,9 +97,9 @@
   --text-on-danger: var(--danger-900);
   --outline: var(--neutral-300);
 
-  --radius-large: 24px;
-  --radius-medium: 12px;
-  --radius-small: 6px;
+  --radius-large: 12px;
+  --radius-medium: 6px;
+  --radius-small: 3px;
 }
 
 * {
