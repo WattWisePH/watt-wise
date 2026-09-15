@@ -136,6 +136,11 @@
   color: var(--text-muted);
 }
 
+.SimulatorItem_toggleWrapper {
+  position: relative;
+  display: inline-flex;
+}
+
 .SimulatorItem_toggle {
   -webkit-appearance: none;
   appearance: none;
@@ -148,8 +153,6 @@
   cursor: pointer;
   border-radius: var(--radius-medium);
   outline: none;
-  font-size: 16px;
-  font-weight: bold;
   transition: all 0.2s ease;
   background-color: var(--background);
   border: 2px solid var(--outline);
@@ -162,17 +165,17 @@
 .SimulatorItem_toggle:checked {
   background-color: var(--bg-primary);
   border-color: var(--text-on-primary);
-  color: var(--text-on-primary);
 }
 
 .SimulatorItem_toggle:checked:hover {
   background-color: var(--bg-primary-hover);
 }
 
-.SimulatorItem_toggle::before {
-  content: "";
-}
-
-.SimulatorItem_toggle:checked::before {
-  content: "✓";
+.SimulatorItem_toggleIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text-on-primary);
+  pointer-events: none;
 }
