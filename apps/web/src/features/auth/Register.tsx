@@ -11,6 +11,7 @@ import { EnvelopeSimpleIcon, ArrowRightIcon } from "@phosphor-icons/react";
 import { ApiError } from "../../lib/api";
 import { register } from "../../lib/auth";
 import { PasswordField } from "./PasswordField";
+import logo from "../../../public/images/watty-logo.svg";
 import styles from "./Auth.module.css";
 
 export function Register() {
@@ -55,6 +56,7 @@ export function Register() {
 
   return (
     <div className={styles.Auth}>
+      <img src={logo} alt="Watty" className={styles.Auth_logo} />
       <h1 className={styles.Auth_title}>Create your account</h1>
       <p className={styles.Auth_subtitle}>Turn electricity bills into smarter decisions.</p>
 

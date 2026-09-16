@@ -55,25 +55,37 @@
 .EstablishmentSetup_field input,
 .EstablishmentSetup_field select {
   padding: 12px;
-  border: 1px solid var(--outline);
+  border: none;
   border-radius: var(--radius-medium);
   font-size: 0.95rem;
   font-weight: 400;
   color: var(--text);
   background: var(--bg-surface);
+  transition: box-shadow 0.15s ease;
+  transition-delay: 0.05s;
+}
+
+.EstablishmentSetup_field select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 36px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235e625f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
 }
 
 .EstablishmentSetup_field select:disabled {
   color: var(--text-muted);
-  background: var(--bg-surface);
+  background-color: var(--bg-surface);
   opacity: 0.7;
 }
 
 .EstablishmentSetup_field input:focus,
 .EstablishmentSetup_field select:focus {
   outline: none;
-  border-color: var(--bg-primary-hover);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--bg-primary-hover) 30%, transparent);
+  box-shadow: 0 0 0 3px var(--bg-primary-hover);
 }
 
 .EstablishmentSetup_hint {

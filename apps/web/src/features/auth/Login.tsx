@@ -11,6 +11,7 @@ import { EnvelopeSimpleIcon, ArrowRightIcon } from "@phosphor-icons/react";
 import { ApiError } from "../../lib/api";
 import { login } from "../../lib/auth";
 import { PasswordField } from "./PasswordField";
+import logo from "../../../public/images/watty-logo.svg";
 import styles from "./Auth.module.css";
 
 export function Login() {
@@ -43,6 +44,7 @@ export function Login() {
 
   return (
     <div className={styles.Auth}>
+      <img src={logo} alt="Watty" className={styles.Auth_logo} />
       <h1 className={styles.Auth_title}>Welcome back</h1>
       <p className={styles.Auth_subtitle}>Sign in to see your energy insights.</p>
 

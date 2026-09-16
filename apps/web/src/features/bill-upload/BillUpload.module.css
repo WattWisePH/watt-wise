@@ -146,19 +146,19 @@
   width: 100%;
   min-width: 0;
   padding: 12px;
-  border: 1px solid var(--outline);
+  border: none;
   border-radius: var(--radius-medium);
   font-size: 0.95rem;
   font-weight: 400;
   color: var(--text);
   background: var(--bg-surface);
+  transition: box-shadow 0.15s ease;
+  transition-delay: 0.05s;
 }
 
 .BillForm_field input:focus {
   outline: none;
-  border-color: var(--bg-primary-hover);
-  box-shadow: 0 0 0 3px
-    color-mix(in srgb, var(--bg-primary-hover) 30%, transparent);
+  box-shadow: 0 0 0 3px var(--bg-primary-hover);
 }
 
 .BillForm_back {

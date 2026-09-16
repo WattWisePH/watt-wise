@@ -16,7 +16,23 @@
  */
 
 import { useEffect, useState } from "react";
-import { PlusIcon, TrashIcon, ArrowRightIcon } from "@phosphor-icons/react";
+import {
+  PlusIcon,
+  TrashIcon,
+  ArrowRightIcon,
+  SnowflakeIcon,
+  DoorOpenIcon,
+  TelevisionIcon,
+  WashingMachineIcon,
+  DropIcon,
+  FanIcon,
+  LightbulbIcon,
+  PlugIcon,
+  HashIcon,
+  TagIcon,
+  CalendarIcon,
+  type Icon,
+} from "@phosphor-icons/react";
 import { ApiError, saveAppliances, type ApplianceDraft } from "../../lib/api";
 import {
   fetchApplianceOptions,
@@ -25,6 +41,23 @@ import {
   type ApplianceOptions,
 } from "../../lib/lookups";
 import styles from "./ApplianceSurvey.module.css";
+
+/** Fitting icon per appliance kind, matched by name.
+ * Unrecognized kinds fall back to a generic plug. */
+const APPLIANCE_ICONS: Record<string, Icon> = {
+  "air conditioner": SnowflakeIcon,
+  refrigerator: DoorOpenIcon,
+  television: TelevisionIcon,
+  "washing machine": WashingMachineIcon,
+  "water heater": DropIcon,
+  "electric fan": FanIcon,
+  lighting: LightbulbIcon,
+};
+
+function iconForAppliance(applianceName: string | undefined): Icon {
+  if (!applianceName) return PlugIcon;
+  return APPLIANCE_ICONS[applianceName.toLowerCase()] ?? PlugIcon;
+}
 
 /** What one card holds while it's being filled in. */
 interface CardDraft {
@@ -179,6 +212,7 @@ export function ApplianceSurvey() {
           // A kind either declares variants or it doesn't; don't show an
           // empty selector for a ceiling fan.
           const showSubtypes = Boolean(kind?.hasSubtype) && subtypes.length > 0;
+          const ApplianceIcon = iconForAppliance(kind?.applianceName);
 
           return (
             <section className={styles.ApplianceCard} key={index}>
@@ -186,7 +220,10 @@ export function ApplianceSurvey() {
                 <label
                   className={`${styles.ApplianceCard_field} ${styles.ApplianceCard_field__grow}`}
                 >
-                  <span>Appliance</span>
+                  <span className={styles.ApplianceCard_fieldLabel}>
+                    <ApplianceIcon size={16} />
+                    Appliance
+                  </span>
                   <select
                     value={card.kindId}
                     onChange={(e) => changeKind(index, e.target.value)}
@@ -202,7 +239,10 @@ export function ApplianceSurvey() {
                 <label
                   className={`${styles.ApplianceCard_field} ${styles.ApplianceCard_field__narrow}`}
                 >
-                  <span>Qty</span>
+                  <span className={styles.ApplianceCard_fieldLabel}>
+                    <HashIcon size={16} />
+                    Qty
+                  </span>
                   <input
                     type="number"
                     min="1"
@@ -229,7 +269,10 @@ export function ApplianceSurvey() {
 
               {showSubtypes && (
                 <div className={styles.ApplianceCard_field}>
-                  <span>Type</span>
+                  <span className={styles.ApplianceCard_fieldLabel}>
+                    <TagIcon size={16} />
+                    Type
+                  </span>
                   <div className={styles.ToggleGroup}>
                     {subtypes.map((s) => (
                       <button
@@ -253,7 +296,10 @@ export function ApplianceSurvey() {
               <label
                 className={`${styles.ApplianceCard_field} ${styles.ApplianceCard_field__narrow}`}
               >
-                <span>Age (years)</span>
+                <span className={styles.ApplianceCard_fieldLabel}>
+                  <CalendarIcon size={16} />
+                  Age (years)
+                </span>
                 <input
                   type="number"
                   min="0"
