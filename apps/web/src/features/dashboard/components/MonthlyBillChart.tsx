@@ -127,14 +127,6 @@ export function MonthlyBillChart({
         role="img"
         aria-label={`Monthly bill trend over ${points.length} months, ending at ${points[points.length - 1].month} with ${formatValue(points[points.length - 1].amount)}${unit ? ` ${unit}` : ""}`}
       >
-        <line
-          className={styles.MonthlyBillChart_gridline}
-          x1={PADDING.left}
-          x2={VIEW_WIDTH - PADDING.right}
-          y1={baseline}
-          y2={baseline}
-        />
-
         {showAverage && points.length > 1 && (
           <line
             className={styles.MonthlyBillChart_averageLine}
@@ -176,6 +168,14 @@ export function MonthlyBillChart({
             />
           </g>
         ))}
+
+        <line
+          className={styles.MonthlyBillChart_gridline}
+          x1={PADDING.left}
+          x2={VIEW_WIDTH - PADDING.right}
+          y1={baseline}
+          y2={baseline}
+        />
       </svg>
 
       <div

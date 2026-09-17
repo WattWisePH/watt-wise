@@ -29,7 +29,7 @@
 }
 
 .MonthlyBillChart_averageLine {
-  stroke: var(--warning-200);
+  stroke: var(--secondary-200);
   stroke-width: 2;
   stroke-dasharray: 6 3;
   vector-effect: non-scaling-stroke;
@@ -58,8 +58,8 @@
   stroke: var(--primary-700);
 }
 
-.MonthlyBillChart_bar[data-current="true"] {
-  fill: var(--warning-500);
+.MonthlyBillChart .MonthlyBillChart_bar[data-current="true"] {
+  fill: var(--warning-300);
   stroke: var(--warning-700);
 }
 
@@ -151,6 +151,6 @@
   display: inline-block;
   width: 14px;
   height: 0;
-  border-top: 2px dashed var(--warning-200);
+  border-top: 2px dashed var(--secondary-200);
   font-style: normal;
 }
