@@ -5,33 +5,24 @@ export const InsightsTabs = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const currentTab = pathname.split("/")[2];
-  console.log("Current tab:", currentTab);
 
   return (
     <div className={styles.Tabs_background}>
       <ul className={styles.Tabs_container}>
         <li className={styles.Tabs_itemContainer}>
           <button
-            className={styles.Tabs_button}
+            className={`${styles.Tabs_button} ${currentTab === "health-score" ? styles.Tabs_button__selected : ""}`}
             onClick={() => navigate("health-score")}
           >
-            <div
-              className={`${styles.Tabs_label} ${currentTab === "health-score" ? styles.Tabs_label__selected : ""}`}
-            >
-              Health Score
-            </div>
+            <div className={`${styles.Tabs_label}`}>Health Score</div>
           </button>
         </li>
         <li className={styles.Tabs_itemContainer}>
           <button
-            className={styles.Tabs_button}
+            className={`${styles.Tabs_button} ${currentTab === "priority-actions" ? styles.Tabs_button__selected : ""}`}
             onClick={() => navigate("priority-actions")}
           >
-            <div
-              className={`${styles.Tabs_label} ${currentTab === "priority-actions" ? styles.Tabs_label__selected : ""}`}
-            >
-              Priority Actions
-            </div>
+            <div className={styles.Tabs_label}>Priority Actions</div>
           </button>
         </li>
       </ul>

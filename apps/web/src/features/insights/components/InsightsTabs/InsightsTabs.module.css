@@ -1,6 +1,4 @@
 .Tabs_background {
-  /* background-color: #e9eee5; */
-  background-color: var(--bg-surface);
   width: 100%;
 }
 
@@ -9,9 +7,11 @@
   list-style: none;
   padding-left: 0;
   display: flex;
+  gap: 6px;
   justify-content: space-evenly;
   max-width: 56rem;
-  width: 100%;
+  margin: 12px;
+  margin-bottom: 0;
 }
 
 .Tabs_itemContainer {
@@ -21,32 +21,35 @@
 }
 
 .Tabs_button {
+  height: 36px;
   border: none;
   background-color: transparent;
   font-size: 14px;
   font-weight: bold;
-  padding: 0;
   cursor: pointer;
   width: 100%;
   color: var(--text-muted);
+  border-radius: var(--radius-medium);
+  transition: background-color 200ms;
 }
 
 .Tabs_button:hover {
   background-color: var(--bg-surface-hover);
 }
 
+.Tabs_button__selected {
+  background-color: var(--bg-secondary);
+  color: var(--text-on-secondary);
+}
+
+.Tabs_button__selected:hover {
+  background-color: var(--bg-secondary-hover);
+}
+
 .Tabs_label {
-  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto;
   width: fit-content;
-}
-
-.Tabs_label__selected {
-  padding-top: 2px;
-  color: var(--text-secondary);
-  border-bottom: 3px solid var(--text-secondary);
-  border-radius: 2px;
 }
