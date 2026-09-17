@@ -63,7 +63,7 @@ export function Dashboard() {
         </li>
         <li className={styles.QuickLinks_item}>
           <ClipboardTextIcon size={24} className={duotone.navy} />
-          <p>My Inventory</p>
+          <p>My Appliances</p>
         </li>
         <li className={styles.QuickLinks_item}>
           <CheckSquareIcon size={24} className={duotone.green} />
@@ -113,7 +113,7 @@ export function Dashboard() {
         className={`${styles.Dashboard_card} ${styles.Dashboard_card__secondary}`}
       >
         <div className={styles.Card_header}>
-          <h3 className={styles.Card_title}>Monthly Bill Trend</h3>
+          <h3 className={styles.Card_title}>Monthly Bill Chart</h3>
           {/* <InfoIcon size={24} /> */}
         </div>
         <MonthlyBillChart

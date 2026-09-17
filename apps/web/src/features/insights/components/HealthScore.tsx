@@ -44,7 +44,7 @@ export const HealthScore = () => {
             You consume{" "}
             <span className={styles.Benchmark_description__colored}>18%</span>{" "}
             more electricity than similar{" "}
-            <span className={styles.Benchmark_description__colored}>cafes</span>{" "}
+            <span className={styles.Benchmark_description__colored}>cafes</span>
             .
           </p>
         </div>
@@ -52,7 +52,7 @@ export const HealthScore = () => {
           <div className={styles.Insights_cardTitle}>
             <GaugeIcon
               size={20}
-              className={`${duotone.navy} ${styles.Insights_cardIcon}`}
+              className={`${duotone.neutral} ${styles.Insights_cardIcon}`}
             />
             Comparison Bar
           </div>
@@ -62,9 +62,9 @@ export const HealthScore = () => {
           <div className={styles.Insights_cardTitle}>
             <ChartBarIcon
               size={20}
-              className={`${duotone.amber} ${styles.Insights_cardIcon}`}
+              className={`${duotone.neutral} ${styles.Insights_cardIcon}`}
             />
-            Average KWH Consumption this Month
+            Monthly Consumption
           </div>
           <ConsumptionComparison rows={consumptionRows} />
         </div>
