@@ -1,0 +1,19 @@
+.Stats_header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.Stats_card__increase {
+  background-color: var(--bg-danger);
+  color: var(--text-on-danger);
+}
+
+.Stats_card__decrease {
+  background-color: var(--bg-success);
+  color: var(--text-on-success);
+}
+
+.Stats_trendIcon {
+  flex-shrink: 0;
+}

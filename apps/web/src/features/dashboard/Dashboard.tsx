@@ -19,6 +19,7 @@ import {
 import styles from "./Dashboard.module.css";
 import duotone from "../../styles/DuotoneIcon.module.css";
 import { MonthlyBillChart } from "./components/MonthlyBillChart";
+import { DashboardStats } from "./components/DashboardStats";
 import { HealthScoreGauge } from "../../components/HealthScoreGauge";
 
 const BILL_HISTORY = [
@@ -123,52 +124,15 @@ export function Dashboard() {
           height={180}
         />
       </div>
-      <div className={styles.Stats}>
-        <div className={`${styles.Dashboard_card} ${styles.Stats_card}`}>
-          <p className={`${styles.Stats_label} ${styles.Text_muted}`}>
-            This Month
-          </p>
-          <div>
-            <span className={styles.Stats_value}>18,236</span>
-            <span className={`${styles.Stats_label} ${styles.Text_muted}`}>
-              pesos
-            </span>
-          </div>
-        </div>
-        <div className={`${styles.Dashboard_card} ${styles.Stats_card}`}>
-          <p className={`${styles.Stats_label} ${styles.Text_muted}`}>
-            vs Last Month
-          </p>
-          <div>
-            <span className={styles.Stats_value}>8.6%</span>
-            <span className={`${styles.Stats_label} ${styles.Text_muted}`}>
-              increase
-            </span>
-          </div>
-        </div>
-        <div className={`${styles.Dashboard_card} ${styles.Stats_card}`}>
-          <p className={`${styles.Stats_label} ${styles.Text_muted}`}>
-            Total Consumption
-          </p>
-          <div>
-            <span className={styles.Stats_value}>312</span>
-            <span className={`${styles.Stats_label} ${styles.Text_muted}`}>
-              kWh
-            </span>
-          </div>
-        </div>
-        <div className={`${styles.Dashboard_card} ${styles.Stats_card}`}>
-          <p className={`${styles.Stats_label} ${styles.Text_muted}`}>
-            Cost per kWh
-          </p>
-          <div>
-            <span className={styles.Stats_value}>5.85</span>
-            <span className={`${styles.Stats_label} ${styles.Text_muted}`}>
-              pesos
-            </span>
-          </div>
-        </div>
-      </div>
+      <DashboardStats
+        currentMonthAmount={18236}
+        currentMonthUnit="pesos"
+        vsLastMonthPercent={8.6}
+        totalConsumption={312}
+        totalConsumptionUnit="kWh"
+        costPerUnit={5.85}
+        costPerUnitLabel="kWh"
+      />
     </div>
   );
 }
