@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router";
+
 import {
   BellIcon,
   ReceiptIcon,
@@ -17,8 +19,17 @@ import {
 
 import styles from "./Dashboard.module.css";
 import duotone from "../../styles/DuotoneIcon.module.css";
-import { useNavigate } from "react-router";
+import { MonthlyBillChart } from "./components/MonthlyBillChart";
 import { HealthScoreGauge } from "../../components/HealthScoreGauge";
+
+const BILL_HISTORY = [
+  { month: "Apr", amount: 15420 },
+  { month: "May", amount: 16810 },
+  { month: "Jun", amount: 15990 },
+  { month: "Jul", amount: 17250 },
+  { month: "Aug", amount: 16790 },
+  { month: "Sep", amount: 18236 },
+];
 
 /**
  * Energy dashboard component. This is what the user first sees when logged in.
@@ -104,11 +115,13 @@ export function Dashboard() {
           <h3 className={styles.Card_title}>Monthly Bill Trend</h3>
           <InfoIcon size={24} />
         </div>
-        <div
-          className={`${styles.MonthlyCard_placeholder} ${styles.Text_muted}`}
-        >
-          placeholder
-        </div>
+        <MonthlyBillChart
+          data={BILL_HISTORY}
+          unit="pesos"
+          color="secondary"
+          monthsToShow={6}
+          height={180}
+        />
       </div>
       <div className={styles.Stats}>
         <div className={`${styles.Dashboard_card} ${styles.Stats_card}`}>
