@@ -33,7 +33,7 @@ p {
 }
 
 .Dashboard_card__secondary {
-  background-color: var(--bg-secondary);
+  background-color: var(--secondary-400);
   color: var(--text-on-secondary);
 }
 

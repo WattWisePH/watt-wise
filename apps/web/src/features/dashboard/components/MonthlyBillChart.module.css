@@ -15,7 +15,7 @@
   height: 160px;
   border-radius: var(--radius-medium);
   background-color: var(--bg-surface);
-  color: var(--text-muted);
+  color: var(--text);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -23,14 +23,14 @@
 }
 
 .MonthlyBillChart_gridline {
-  stroke: var(--outline);
-  stroke-width: 1;
+  stroke: var(--bg-secondary);
+  stroke-width: 2;
   vector-effect: non-scaling-stroke;
 }
 
 .MonthlyBillChart_averageLine {
-  stroke: var(--text-muted);
-  stroke-width: 1;
+  stroke: var(--warning-200);
+  stroke-width: 2;
   stroke-dasharray: 6 3;
   vector-effect: non-scaling-stroke;
 }
@@ -50,7 +50,7 @@
 
 .MonthlyBillChart[data-color="secondary"] .MonthlyBillChart_bar {
   fill: var(--secondary-300);
-  stroke: var(--secondary-600);
+  stroke: var(--bg-secondary);
 }
 
 .MonthlyBillChart[data-color="primary"] .MonthlyBillChart_bar {
@@ -72,7 +72,7 @@
   display: flex;
   margin-top: 4px;
   font-size: 12px;
-  color: var(--text-muted);
+  color: var(--secondary-200);
 }
 
 .MonthlyBillChart_xLabel {
@@ -85,7 +85,7 @@
 }
 
 .MonthlyBillChart_xLabel[data-active="true"] {
-  color: var(--text);
+  color: var(--text-on-secondary);
   font-weight: bold;
 }
 
@@ -144,13 +144,13 @@
   gap: 6px;
   margin-top: 8px;
   font-size: 11px;
-  color: var(--text-muted);
+  color: var(--text-on-secondary);
 }
 
 .MonthlyBillChart_legendSwatch {
   display: inline-block;
   width: 14px;
   height: 0;
-  border-top: 2px dashed var(--text-muted);
+  border-top: 2px dashed var(--warning-200);
   font-style: normal;
 }

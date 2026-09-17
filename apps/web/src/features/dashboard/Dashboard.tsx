@@ -10,7 +10,6 @@ import {
   HandshakeIcon,
   PlusIcon,
   ArrowCircleRightIcon,
-  InfoIcon,
   SealWarningIcon,
   WarningIcon,
   CaretDownIcon,
@@ -110,15 +109,16 @@ export function Dashboard() {
           </li>
         </ul>
       </div>
-      <div className={styles.Dashboard_card}>
+      <div
+        className={`${styles.Dashboard_card} ${styles.Dashboard_card__secondary}`}
+      >
         <div className={styles.Card_header}>
           <h3 className={styles.Card_title}>Monthly Bill Trend</h3>
-          <InfoIcon size={24} />
+          {/* <InfoIcon size={24} /> */}
         </div>
         <MonthlyBillChart
           data={BILL_HISTORY}
           unit="pesos"
-          color="secondary"
           monthsToShow={6}
           height={180}
         />

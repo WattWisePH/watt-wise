@@ -28,10 +28,27 @@ const VIEW_WIDTH = 320;
 const PADDING = { top: 28, right: 8, bottom: 4, left: 8 };
 const MAX_BAR_WIDTH = 80;
 const BAR_GAP = 12;
-const BAR_RADIUS = 4;
+const BAR_RADIUS = 6;
 
 function formatValue(value: number): string {
   return Math.round(value).toLocaleString();
+}
+
+function topRoundedBarPath(
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  radius: number,
+): string {
+  const r = Math.min(radius, width / 2, height);
+  return `M ${x} ${y + height}
+    L ${x} ${y + r}
+    Q ${x} ${y} ${x + r} ${y}
+    L ${x + width - r} ${y}
+    Q ${x + width} ${y} ${x + width} ${y + r}
+    L ${x + width} ${y + height}
+    Z`;
 }
 
 export function MonthlyBillChart({
@@ -130,15 +147,17 @@ export function MonthlyBillChart({
 
         {bars.map((bar, i) => (
           <g key={`${bar.point.month}-${i}`}>
-            <rect
+            <path
               className={styles.MonthlyBillChart_bar}
               data-current={i === lastIndex}
               data-active={i === activeIndex}
-              x={bar.x}
-              y={bar.y}
-              width={bar.width}
-              height={Math.max(bar.height, 1)}
-              rx={BAR_RADIUS}
+              d={topRoundedBarPath(
+                bar.x,
+                bar.y,
+                bar.width,
+                Math.max(bar.height, 1),
+                BAR_RADIUS,
+              )}
             />
             <rect
               className={styles.MonthlyBillChart_hitArea}
