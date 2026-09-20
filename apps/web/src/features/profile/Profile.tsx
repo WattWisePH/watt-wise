@@ -1,5 +1,5 @@
 import styles from "./Profile.module.css";
-import logo from "../../../public/images/watty-logo.svg";
+const logo = "/images/watty-logo.svg";
 import { useNavigate } from "react-router";
 import { logout } from "../../lib/auth";
 import {

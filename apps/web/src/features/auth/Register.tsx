@@ -14,7 +14,7 @@ import styles from "./Auth.module.css";
 import { ApiError } from "../../lib/api";
 import { register } from "../../lib/auth";
 import { PasswordField } from "./PasswordField";
-import logo from "../../../public/images/watty-logo.svg";
+const logo = "/images/watty-logo.svg";
 import { AuthBackdrop } from "../../components/AuthBackdrop";
 
 export function Register() {

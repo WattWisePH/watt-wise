@@ -3,7 +3,7 @@ import { Outlet, useNavigate } from "react-router";
 
 import { logout } from "./lib/auth";
 import { supabase } from "./lib/supabase";
-import logo from "../public/images/watty-logo.svg";
+const logo = "/images/watty-logo.svg";
 import styles from "./App.module.css";
 
 /**
