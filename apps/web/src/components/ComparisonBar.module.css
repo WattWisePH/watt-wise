@@ -19,14 +19,14 @@
   border-radius: var(--radius-large);
   background: linear-gradient(
     90deg,
-    var(--primary-300) 0%,
-    var(--primary-300) 25%,
-    var(--secondary-300) 25%,
-    var(--secondary-300) 50%,
-    var(--warning-300) 50%,
-    var(--warning-300) 75%,
-    var(--danger-300) 75%,
-    var(--danger-300) 100%
+    var(--primary-600) 0%,
+    var(--primary-600) 25%,
+    var(--secondary-800) 25%,
+    var(--secondary-800) 50%,
+    var(--accent-500) 50%,
+    var(--accent-500) 75%,
+    var(--danger-500) 75%,
+    var(--danger-500) 100%
   );
 }
 
@@ -56,15 +56,15 @@
 }
 
 .ComparisonBar_indicator[data-zone="secondary"] {
-  color: var(--secondary-700);
+  color: var(--secondary-800);
 }
 
 .ComparisonBar_indicator[data-zone="warning"] {
-  color: var(--warning-800);
+  color: var(--accent-800);
 }
 
 .ComparisonBar_indicator[data-zone="danger"] {
-  color: var(--danger-600);
+  color: var(--danger-700);
 }
 
 .ComparisonBar_labelName {
@@ -108,19 +108,19 @@
 }
 
 .ComparisonBar_legendSwatch[data-zone="primary"] {
-  background-color: var(--primary-300);
+  background-color: var(--primary-600);
 }
 
 .ComparisonBar_legendSwatch[data-zone="secondary"] {
-  background-color: var(--secondary-300);
+  background-color: var(--secondary-800);
 }
 
 .ComparisonBar_legendSwatch[data-zone="warning"] {
-  background-color: var(--warning-300);
+  background-color: var(--accent-500);
 }
 
 .ComparisonBar_legendSwatch[data-zone="danger"] {
-  background-color: var(--danger-300);
+  background-color: var(--danger-500);
 }
 
 .ComparisonBar_legendSwatch__average {

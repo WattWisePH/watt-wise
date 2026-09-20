@@ -1,6 +1,14 @@
 .App {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background: var(--background);
+}
+
+.App_main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .App_header {
@@ -8,8 +16,8 @@
   align-items: center;
   justify-content: space-between;
   padding: 12px;
-  border-bottom: 1px solid var(--bg-surface);
-  background: white;
+  border-bottom: 1px solid var(--outline);
+  background: var(--background);
 }
 
 .App_logo {

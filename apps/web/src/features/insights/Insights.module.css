@@ -11,6 +11,7 @@
 .Insights_sectionTitle {
   font-size: 20px;
   font-weight: bold;
+  color: var(--text-secondary);
   margin: 0;
 }
 
@@ -40,6 +41,7 @@
   padding: 16px;
   border-radius: var(--radius-large);
   background-color: var(--bg-surface);
+  border: 1px solid var(--outline);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -190,7 +192,7 @@
 }
 
 .AverageConsumption_barFill[data-trend="up"] {
-  background-color: var(--bg-danger);
+  background-color: var(--danger-400);
 }
 
 .PriorityAction_actionList {

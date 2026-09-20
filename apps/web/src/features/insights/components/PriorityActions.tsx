@@ -56,9 +56,7 @@ export const PriorityActions = () => {
                   <button
                     className={`${styles.PriorityAction_button} ${styles.PriorityAction_button__action}`}
                   >
-                    <CheckIcon
-                      className={`${styles.PriorityAction_icon} ${duotone.green}`}
-                    />
+                    <CheckIcon className={styles.PriorityAction_icon} />
                     Action Taken
                   </button>
                   <button

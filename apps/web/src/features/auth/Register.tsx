@@ -7,12 +7,15 @@
 
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
+
 import { EnvelopeSimpleIcon, ArrowRightIcon } from "@phosphor-icons/react";
+
+import styles from "./Auth.module.css";
 import { ApiError } from "../../lib/api";
 import { register } from "../../lib/auth";
 import { PasswordField } from "./PasswordField";
 import logo from "../../../public/images/watty-logo.svg";
-import styles from "./Auth.module.css";
+import { AuthBackdrop } from "../../components/AuthBackdrop";
 
 export function Register() {
   const [email, setEmail] = useState("");
@@ -55,60 +58,69 @@ export function Register() {
   }
 
   return (
-    <div className={styles.Auth}>
-      <img src={logo} alt="Watty" className={styles.Auth_logo} />
-      <h1 className={styles.Auth_title}>Create your account</h1>
-      <p className={styles.Auth_subtitle}>Turn electricity bills into smarter decisions.</p>
+    <div className={styles.Auth_page}>
+      <AuthBackdrop />
+      <div className={styles.Auth}>
+        <img src={logo} alt="Watty" className={styles.Auth_logo} />
+        <h1 className={styles.Auth_title}>Create your account</h1>
+        <p className={styles.Auth_subtitle}>
+          Turn electricity bills into smarter decisions.
+        </p>
 
-      <form className={styles.Auth_form} onSubmit={handleSubmit}>
-        <label className={styles.Auth_field}>
-          <span className={styles.Auth_fieldLabel}>
-            <EnvelopeSimpleIcon size={16} />
-            Email
-          </span>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            autoComplete="email"
-            required
+        <form className={styles.Auth_form} onSubmit={handleSubmit}>
+          <label className={styles.Auth_field}>
+            <span className={styles.Auth_fieldLabel}>
+              <EnvelopeSimpleIcon size={16} />
+              Email
+            </span>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              autoComplete="email"
+              required
+            />
+          </label>
+
+          <PasswordField
+            label="Password"
+            value={password}
+            onChange={setPassword}
+            placeholder="At least 8 characters"
+            autoComplete="new-password"
+            minLength={8}
           />
-        </label>
 
-        <PasswordField
-          label="Password"
-          value={password}
-          onChange={setPassword}
-          placeholder="At least 8 characters"
-          autoComplete="new-password"
-          minLength={8}
-        />
+          <PasswordField
+            label="Confirm password"
+            value={confirmPassword}
+            onChange={setConfirmPassword}
+            autoComplete="new-password"
+          />
 
-        <PasswordField
-          label="Confirm password"
-          value={confirmPassword}
-          onChange={setConfirmPassword}
-          autoComplete="new-password"
-        />
+          {errors.length > 0 && (
+            <ul className={styles.Auth_errors}>
+              {errors.map((msg) => (
+                <li key={msg}>{msg}</li>
+              ))}
+            </ul>
+          )}
 
-        {errors.length > 0 && (
-          <ul className={styles.Auth_errors}>
-            {errors.map((msg) => (
-              <li key={msg}>{msg}</li>
-            ))}
-          </ul>
-        )}
+          <button
+            type="submit"
+            className={styles.Auth_submit}
+            disabled={submitting}
+          >
+            {submitting ? "Creating account…" : "Sign up"}
+            {!submitting && <ArrowRightIcon size={18} weight="bold" />}
+          </button>
+        </form>
 
-        <button type="submit" className={styles.Auth_submit} disabled={submitting}>
-          {submitting ? "Creating account…" : "Sign up"}
-          {!submitting && <ArrowRightIcon size={18} weight="bold" />}
-        </button>
-      </form>
-
-      <p className={styles.Auth_alt}>
-        Already have an account? <Link to="/login">Sign in</Link>
-      </p>
+        <p className={styles.Auth_alt}>
+          Already have an account? <Link to="/login">Sign in</Link>
+        </p>
+      </div>
     </div>
   );
 }

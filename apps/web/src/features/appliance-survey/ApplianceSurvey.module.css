@@ -9,6 +9,7 @@
 .ApplianceSurvey_title {
   font-size: 1.5rem;
   font-weight: 700;
+  color: var(--text-secondary);
   margin: 8px 0 4px;
 }
 
@@ -27,6 +28,7 @@
   margin-bottom: 12px;
   border-radius: var(--radius-large);
   background: var(--bg-surface);
+  border: 1px solid var(--outline);
 }
 
 .ApplianceCard_row {
@@ -73,6 +75,7 @@
   background: var(--background);
   transition: box-shadow 0.15s ease;
   transition-delay: 0.05s;
+  border: 1px solid var(--outline);
 }
 
 .ApplianceCard_field select {
@@ -130,24 +133,25 @@
   font-weight: 500;
   color: var(--text);
   cursor: pointer;
+  border: 1px solid var(--outline);
 }
 
 .Toggle__on {
-  background: var(--bg-primary);
-  color: var(--text-on-primary);
+  background: var(--bg-primary-subtle);
+  color: var(--text-on-primary-subtle);
   font-weight: 600;
 }
 
 .ApplianceSurvey_add {
   width: 100%;
   padding: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
   border: 1px dashed var(--bg-primary-hover);
-  border-radius: var(--radius-medium);
+  border-radius: var(--radius-large);
   background: var(--bg-success);
   color: var(--text-on-success);
   font-size: 0.9rem;
@@ -163,7 +167,7 @@
   justify-content: center;
   gap: 8px;
   border: none;
-  border-radius: var(--radius-medium);
+  border-radius: var(--radius-large);
   background: var(--bg-secondary);
   color: var(--text-on-secondary);
   font-size: 1rem;

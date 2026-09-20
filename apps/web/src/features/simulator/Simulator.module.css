@@ -18,6 +18,7 @@
 .Simulator_sectionTitle {
   font-size: 20px;
   font-weight: bold;
+  color: var(--text-secondary);
   margin: 0;
 }
 
@@ -117,20 +118,23 @@
 }
 
 .Simulator_button {
-  border: none;
+  border: 1px solid var(--outline);
   cursor: pointer;
   padding: 16px;
   border-radius: var(--radius-large);
   font-size: 14px;
   font-weight: bold;
   transition: 100ms all;
-  background-color: var(--bg-secondary);
-  color: var(--text-on-secondary);
+  background-color: var(--bg-surface);
+  color: var(--text);
+}
+
+.Simulator_button:hover {
+  background-color: var(--bg-surface-hover);
 }
 
 .Simulator_button:active {
   transform: scale(0.98);
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .Simulator_itemList {
@@ -145,6 +149,7 @@
   gap: 8px;
   height: fit-content;
   background-color: var(--bg-surface);
+  border: 1px solid var(--outline);
   border-radius: var(--radius-large);
   padding: 16px;
   cursor: pointer;

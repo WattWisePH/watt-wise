@@ -1,7 +1,8 @@
 .NavBar {
   position: fixed;
   bottom: 0;
-  background-color: var(--bg-surface);
+  background-color: var(--background);
+  border-top: 1px solid var(--outline);
   padding: 4px;
   width: 100%;
   z-index: 999;
@@ -57,7 +58,7 @@
 }
 
 .NavBar_menuName__amber {
-  color: var(--warning-700);
+  color: var(--accent-700);
 }
 
 .NavBar_menuName__green {

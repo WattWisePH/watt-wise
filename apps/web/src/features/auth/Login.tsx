@@ -7,12 +7,15 @@
 
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
+
 import { EnvelopeSimpleIcon, ArrowRightIcon } from "@phosphor-icons/react";
-import { ApiError } from "../../lib/api";
+
+import styles from "./Auth.module.css";
 import { login } from "../../lib/auth";
+import { ApiError } from "../../lib/api";
 import { PasswordField } from "./PasswordField";
 import logo from "../../../public/images/watty-logo.svg";
-import styles from "./Auth.module.css";
+import { AuthBackdrop } from "../../components/AuthBackdrop";
 
 export function Login() {
   const [email, setEmail] = useState("");
@@ -43,51 +46,60 @@ export function Login() {
   }
 
   return (
-    <div className={styles.Auth}>
-      <img src={logo} alt="Watty" className={styles.Auth_logo} />
-      <h1 className={styles.Auth_title}>Welcome back</h1>
-      <p className={styles.Auth_subtitle}>Sign in to see your energy insights.</p>
+    <div className={styles.Auth_page}>
+      <AuthBackdrop />
+      <div className={styles.Auth}>
+        <img src={logo} alt="Watty" className={styles.Auth_logo} />
+        <h1 className={styles.Auth_title}>Welcome back</h1>
+        <p className={styles.Auth_subtitle}>
+          Sign in to see your energy insights.
+        </p>
 
-      <form className={styles.Auth_form} onSubmit={handleSubmit}>
-        <label className={styles.Auth_field}>
-          <span className={styles.Auth_fieldLabel}>
-            <EnvelopeSimpleIcon size={16} />
-            Email
-          </span>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            autoComplete="email"
-            required
+        <form className={styles.Auth_form} onSubmit={handleSubmit}>
+          <label className={styles.Auth_field}>
+            <span className={styles.Auth_fieldLabel}>
+              <EnvelopeSimpleIcon size={16} />
+              Email
+            </span>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              autoComplete="email"
+              required
+            />
+          </label>
+
+          <PasswordField
+            label="Password"
+            value={password}
+            onChange={setPassword}
+            autoComplete="current-password"
           />
-        </label>
 
-        <PasswordField
-          label="Password"
-          value={password}
-          onChange={setPassword}
-          autoComplete="current-password"
-        />
+          {errors.length > 0 && (
+            <ul className={styles.Auth_errors}>
+              {errors.map((msg) => (
+                <li key={msg}>{msg}</li>
+              ))}
+            </ul>
+          )}
 
-        {errors.length > 0 && (
-          <ul className={styles.Auth_errors}>
-            {errors.map((msg) => (
-              <li key={msg}>{msg}</li>
-            ))}
-          </ul>
-        )}
+          <button
+            type="submit"
+            className={styles.Auth_submit}
+            disabled={submitting}
+          >
+            {submitting ? "Signing in…" : "Sign in"}
+            {!submitting && <ArrowRightIcon size={18} weight="bold" />}
+          </button>
+        </form>
 
-        <button type="submit" className={styles.Auth_submit} disabled={submitting}>
-          {submitting ? "Signing in…" : "Sign in"}
-          {!submitting && <ArrowRightIcon size={18} weight="bold" />}
-        </button>
-      </form>
-
-      <p className={styles.Auth_alt}>
-        No account yet? <Link to="/register">Register</Link>
-      </p>
+        <p className={styles.Auth_alt}>
+          No account yet? <Link to="/register">Register</Link>
+        </p>
+      </div>
     </div>
   );
 }

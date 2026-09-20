@@ -31,6 +31,7 @@ import {
   type Provider,
 } from "../../lib/establishments";
 import styles from "./EstablishmentSetup.module.css";
+import { AuthBackdrop } from "../../components/AuthBackdrop";
 
 export function EstablishmentSetup() {
   const [name, setName] = useState("");
@@ -110,7 +111,9 @@ export function EstablishmentSetup() {
   }
 
   return (
-    <div className={styles.EstablishmentSetup}>
+    <div className={styles.EstablishmentSetup_page}>
+      <AuthBackdrop />
+      <div className={styles.EstablishmentSetup}>
       <h1 className={styles.EstablishmentSetup_title}>Tell us about your place</h1>
       <p className={styles.EstablishmentSetup_subtitle}>
         These details let Watty compare your usage against similar
@@ -212,6 +215,7 @@ export function EstablishmentSetup() {
           {!submitting && <ArrowRightIcon size={18} weight="bold" />}
         </button>
       </form>
+      </div>
     </div>
   );
 }

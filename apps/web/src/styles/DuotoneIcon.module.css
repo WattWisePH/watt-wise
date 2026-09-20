@@ -24,13 +24,16 @@
   fill: var(--secondary-800);
 }
 
+/* This is the brand accent color, not the caution/warning state — used for
+   nav and icon identity (e.g. the Insights tab, notification bell), so it
+   is keyed to --accent-*, not --warning-*. */
 .amber path:first-child {
-  fill: var(--warning-300);
+  fill: var(--accent-300);
   opacity: 1;
 }
 
 .amber path:last-child {
-  fill: var(--warning-700);
+  fill: var(--accent-700);
 }
 
 .neutral path:first-child {

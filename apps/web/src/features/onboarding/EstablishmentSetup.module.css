@@ -2,7 +2,15 @@
    Shares Auth.module.css's tokens so the step after sign-up doesn't look
    like a different app. */
 
+.EstablishmentSetup_page {
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+}
+
 .EstablishmentSetup {
+  position: relative;
+  z-index: 1;
   max-width: 360px;
   margin: 0 auto;
   padding: 40px 20px;
@@ -13,13 +21,20 @@
 .EstablishmentSetup_title {
   font-size: 1.5rem;
   font-weight: 700;
+  color: var(--text-secondary);
   margin: 0 0 4px;
 }
 
 .EstablishmentSetup_subtitle {
+  position: relative;
+  z-index: 1;
   color: var(--text-muted);
   font-size: 0.9rem;
   margin: 0 0 24px;
+  padding: 12px;
+  border-radius: var(--radius-large);
+  background: var(--bg-surface);
+  border: 1px solid var(--outline);
 }
 
 .EstablishmentSetup_form {
@@ -63,6 +78,7 @@
   background: var(--bg-surface);
   transition: box-shadow 0.15s ease;
   transition-delay: 0.05s;
+  border: 1px solid var(--outline);
 }
 
 .EstablishmentSetup_field select {

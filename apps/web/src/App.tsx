@@ -52,7 +52,7 @@ function App() {
           </button>
         )}
       </header>
-      <main>
+      <main className={styles.App_main}>
         <Outlet />
       </main>
     </div>

@@ -1,6 +1,14 @@
 /* Shared styles for the register and login pages. */
 
+.Auth_page {
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+}
+
 .Auth {
+  position: relative;
+  z-index: 1;
   max-width: 360px;
   margin: 0 auto;
   padding: 40px 20px;
@@ -11,6 +19,7 @@
 .Auth_title {
   font-size: 1.5rem;
   font-weight: 700;
+  color: var(--text-secondary);
   margin: 0 0 4px;
 }
 
@@ -55,6 +64,7 @@
   background: var(--bg-surface);
   transition: box-shadow 0.15s ease;
   transition-delay: 0.05s;
+  border: 1px solid var(--outline);
 }
 
 .Auth_field input:focus {
@@ -67,6 +77,9 @@
   height: 96px;
   width: 96px;
   margin: 0 auto 24px;
+  padding: 12px 12px 6px 12px;
+  border-radius: 50%;
+  background: var(--bg-surface);
 }
 
 /* Password input with its reveal toggle sitting inside the field. */

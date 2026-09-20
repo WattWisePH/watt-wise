@@ -11,6 +11,7 @@
 .BillUpload_title {
   font-size: 1.6rem;
   font-weight: 700;
+  color: var(--text-secondary);
   text-align: center;
   margin: 8px 0 4px;
 }
@@ -154,6 +155,7 @@
   background: var(--bg-surface);
   transition: box-shadow 0.15s ease;
   transition-delay: 0.05s;
+  border: 1px solid var(--outline);
 }
 
 .BillForm_field input:focus {

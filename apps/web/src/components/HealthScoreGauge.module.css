@@ -3,6 +3,7 @@
   border-radius: var(--radius-large);
   display: flex;
   flex-direction: column;
+  border: 1px solid var(--outline);
   gap: 4px;
   color: var(--text-on-primary);
 }

@@ -23,13 +23,13 @@
 }
 
 .MonthlyBillChart_gridline {
-  stroke: var(--bg-secondary);
+  stroke: var(--outline);
   stroke-width: 2;
   vector-effect: non-scaling-stroke;
 }
 
 .MonthlyBillChart_averageLine {
-  stroke: var(--secondary-200);
+  stroke: var(--neutral-400);
   stroke-width: 2;
   stroke-dasharray: 6 3;
   vector-effect: non-scaling-stroke;
@@ -49,7 +49,7 @@
 }
 
 .MonthlyBillChart[data-color="secondary"] .MonthlyBillChart_bar {
-  fill: var(--secondary-300);
+  fill: var(--bg-secondary);
   stroke: var(--bg-secondary);
 }
 
@@ -58,9 +58,11 @@
   stroke: var(--primary-700);
 }
 
+/* Highlights the current month — this is the brand accent color, not a
+   caution/warning state. */
 .MonthlyBillChart .MonthlyBillChart_bar[data-current="true"] {
-  fill: var(--warning-300);
-  stroke: var(--warning-700);
+  fill: var(--accent-300);
+  stroke: var(--accent-700);
 }
 
 .MonthlyBillChart_hitArea {
@@ -72,7 +74,7 @@
   display: flex;
   margin-top: 4px;
   font-size: 12px;
-  color: var(--secondary-200);
+  color: var(--text-muted);
 }
 
 .MonthlyBillChart_xLabel {
@@ -85,7 +87,7 @@
 }
 
 .MonthlyBillChart_xLabel[data-active="true"] {
-  color: var(--text-on-secondary);
+  color: var(--text-secondary);
   font-weight: bold;
 }
 
@@ -99,7 +101,10 @@
   pointer-events: none;
   text-align: center;
   white-space: nowrap;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  /* A floating tooltip is the one place a shadow earns its keep — kept soft
+     and tied to the ink color rather than a generic black, since the rest
+     of the app's surfaces are flat. */
+  box-shadow: 0px 4px 10px rgba(26, 24, 21, 0.18);
   z-index: 1;
 }
 
@@ -144,13 +149,13 @@
   gap: 6px;
   margin-top: 8px;
   font-size: 11px;
-  color: var(--text-on-secondary);
+  color: var(--text-muted);
 }
 
 .MonthlyBillChart_legendSwatch {
   display: inline-block;
   width: 14px;
   height: 0;
-  border-top: 2px dashed var(--secondary-200);
+  border-top: 2px dashed var(--neutral-400);
   font-style: normal;
 }

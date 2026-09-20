@@ -72,7 +72,7 @@ export function Dashboard() {
         </li>
         <li className={styles.QuickLinks_item}>
           <GaugeIcon size={24} className={duotone.navy} />
-          <p>Benchmarking</p>
+          <p>Benchmark</p>
         </li>
         <li className={styles.QuickLinks_item}>
           <StorefrontIcon size={24} className={duotone.green} />
@@ -110,9 +110,7 @@ export function Dashboard() {
           </li>
         </ul>
       </div>
-      <div
-        className={`${styles.Dashboard_card} ${styles.Dashboard_card__secondary}`}
-      >
+      <div className={styles.Dashboard_card}>
         <div className={styles.Card_header}>
           <h3 className={styles.Card_title}>Monthly Bill Chart</h3>
           {/* <InfoIcon size={24} /> */}

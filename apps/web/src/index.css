@@ -1,51 +1,71 @@
 /* Global base styles for the Watty web app. */
 
 :root {
-  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+  /* Typography */
+  --font-body: Figtree, system-ui, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-body);
+  --weight-display: 800;
+  --leading-display: 1.05;
+
+  font-family: var(--font-body);
   line-height: 1.5;
-  color: #1a1a1a;
-  background: #f7faf7;
+  color: #1a1815;
+  background: #f1eee6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
   /* Color Variables */
   /* Primitives */
-  /* Primary (brand green) */
-  --primary-50: #f3fbf3;
-  --primary-100: #e5f5e5;
-  --primary-200: #cbeccd;
-  --primary-300: #9edba1;
-  --primary-400: #6ec972;
-  --primary-500: #43b749;
-  --primary-600: #348d38;
-  --primary-700: #29702d;
-  --primary-800: #1e5221;
-  --primary-900: #153816;
-  --primary-950: #0c220d;
-  /* Secondary (brand navy) */
-  --secondary-50: #f0f6fd;
-  --secondary-100: #dfecfb;
-  --secondary-200: #c0d9f8;
-  --secondary-300: #89b9f1;
-  --secondary-400: #4d95ea;
-  --secondary-500: #1a75e0;
-  --secondary-600: #145aad;
-  --secondary-700: #104789;
-  --secondary-800: #0c3464;
-  --secondary-900: #082445;
-  --secondary-950: #051529;
-  /* Warning & Accent (brand amber) */
-  --warning-50: #fffbef;
-  --warning-100: #fff7db;
-  --warning-200: #ffefb8;
-  --warning-300: #ffe07b;
-  --warning-400: #ffd138;
-  --warning-500: #fac000;
-  --warning-600: #c19400;
-  --warning-700: #997600;
-  --warning-800: #705600;
-  --warning-900: #4d3b00;
-  --warning-950: #2e2300;
+  /* Primary (brand green) — 600 is the logo green #2E7D32 */
+  --primary-50: #f1f8f1;
+  --primary-100: #dcefdd;
+  --primary-200: #bbdebd;
+  --primary-300: #8ac68e;
+  --primary-400: #55a85b;
+  --primary-500: #3a8f40;
+  --primary-600: #2e7d32;
+  --primary-700: #256428;
+  --primary-800: #1d4c20;
+  --primary-900: #153517;
+  --primary-950: #0b1f0d;
+  /* Secondary (brand navy) — 800 is the logo navy #0B315E */
+  --secondary-50: #eff5fc;
+  --secondary-100: #dbe9f8;
+  --secondary-200: #bcd5f1;
+  --secondary-300: #8bb6e6;
+  --secondary-400: #5291d6;
+  --secondary-500: #2a72bd;
+  --secondary-600: #1d5a9c;
+  --secondary-700: #16477d;
+  --secondary-800: #0b315e;
+  --secondary-900: #082444;
+  --secondary-950: #051627;
+  /* Accent (brand amber) — 500 is the logo amber #FFC400.
+     Decorative only, and deliberately kept to one element per screen.
+     Anything that signals a *state* belongs in --warning-* instead. */
+  --accent-50: #fffbeb;
+  --accent-100: #fff4c8;
+  --accent-200: #ffe88f;
+  --accent-300: #ffda52;
+  --accent-400: #ffcd20;
+  --accent-500: #ffc400;
+  --accent-600: #d19d00;
+  --accent-700: #a37a00;
+  --accent-800: #755800;
+  --accent-900: #4d3a00;
+  --accent-950: #2b2000;
+  /* Warning */
+  --warning-50: #fff7ed;
+  --warning-100: #ffedd5;
+  --warning-200: #fed7aa;
+  --warning-300: #fdba74;
+  --warning-400: #fb923c;
+  --warning-500: #f97316;
+  --warning-600: #ea580c;
+  --warning-700: #c2410c;
+  --warning-800: #9a3412;
+  --warning-900: #7c2d12;
+  --warning-950: #431407;
   --danger-50: #fdf3f1;
   --danger-100: #fbe3df;
   --danger-200: #f8c7bf;
@@ -58,48 +78,51 @@
   --danger-900: #451108;
   --danger-950: #290a05;
   /* Neutral */
-  --neutral-50: #f7f7f7;
-  --neutral-100: #ededed;
-  --neutral-200: #dbdcdb;
-  --neutral-300: #bcbebc;
-  --neutral-400: #9a9e9a;
-  --neutral-500: #7a7f7b;
-  --neutral-600: #5e625f;
-  --neutral-700: #4b4e4b;
-  --neutral-800: #373937;
-  --neutral-900: #262726;
-  --neutral-950: #161717;
+  --neutral-50: #fbf9f5;
+  --neutral-100: #f1eee6;
+  --neutral-200: #e4e0d4;
+  --neutral-300: #c9c3b2;
+  --neutral-400: #a8a192;
+  --neutral-500: #8a8375;
+  --neutral-600: #6b655a;
+  --neutral-700: #544f46;
+  --neutral-800: #3d3933;
+  --neutral-900: #2a2723;
+  --neutral-950: #1a1815;
 
   /* Semantic */
   /* use these in the app */
-  --background: var(--neutral-50);
+  --background: var(--neutral-100);
   --text: var(--neutral-950);
   --text-muted: var(--neutral-600);
   --text-primary: var(--primary-700);
-  --text-on-primary: var(--primary-800);
+  --text-on-primary: var(--primary-50);
   --text-secondary: var(--secondary-800);
-  --text-on-secondary: var(--secondary-50);
-  --text-accent: var(--warning-700);
-  --text-on-accent: var(--warning-950);
-  --bg-primary: var(--primary-300);
-  --bg-primary-hover: var(--primary-400);
-  --bg-surface: var(--neutral-100);
+  --text-on-secondary: var(--neutral-50);
+  --text-accent: var(--accent-700);
+  --text-on-accent: var(--accent-950);
+  --bg-primary: var(--primary-600);
+  --bg-primary-hover: var(--primary-700);
+  /* Quiet green wash for hover and passive states that shouldn't shout. */
+  --bg-primary-subtle: var(--primary-100);
+  --text-on-primary-subtle: var(--primary-900);
+  --bg-surface: var(--neutral-50);
+  --bg-surface-hover: var(--neutral-200);
   --bg-secondary: var(--secondary-800);
   --bg-secondary-hover: var(--secondary-900);
-  --bg-surface-hover: var(--neutral-200);
-  --bg-accent: var(--warning-500);
-  --bg-accent-hover: var(--warning-600);
-  --bg-success: var(--primary-200);
+  --bg-accent: var(--accent-500);
+  --bg-accent-hover: var(--accent-600);
+  --bg-success: var(--primary-100);
   --text-on-success: var(--primary-900);
-  --bg-warning: var(--warning-300);
+  --bg-warning: var(--warning-100);
   --text-on-warning: var(--warning-900);
-  --bg-danger: var(--danger-300);
+  --bg-danger: var(--danger-100);
   --text-on-danger: var(--danger-900);
   --outline: var(--neutral-300);
 
-  --radius-large: 12px;
-  --radius-medium: 6px;
-  --radius-small: 3px;
+  --radius-large: 16px;
+  --radius-medium: 8px;
+  --radius-small: 4px;
 }
 
 * {
@@ -113,4 +136,16 @@ body {
 
 #root {
   min-height: 100vh;
+}
+
+/* Typography config */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  line-height: var(--leading-display);
+  letter-spacing: -0.015em;
+  color: inherit;
 }
