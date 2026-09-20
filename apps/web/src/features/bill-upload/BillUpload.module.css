@@ -42,14 +42,14 @@
 }
 
 .Dropzone:hover {
-  background: var(--bg-primary);
+  background: var(--primary-200);
 }
 
 /* Scanning takes tens of seconds, so the whole dropzone shows it — a small
    label change is easy to miss while waiting. */
 .Dropzone__scanning,
 .Dropzone__scanning:hover {
-  background: var(--bg-primary);
+  background: var(--primary-300);
   border-style: solid;
   border-color: var(--bg-primary-hover);
   cursor: progress;
@@ -168,7 +168,7 @@
   align-items: center;
   gap: 4px;
   padding: 8px 16px;
-  border: none;
+  border: 1px solid var(--outline);
   border-radius: var(--radius-medium);
   background: transparent;
   color: var(--text);

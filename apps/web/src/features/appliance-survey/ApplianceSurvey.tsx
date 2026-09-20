@@ -262,7 +262,7 @@ export function ApplianceSurvey() {
                     onClick={() => removeCard(index)}
                     aria-label={`Remove appliance ${index + 1}`}
                   >
-                    <TrashIcon size={18} weight="regular" />
+                    <TrashIcon size={20} weight="regular" />
                   </button>
                 )}
               </div>
