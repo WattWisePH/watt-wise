@@ -1,18 +1,21 @@
-import styles from "./Profile.module.css";
-const logo = "/images/watty-logo.svg";
 import { useNavigate } from "react-router";
-import { logout } from "../../lib/auth";
 import {
-  CoffeeIcon,
   CaretRightIcon,
-  HouseIcon,
   PasswordIcon,
   QuestionIcon,
   SignOutIcon,
 } from "@phosphor-icons/react";
 
+const logo = "/images/watty-logo.svg";
+import { logout } from "../../lib/auth";
+import styles from "./Profile.module.css";
+import { useEstablishment } from "../establishment/hooks/useEstablishment";
+import { EstablishmentIcon } from "../establishment/EstablishmentIcon";
+
 export const Profile = () => {
   const navigate = useNavigate();
+  const { establishments, activeEstablishmentId, setActiveEstablishmentId } =
+    useEstablishment();
 
   async function handleLogOut() {
     await logout();
@@ -38,43 +41,44 @@ export const Profile = () => {
           </p>
         </div>
         <ul className={styles.EstablishmentsList_container}>
-          <li>
-            <button
-              className={`${styles.EstablishmentsList_button} ${styles.EstablishmentsList_button__active}`}
-            >
-              <div className={styles.EstablishmentsList_icon}>
-                <CoffeeIcon size={20} />
-              </div>
-              <div className={styles.EstablishmentsList_establishmentContent}>
-                <p className={styles.EstablishmentsList_establishmentName}>
-                  Cafe Marie
-                </p>
-                <p>Jaro, Iloilo</p>
-              </div>
-              Selected
-              <CaretRightIcon size={20} />
-            </button>
-          </li>
-          <li>
-            <button className={styles.EstablishmentsList_button}>
-              {" "}
-              <div className={styles.EstablishmentsList_icon}>
-                <HouseIcon size={20} />
-              </div>
-              <div className={styles.EstablishmentsList_establishmentContent}>
-                <p className={styles.EstablishmentsList_establishmentName}>
-                  Home
-                </p>
-                <p>Iloilo City</p>
-              </div>
-              <CaretRightIcon size={20} />
-            </button>
-          </li>
+          {establishments.map((establishment) => {
+            const active = establishment.id === activeEstablishmentId;
+            return (
+              <li key={establishment.id}>
+                <button
+                  className={`${styles.EstablishmentsList_button} ${
+                    active ? styles.EstablishmentsList_button__active : ""
+                  }`}
+                  onClick={() => setActiveEstablishmentId(establishment.id)}
+                >
+                  <div className={styles.EstablishmentsList_icon}>
+                    <EstablishmentIcon
+                      establishment={establishment}
+                      size={20}
+                    />
+                  </div>
+                  <div
+                    className={styles.EstablishmentsList_establishmentContent}
+                  >
+                    <p className={styles.EstablishmentsList_establishmentName}>
+                      {establishment.name}
+                    </p>
+                    <p>{establishment.address}</p>
+                  </div>
+                  {active && "Selected"}
+                  <CaretRightIcon size={20} />
+                </button>
+              </li>
+            );
+          })}
           <li>
             <button
               className={`${styles.EstablishmentsList_button} ${styles.EstablishmentsList_button__add}`}
+              onClick={() => navigate("/establishment")}
             >
-              Add New Property
+              {establishments.length === 0
+                ? "Add Your First Establishment"
+                : "Add New Establishment"}
             </button>
           </li>
         </ul>

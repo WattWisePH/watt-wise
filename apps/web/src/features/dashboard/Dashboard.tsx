@@ -12,8 +12,6 @@ import {
   ArrowCircleRightIcon,
   SealWarningIcon,
   WarningIcon,
-  CaretDownIcon,
-  CoffeeIcon,
 } from "@phosphor-icons/react";
 
 import styles from "./Dashboard.module.css";
@@ -21,6 +19,8 @@ import duotone from "../../styles/DuotoneIcon.module.css";
 import { MonthlyBillChart } from "./components/MonthlyBillChart";
 import { DashboardStats } from "./components/DashboardStats";
 import { HealthScoreGauge } from "../../components/HealthScoreGauge";
+import { EstablishmentIcon } from "../establishment/EstablishmentIcon";
+import { useEstablishment } from "../establishment/hooks/useEstablishment";
 
 const BILL_HISTORY = [
   { month: "Apr", amount: 15420 },
@@ -37,19 +37,29 @@ const BILL_HISTORY = [
  */
 export function Dashboard() {
   const navigate = useNavigate();
+  const { activeEstablishment } = useEstablishment();
+  console.log("Active Establishment:", activeEstablishment);
 
   return (
     <div className={styles.Dashboard}>
       <div className={styles.Dashboard_header}>
-        <div className={styles.Selector}>
-          <CoffeeIcon size={24} className={duotone.navy} />
-          <div className={styles.Selector_label}>Cafe Marie</div>
-          <CaretDownIcon
+        <button className={styles.Selector}>
+          {activeEstablishment && (
+            <EstablishmentIcon
+              establishment={activeEstablishment}
+              size={24}
+              className={duotone.navy}
+            />
+          )}
+          <div className={styles.Selector_label}>
+            {activeEstablishment?.name || "Set your establishment first."}
+          </div>
+          {/* <CaretDownIcon
             size={16}
             weight="bold"
             className={styles.Selector_caret}
-          />
-        </div>
+          /> */}
+        </button>
         <BellIcon size={24} className={duotone.amber} />
       </div>
       <HealthScoreGauge
