@@ -32,6 +32,7 @@ import {
 } from "../../lib/establishments";
 import styles from "./EstablishmentSetup.module.css";
 import { AuthBackdrop } from "../../components/AuthBackdrop";
+import { useEstablishment } from "../establishment/hooks/useEstablishment";
 
 export function EstablishmentSetup() {
   const [name, setName] = useState("");
@@ -48,6 +49,7 @@ export function EstablishmentSetup() {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const { setEstablishments, setActiveEstablishmentId } = useEstablishment();
   // Register passes along wherever the user was originally headed.
   const from = (location.state as { from?: string } | null)?.from ?? "/";
 
@@ -96,7 +98,9 @@ export function EstablishmentSetup() {
     setSubmitting(true);
     setErrors([]);
     try {
-      await createEstablishment({ name, typeId, providerId, address });
+      const established = await createEstablishment({ name, typeId, providerId, address });
+      setEstablishments((prev) => [established, ...prev]);
+      setActiveEstablishmentId(established.id);
       navigate(from, { replace: true });
     } catch (err) {
       // ApiError carries the API's per-field validation messages.
