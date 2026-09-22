@@ -11,7 +11,18 @@
 .Insights_sectionTitle {
   font-size: 20px;
   font-weight: bold;
+  color: var(--text-secondary);
   margin: 0;
+}
+
+.Insights_titleIcon {
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+.Insights_cardIcon {
+  vertical-align: middle;
+  flex-shrink: 0;
 }
 
 .Insights_section {
@@ -30,6 +41,7 @@
   padding: 16px;
   border-radius: var(--radius-large);
   background-color: var(--bg-surface);
+  border: 1px solid var(--outline);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -40,6 +52,9 @@
   font-weight: bold;
   margin: 0;
   line-height: 18px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .Insights_card__primary {
@@ -49,6 +64,21 @@
 .HealthCard_topRow {
   display: flex;
   justify-content: space-between;
+}
+
+.HealthCard_valueRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.HealthCard_icon {
+  font-size: 32px !important;
+}
+
+.HealthCard_icon path:first-child {
+  fill: var(--primary-400);
+  opacity: 1;
 }
 
 .HealthCard_value {
@@ -90,28 +120,79 @@
   color: var(--text-secondary);
 }
 
-.Comparison_placeholder {
+.AverageConsumption_list {
   display: flex;
-  justify-content: center;
-  opacity: 0.8;
-  font-size: 12px;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.AverageConsumption_table,
-td {
-  border-collapse: collapse;
-  padding: 8px;
-  text-align: center;
-  font-size: 16px;
+.AverageConsumption_row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.AverageConsumption_table th {
-  color: var(--text-secondary);
-  border-bottom: 1px solid var(--outline);
+.AverageConsumption_rowHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.AverageConsumption_rowLabel {
+  font-weight: 600;
+}
+
+.AverageConsumption_rowMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .AverageConsumption_number {
-  text-align: end;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.AverageConsumption_delta {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+.AverageConsumption_delta[data-trend="up"] {
+  background-color: var(--bg-danger);
+  color: var(--text-on-danger);
+}
+
+.AverageConsumption_delta[data-trend="down"] {
+  background-color: var(--bg-success);
+  color: var(--text-on-success);
+}
+
+.AverageConsumption_barTrack {
+  height: 8px;
+  border-radius: var(--radius-large);
+  background-color: var(--outline);
+  overflow: hidden;
+}
+
+.AverageConsumption_barFill {
+  height: 100%;
+  border-radius: var(--radius-large);
+  background-color: var(--text-muted);
+}
+
+.AverageConsumption_barFill[data-trend="down"] {
+  background-color: var(--primary-400);
+}
+
+.AverageConsumption_barFill[data-trend="up"] {
+  background-color: var(--danger-400);
 }
 
 .PriorityAction_actionList {
@@ -128,6 +209,7 @@ td {
 
 .PriorityAction_badge {
   background-color: var(--bg-danger);
+  color: var(--text-on-danger);
   padding: 4px 8px;
   border-radius: var(--radius-medium);
   height: fit-content;
@@ -137,6 +219,7 @@ td {
 
 .PriorityAction_badge__medium {
   background-color: var(--bg-warning);
+  color: var(--text-on-warning);
 }
 
 .PriorityAction_description {
@@ -149,7 +232,7 @@ td {
   display: flex;
   padding-top: 16px;
   justify-content: space-between;
-  gap: 16px;
+  gap: 8px;
 }
 
 .PriorityAction_button {
@@ -163,11 +246,12 @@ td {
   justify-content: center;
   cursor: pointer;
   align-items: center;
+  transition: all;
+  transition-duration: 100ms;
 }
 
 .PriorityAction_icon {
   font-size: 20px !important;
-  font-variation-settings: "opsz" 32;
 }
 
 .PriorityAction_button__action {
@@ -175,7 +259,15 @@ td {
   color: var(--text-on-primary);
 }
 
+.PriorityAction_button__action:hover {
+  background-color: var(--bg-primary-hover);
+}
+
 .PriorityAction_button__dismiss {
-  background-color: var(--bg-secondary);
-  color: var(--text-on-secondary);
+  background-color: var(--bg-surface);
+  color: var(--text-muted);
+}
+
+.PriorityAction_button__dismiss:hover {
+  background-color: var(--bg-surface-hover);
 }

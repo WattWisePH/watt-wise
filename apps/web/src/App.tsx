@@ -3,10 +3,11 @@ import { Outlet, useNavigate } from "react-router";
 
 import { logout } from "./lib/auth";
 import { supabase } from "./lib/supabase";
-import "./App.css";
+const logo = "/images/watty-logo.svg";
+import styles from "./App.module.css";
 
 /**
- * App shell: the WattWise header plus an Outlet for whichever page matched.
+ * App shell: the Watty header plus an Outlet for whichever page matched.
  * The header also carries the sign-out control, since it's the one element
  * present on every screen.
  */
@@ -30,27 +31,28 @@ function App() {
   }
 
   return (
-    <div className="app">
-      <header className="app__header">
+    <div className={styles.App}>
+      <header className={styles.App_header}>
         <button
           onClick={() => {
             navigate("/");
           }}
-          className="app__brand"
+          className={styles.App_brand}
         >
-          WattWise
+          <img src={logo} alt="Logo" className={styles.App_logo} />
+          Watty
         </button>
         {signedIn && (
           <button
             type="button"
-            className="app__signout"
+            className={styles.App_signout}
             onClick={handleSignOut}
           >
             Sign out
           </button>
         )}
       </header>
-      <main>
+      <main className={styles.App_main}>
         <Outlet />
       </main>
     </div>

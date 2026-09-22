@@ -1,7 +1,35 @@
-import "material-symbols/rounded.css";
-
-import "./Dashboard.css";
 import { useNavigate } from "react-router";
+
+import {
+  BellIcon,
+  ReceiptIcon,
+  ClipboardTextIcon,
+  CheckSquareIcon,
+  GaugeIcon,
+  StorefrontIcon,
+  HandshakeIcon,
+  PlusIcon,
+  ArrowCircleRightIcon,
+  SealWarningIcon,
+  WarningIcon,
+  CaretDownIcon,
+  CoffeeIcon,
+} from "@phosphor-icons/react";
+
+import styles from "./Dashboard.module.css";
+import duotone from "../../styles/DuotoneIcon.module.css";
+import { MonthlyBillChart } from "./components/MonthlyBillChart";
+import { DashboardStats } from "./components/DashboardStats";
+import { HealthScoreGauge } from "../../components/HealthScoreGauge";
+
+const BILL_HISTORY = [
+  { month: "Apr", amount: 15420 },
+  { month: "May", amount: 16810 },
+  { month: "Jun", amount: 15990 },
+  { month: "Jul", amount: 17250 },
+  { month: "Aug", amount: 16790 },
+  { month: "Sep", amount: 18236 },
+];
 
 /**
  * Energy dashboard component. This is what the user first sees when logged in.
@@ -11,116 +39,98 @@ export function Dashboard() {
   const navigate = useNavigate();
 
   return (
-    <div className="dashboard">
-      <div className="dashboard__header">
-        <div className="selector">
-          <div className="selector__avatar" />
-          <div className="selector__label">Cafe Marie</div>
+    <div className={styles.Dashboard}>
+      <div className={styles.Dashboard_header}>
+        <div className={styles.Selector}>
+          <CoffeeIcon size={24} className={duotone.navy} />
+          <div className={styles.Selector_label}>Cafe Marie</div>
+          <CaretDownIcon
+            size={16}
+            weight="bold"
+            className={styles.Selector_caret}
+          />
         </div>
-        <span className="material-symbols-rounded">notifications</span>
+        <BellIcon size={24} className={duotone.amber} />
       </div>
-      <div className="dashboard__card dashboard__card--green">
-        <div className="card__header">
-          <h3 className="card__title">Energy Health Score</h3>
-          <div className="health-card__status">Good</div>
-        </div>
-        <div className="health-card__content">
-          <span className="material-symbols-rounded icon--large icon--filled icon--color-primary">
-            favorite
-          </span>
-          <p className="health-card__percentage">78%</p>
-        </div>
-      </div>
-      <ul className="dashboard__card quick-links">
-        <li className="quick-links__item">
-          <span className="material-symbols-rounded">receipt_long</span>
+      <HealthScoreGauge
+        score={78}
+        label="Good"
+        insight="Better than 65% of similar cafes"
+      />
+      <ul className={`${styles.Dashboard_card} ${styles.QuickLinks}`}>
+        <li className={styles.QuickLinks_item}>
+          <ReceiptIcon size={24} className={duotone.green} />
           <p>Bill History</p>
         </li>
-        <li className="quick-links__item">
-          <span className="material-symbols-rounded">inventory</span>
-          <p>My Inventory</p>
+        <li className={styles.QuickLinks_item}>
+          <ClipboardTextIcon size={24} className={duotone.navy} />
+          <p>My Appliances</p>
         </li>
-        <li className="quick-links__item">
-          <span className="material-symbols-rounded">priority</span>
+        <li className={styles.QuickLinks_item}>
+          <CheckSquareIcon size={24} className={duotone.green} />
           <p>Priority Actions</p>
         </li>
-        <li className="quick-links__item">
-          <span className="material-symbols-rounded">speed</span>
-          <p>Benchmarking</p>
+        <li className={styles.QuickLinks_item}>
+          <GaugeIcon size={24} className={duotone.navy} />
+          <p>Benchmark</p>
         </li>
-        <li className="quick-links__item icon--filled">
-          <span className="material-symbols-rounded">store</span>
-          <p>My Properties</p>
+        <li className={styles.QuickLinks_item}>
+          <StorefrontIcon size={24} className={duotone.green} />
+          <p>My Establishments</p>
         </li>
-        <li className="quick-links__item">
-          <span className="material-symbols-rounded">handshake</span>
+        <li className={styles.QuickLinks_item}>
+          <HandshakeIcon size={24} className={duotone.navy} />
           <p>Partners</p>
         </li>
       </ul>
       <button
-        className="dashboard__button dashboard__button--primary dashboard__button--with-icon"
+        className={`${styles.Dashboard_button} ${styles.Dashboard_button__primary} ${styles.Dashboard_button__withIcon}`}
         onClick={() => navigate("/upload")}
       >
-        <span className="material-symbols-rounded">add</span>
+        <PlusIcon size={24} />
         <p>Add a Bill</p>
       </button>
-      <div className="dashboard__card">
-        <div className="card__header">
-          <h3 className="card__title">Priority Actions</h3>
-          <span className="material-symbols-rounded">arrow_circle_right</span>
+      <div className={styles.Dashboard_card}>
+        <div className={styles.Card_header}>
+          <h3 className={styles.Card_title}>Priority Actions</h3>
+          <ArrowCircleRightIcon size={24} />
         </div>
-        <ul className="priority-list">
-          <li className="priority-list__item">
-            <div className="priority-list__indicator priority-list__indicator--high" />
-            <p className="text--muted priority-list__text">
+        <ul className={styles.PriorityList}>
+          <li className={styles.PriorityList_item}>
+            <SealWarningIcon size={18} className={`${duotone.red}`} />
+            <p className={`${styles.Text_muted} ${styles.PriorityList_text}`}>
               Your evening usage is higher than similar cafes.
             </p>
           </li>
-          <li className="priority-list__item">
-            <div className="priority-list__indicator priority-list__indicator--med" />
-            <p className="text--muted priority-list__text">
+          <li className={styles.PriorityList_item}>
+            <WarningIcon size={18} className={duotone.amber} />
+            <p className={`${styles.Text_muted} ${styles.PriorityList_text}`}>
               Non-inverter appliances may be driving up costs.
             </p>
           </li>
         </ul>
       </div>
-      <div className="dashboard__card">
-        <div className="card__header">
-          <h3 className="card__title">Monthly Bill Trend</h3>
-          <span className="material-symbols-rounded">info</span>
+      <div className={styles.Dashboard_card}>
+        <div className={styles.Card_header}>
+          <h3 className={styles.Card_title}>Monthly Bill Chart</h3>
+          {/* <InfoIcon size={24} /> */}
         </div>
-        <div className="monthly-card__placeholder text--muted">placeholder</div>
+        <MonthlyBillChart
+          data={BILL_HISTORY}
+          unit="pesos"
+          monthsToShow={6}
+          height={180}
+        />
       </div>
-      <div className="stats">
-        <div className="dashboard__card stats__card">
-          <p className="stats__label text--muted">This Month</p>
-          <div>
-            <span className="stats__value">18,236</span>
-            <span className="stats__label text--muted">pesos</span>
-          </div>
-        </div>
-        <div className="dashboard__card stats__card">
-          <p className="stats__label text--muted">vs Last Month</p>
-          <div>
-            <span className="stats__value">8.6%</span>
-            <span className="stats__label text--muted">increase</span>
-          </div>
-        </div>
-        <div className="dashboard__card stats__card">
-          <p className="stats__label text--muted">Total Consumption</p>
-          <div>
-            <span className="stats__value">312</span>
-            <span className="stats__label text--muted">kWh</span>
-          </div>
-        </div>
-        <div className="dashboard__card stats__card">
-          <p className="stats__label text--muted">Cost per kWh</p>
-          <div>
-            <span className="stats__value">5.85</span>
-            <span className="stats__label text--muted">pesos</span>
-          </div>
-        </div>
-      </div>
+      <DashboardStats
+        currentMonthAmount={18236}
+        currentMonthUnit="pesos"
+        vsLastMonthPercent={8.6}
+        totalConsumption={312}
+        totalConsumptionUnit="kWh"
+        costPerUnit={5.85}
+        costPerUnitLabel="kWh"
+      />
     </div>
   );
 }

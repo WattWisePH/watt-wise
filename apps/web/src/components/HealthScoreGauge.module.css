@@ -1,0 +1,127 @@
+.HealthScoreGauge {
+  padding: 16px;
+  border-radius: var(--radius-large);
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--outline);
+  gap: 4px;
+  color: var(--text-on-primary);
+}
+
+.HealthScoreGauge__good {
+  background-color: var(--bg-primary);
+  color: var(--text-on-primary);
+}
+
+.HealthScoreGauge__fair {
+  background-color: var(--bg-warning);
+  color: var(--text-on-warning);
+}
+
+.HealthScoreGauge__poor {
+  background-color: var(--bg-danger);
+  color: var(--text-on-danger);
+}
+
+.HealthScoreGauge_header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
+}
+
+.HealthScoreGauge_title {
+  font-size: 20px;
+  font-weight: normal;
+  width: 100%;
+  margin: 0;
+  line-height: 20px;
+}
+
+.HealthScoreGauge_badge {
+  border-radius: var(--radius-medium);
+  border: 2px solid currentColor;
+  color: currentColor;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.HealthScoreGauge_body {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.HealthScoreGauge_ring {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.HealthScoreGauge_svg {
+  transform-origin: center;
+}
+
+.HealthScoreGauge_track {
+  stroke: rgba(255, 255, 255, 0.35);
+}
+
+.HealthScoreGauge_progress {
+  stroke: currentColor;
+  transition: stroke-dashoffset 600ms ease;
+}
+
+.HealthScoreGauge_icon {
+  position: absolute;
+  font-size: 28px !important;
+}
+
+.HealthScoreGauge__good .HealthScoreGauge_icon path:first-child {
+  fill: var(--primary-400);
+  opacity: 1;
+}
+
+.HealthScoreGauge__fair .HealthScoreGauge_icon path:first-child {
+  fill: var(--warning-400);
+  opacity: 1;
+}
+
+.HealthScoreGauge__poor .HealthScoreGauge_icon path:first-child {
+  fill: var(--danger-400);
+  opacity: 1;
+}
+
+.HealthScoreGauge_info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.HealthScoreGauge_valueRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 8px;
+}
+
+.HealthScoreGauge_value {
+  font-size: 32px;
+  font-weight: bold;
+  line-height: 32px;
+  margin: 0;
+}
+
+.HealthScoreGauge_insight {
+  font-size: 13px;
+  line-height: 18px;
+  margin: 0;
+  opacity: 0.9;
+}

@@ -1,56 +1,78 @@
 import styles from "./Profile.module.css";
+const logo = "/images/watty-logo.svg";
+import { useNavigate } from "react-router";
+import { logout } from "../../lib/auth";
+import {
+  CoffeeIcon,
+  CaretRightIcon,
+  HouseIcon,
+  PasswordIcon,
+  QuestionIcon,
+  SignOutIcon,
+} from "@phosphor-icons/react";
 
 export const Profile = () => {
+  const navigate = useNavigate();
+
+  async function handleLogOut() {
+    await logout();
+    navigate("/login", { replace: true });
+  }
+
   return (
     <div className={styles.Profile}>
       {/* Account Details */}
       <section className={styles.Profile_section}>
         <div className={styles.Profile_accountDetails}>
-          wattwiselogo.png
+          <img src={logo} alt="Logo" className={styles.Profile_logo} />
           <h1 className={styles.Profile_sectionTitle}>Username</h1>
           <p className={styles.Profile_sectionSubtitle}>email@example.com</p>
         </div>
       </section>
-      {/* Properties */}
+      {/* Establishments */}
       <section className={styles.Profile_section}>
         <div>
-          <h3 className={styles.Profile_sectionTitle}>My Properties</h3>
+          <h3 className={styles.Profile_sectionTitle}>My Establishments</h3>
           <p className={styles.Profile_sectionSubtitle}>
-            Change to one of your existing properties or add a new one.
+            Change to one of your existing establishments or add a new one.
           </p>
         </div>
-        <ul className={styles.PropertiesList_container}>
+        <ul className={styles.EstablishmentsList_container}>
           <li>
             <button
-              className={`${styles.PropertiesList_button} ${styles.PropertiesList_button__active}`}
+              className={`${styles.EstablishmentsList_button} ${styles.EstablishmentsList_button__active}`}
             >
-              <div className={styles.PropertiesList_icon}>
-                <span className="material-symbols-rounded">local_cafe</span>
+              <div className={styles.EstablishmentsList_icon}>
+                <CoffeeIcon size={20} />
               </div>
-              <div className={styles.PropertiesList_propertyContent}>
-                <p className={styles.PropertiesList_propertyName}>Cafe Marie</p>
+              <div className={styles.EstablishmentsList_establishmentContent}>
+                <p className={styles.EstablishmentsList_establishmentName}>
+                  Cafe Marie
+                </p>
                 <p>Jaro, Iloilo</p>
               </div>
               Selected
-              <span className="material-symbols-rounded">chevron_forward</span>
+              <CaretRightIcon size={20} />
             </button>
           </li>
           <li>
-            <button className={styles.PropertiesList_button}>
+            <button className={styles.EstablishmentsList_button}>
               {" "}
-              <div className={styles.PropertiesList_icon}>
-                <span className="material-symbols-rounded">house</span>
+              <div className={styles.EstablishmentsList_icon}>
+                <HouseIcon size={20} />
               </div>
-              <div className={styles.PropertiesList_propertyContent}>
-                <p className={styles.PropertiesList_propertyName}>Home</p>
+              <div className={styles.EstablishmentsList_establishmentContent}>
+                <p className={styles.EstablishmentsList_establishmentName}>
+                  Home
+                </p>
                 <p>Iloilo City</p>
               </div>
-              <span className="material-symbols-rounded">chevron_forward</span>
+              <CaretRightIcon size={20} />
             </button>
           </li>
           <li>
             <button
-              className={`${styles.PropertiesList_button} ${styles.PropertiesList_button__add}`}
+              className={`${styles.EstablishmentsList_button} ${styles.EstablishmentsList_button__add}`}
             >
               Add New Property
             </button>
@@ -65,33 +87,22 @@ export const Profile = () => {
         <ul className={styles.AccountOptions_container}>
           <li>
             <button className={styles.AccountOptions_button}>
-              <span
-                className={`material-symbols-rounded ${styles.AccountOptions_icon}`}
-              >
-                password
-              </span>
+              <PasswordIcon size={28} className={styles.AccountOptions_icon} />
               Change Password
             </button>
           </li>
           <li>
             <button className={styles.AccountOptions_button}>
-              <span
-                className={`material-symbols-rounded ${styles.AccountOptions_icon}`}
-              >
-                help
-              </span>
+              <QuestionIcon size={28} className={styles.AccountOptions_icon} />
               Help Center
             </button>
           </li>
           <li>
             <button
+              onClick={handleLogOut}
               className={`${styles.AccountOptions_button} ${styles.AccountOptions_button__logout}`}
             >
-              <span
-                className={`material-symbols-rounded ${styles.AccountOptions_icon}`}
-              >
-                logout
-              </span>
+              <SignOutIcon size={28} className={styles.AccountOptions_icon} />
               Log Out
             </button>
           </li>

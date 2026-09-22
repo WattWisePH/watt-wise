@@ -18,6 +18,7 @@
 .Simulator_sectionTitle {
   font-size: 20px;
   font-weight: bold;
+  color: var(--text-secondary);
   margin: 0;
 }
 
@@ -30,37 +31,86 @@
   padding: 16px;
   border-radius: var(--radius-large);
   background-color: var(--bg-primary);
+  color: var(--text-on-primary);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 4px;
+}
+
+.SimulatorCard_body {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.SimulatorCard_iconRing {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.SimulatorCard_icon {
+  font-size: 32px !important;
+}
+
+.SimulatorCard_icon path:first-child {
+  fill: var(--primary-400);
+  opacity: 1;
+}
+
+.SimulatorCard_icon path:last-child {
+  fill: var(--text-on-primary);
+}
+
+.SimulatorCard_info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  width: 100%;
 }
 
 .SimulatorCard_header {
-  font-size: 16px;
+  font-size: 20px;
   color: var(--text-on-primary);
-  font-weight: 600;
+  font-weight: normal;
 }
 
-.SimulatorCard_contentLayout {
+.SimulatorCard_valueRow {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   align-items: end;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
 }
 
 .SimulatorCard_savingsNumber {
-  font-size: 36px;
-  line-height: 100%;
+  font-size: 32px;
+  line-height: 32px;
   font-weight: bold;
-  font-family: monospace;
+  margin: 0;
 }
 
 .SimulatorCard_reductionBadge {
-  color: var(--text-on-primary);
-  padding: 8px;
-  font-size: 12px;
-  background-color: var(--background);
   border-radius: var(--radius-medium);
+  border: 2px solid currentColor;
+  color: currentColor;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
   height: fit-content;
+  transition: opacity 200ms ease;
 }
 
 .SimulatorCard_currencyUnit {
@@ -68,21 +118,23 @@
 }
 
 .Simulator_button {
-  border: none;
+  border: 1px solid var(--outline);
   cursor: pointer;
   padding: 16px;
-  border-radius: 12px;
+  border-radius: var(--radius-large);
   font-size: 14px;
   font-weight: bold;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
   transition: 100ms all;
-  background-color: var(--bg-secondary);
-  color: var(--text-on-secondary);
+  background-color: var(--bg-surface);
+  color: var(--text);
+}
+
+.Simulator_button:hover {
+  background-color: var(--bg-surface-hover);
 }
 
 .Simulator_button:active {
   transform: scale(0.98);
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .Simulator_itemList {
@@ -97,6 +149,7 @@
   gap: 8px;
   height: fit-content;
   background-color: var(--bg-surface);
+  border: 1px solid var(--outline);
   border-radius: var(--radius-large);
   padding: 16px;
   cursor: pointer;
@@ -136,6 +189,11 @@
   color: var(--text-muted);
 }
 
+.SimulatorItem_toggleWrapper {
+  position: relative;
+  display: inline-flex;
+}
+
 .SimulatorItem_toggle {
   -webkit-appearance: none;
   appearance: none;
@@ -148,8 +206,6 @@
   cursor: pointer;
   border-radius: var(--radius-medium);
   outline: none;
-  font-size: 16px;
-  font-weight: bold;
   transition: all 0.2s ease;
   background-color: var(--background);
   border: 2px solid var(--outline);
@@ -162,17 +218,17 @@
 .SimulatorItem_toggle:checked {
   background-color: var(--bg-primary);
   border-color: var(--text-on-primary);
-  color: var(--text-on-primary);
 }
 
 .SimulatorItem_toggle:checked:hover {
   background-color: var(--bg-primary-hover);
 }
 
-.SimulatorItem_toggle::before {
-  content: "";
-}
-
-.SimulatorItem_toggle:checked::before {
-  content: "✓";
+.SimulatorItem_toggleIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--text-on-primary);
+  pointer-events: none;
 }

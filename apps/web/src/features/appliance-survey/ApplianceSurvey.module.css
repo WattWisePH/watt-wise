@@ -1,0 +1,211 @@
+.ApplianceSurvey {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 24px 20px 48px;
+  color: var(--text);
+  text-align: left;
+}
+
+.ApplianceSurvey_title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin: 8px 0 4px;
+}
+
+.ApplianceSurvey_subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0 0 20px;
+}
+
+/* One appliance entry. */
+.ApplianceCard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  border-radius: var(--radius-large);
+  background: var(--bg-surface);
+  border: 1px solid var(--outline);
+}
+
+.ApplianceCard_row {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+.ApplianceCard_field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+  min-width: 0;
+}
+
+.ApplianceCard_field__grow {
+  flex: 1;
+}
+
+.ApplianceCard_field__narrow {
+  max-width: 120px;
+  min-width: 0;
+}
+
+@media (max-width: 400px) {
+  .ApplianceCard_field__narrow {
+    max-width: 80px;
+  }
+}
+
+.ApplianceCard_fieldLabel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 16px;
+}
+
+.ApplianceCard_fieldLabel svg {
+  color: var(--text-muted);
+}
+
+.ApplianceCard_field input,
+.ApplianceCard_field select {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: var(--radius-medium);
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--text);
+  background: var(--background);
+  transition: box-shadow 0.15s ease;
+  transition-delay: 0.05s;
+  border: 1px solid var(--outline);
+}
+
+.ApplianceCard_field select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 36px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235e625f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
+}
+
+.ApplianceCard_field input:focus,
+.ApplianceCard_field select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--bg-primary-hover);
+}
+
+.ApplianceCard_remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 40px;
+  padding: 12px 0;
+  border: 1px solid var(--outline);
+  border-radius: var(--radius-medium);
+  background: var(--background);
+  color: var(--danger-600);
+  cursor: pointer;
+}
+
+.ApplianceCard_remove:hover {
+  background: var(--bg-danger);
+}
+
+.ApplianceCard_remove svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Inverter / non-inverter selector. */
+.ToggleGroup {
+  display: flex;
+  gap: 8px;
+}
+
+.Toggle {
+  flex: 1;
+  padding: 9px 10px;
+  border: none;
+  border-radius: var(--radius-medium);
+  background: var(--background);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  border: 1px solid var(--outline);
+}
+
+.Toggle__on {
+  background: var(--bg-primary-subtle);
+  color: var(--text-on-primary-subtle);
+  font-weight: 600;
+}
+
+.ApplianceSurvey_add {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px dashed var(--bg-primary-hover);
+  border-radius: var(--radius-large);
+  background: var(--bg-success);
+  color: var(--text-on-success);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ApplianceSurvey_submit {
+  width: 100%;
+  padding: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: var(--radius-large);
+  background: var(--bg-secondary);
+  color: var(--text-on-secondary);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.ApplianceSurvey_submit:hover:not(:disabled) {
+  background: var(--bg-secondary-hover);
+}
+
+.ApplianceSurvey_submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.ApplianceSurvey_errorList {
+  margin: 0 0 12px;
+  padding-left: 18px;
+  color: var(--danger-600);
+  font-size: 0.85rem;
+}
+
+.ApplianceSurvey_success {
+  margin: 0 0 12px;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+}

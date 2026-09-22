@@ -1,24 +1,44 @@
-import "material-symbols/rounded.css";
-
 import navStyles from "./NavigationBar.module.css";
+import duotone from "../../styles/DuotoneIcon.module.css";
 import { useNavigate, useLocation } from "react-router";
+import {
+  HouseIcon,
+  LightbulbIcon,
+  LeafIcon,
+  UserIcon,
+  type Icon,
+} from "@phosphor-icons/react";
+
+type NavTint = "navy" | "amber" | "green" | "neutral";
 
 interface NavBarItem {
-  materialIcon: string;
+  icon: Icon;
   itemName: string;
   route: string;
+  tint: NavTint;
 }
 
 export const NavigationBar = () => {
   const navBarItems: NavBarItem[] = [
-    { materialIcon: "home", itemName: "Home", route: "/dashboard" },
-    { materialIcon: "lightbulb", itemName: "Insights", route: "/insights" },
+    { icon: HouseIcon, itemName: "Home", route: "/dashboard", tint: "navy" },
     {
-      materialIcon: "energy_savings_leaf",
+      icon: LightbulbIcon,
+      itemName: "Insights",
+      route: "/insights",
+      tint: "amber",
+    },
+    {
+      icon: LeafIcon,
       itemName: "Simulator",
       route: "/simulator",
+      tint: "green",
     },
-    { materialIcon: "person", itemName: "Profile", route: "/profile" },
+    {
+      icon: UserIcon,
+      itemName: "Profile",
+      route: "/profile",
+      tint: "navy",
+    },
   ];
   const { pathname } = useLocation();
   const currentRoute = pathname.split("/")[1];
@@ -33,27 +53,28 @@ export const NavigationBar = () => {
       <ul className={navStyles.NavBar_layout}>
         {navBarItems.map((navItem) => {
           const isSelected = currentRoute === navItem.route.split("/")[1];
-          console.log(currentRoute, navItem.route);
-          console.log("is selected:", isSelected);
+          const NavIcon = navItem.icon;
+          const tintClass = duotone[navItem.tint];
           return (
             <li key={navItem.route}>
               <button
-                className={`${navStyles.NavBar_menuButton} ${isSelected ? navStyles.NavBar_menuButton___selected : ""}`}
+                className={`${navStyles.NavBar_menuButton} ${isSelected ? navStyles.NavBar_menuButton__selected : ""}`}
                 onClick={() => {
                   handleRedirect(navItem.route);
                 }}
               >
-                <div
-                  className={`${navStyles.NavBar_menuIconContainer} ${isSelected ? navStyles.NavBar_menuIconContainer___selected : ""}`}
-                >
-                  <span
-                    className={`material-symbols-rounded ${navStyles.NavBar_menuicon} ${isSelected ? navStyles.NavBar_menuicon___selected : ""}`}
-                  >
-                    {navItem.materialIcon}
-                  </span>
+                <div className={navStyles.NavBar_menuIconContainer}>
+                  <NavIcon
+                    weight={isSelected ? "duotone" : "regular"}
+                    className={`${navStyles.NavBar_menuicon} ${isSelected ? tintClass : ""}`}
+                  />
                 </div>
 
-                <p className={navStyles.NavBar_menuName}>{navItem.itemName}</p>
+                <p
+                  className={`${navStyles.NavBar_menuName} ${isSelected ? navStyles[`NavBar_menuName__${navItem.tint}`] : ""}`}
+                >
+                  {navItem.itemName}
+                </p>
               </button>
             </li>
           );

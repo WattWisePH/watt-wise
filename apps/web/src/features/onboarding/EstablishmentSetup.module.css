@@ -1,0 +1,143 @@
+/* Establishment setup screen.
+   Shares Auth.module.css's tokens so the step after sign-up doesn't look
+   like a different app. */
+
+.EstablishmentSetup_page {
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+}
+
+.EstablishmentSetup {
+  position: relative;
+  z-index: 1;
+  max-width: 360px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  color: var(--text);
+  text-align: left;
+}
+
+.EstablishmentSetup_title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin: 0 0 4px;
+}
+
+.EstablishmentSetup_subtitle {
+  position: relative;
+  z-index: 1;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0 0 24px;
+  padding: 12px;
+  border-radius: var(--radius-large);
+  background: var(--bg-surface);
+  border: 1px solid var(--outline);
+}
+
+.EstablishmentSetup_form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.EstablishmentSetup_field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.EstablishmentSetup_fieldLabel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.EstablishmentSetup_fieldLabel svg {
+  color: var(--text-muted);
+}
+
+.EstablishmentSetup_optional {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.EstablishmentSetup_field input,
+.EstablishmentSetup_field select {
+  padding: 12px;
+  border: none;
+  border-radius: var(--radius-medium);
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--text);
+  background: var(--bg-surface);
+  transition: box-shadow 0.15s ease;
+  transition-delay: 0.05s;
+  border: 1px solid var(--outline);
+}
+
+.EstablishmentSetup_field select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 36px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235e625f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px 16px;
+}
+
+.EstablishmentSetup_field select:disabled {
+  color: var(--text-muted);
+  background-color: var(--bg-surface);
+  opacity: 0.7;
+}
+
+.EstablishmentSetup_field input:focus,
+.EstablishmentSetup_field select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--bg-primary-hover);
+}
+
+.EstablishmentSetup_hint {
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.EstablishmentSetup_errors {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--danger-600);
+  font-size: 0.85rem;
+}
+
+.EstablishmentSetup_submit {
+  margin-top: 8px;
+  padding: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: var(--radius-medium);
+  background: var(--bg-secondary);
+  color: var(--text-on-secondary);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.EstablishmentSetup_submit:hover:not(:disabled) {
+  background: var(--bg-secondary-hover);
+}
+
+.EstablishmentSetup_submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

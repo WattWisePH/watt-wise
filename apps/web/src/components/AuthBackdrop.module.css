@@ -1,0 +1,30 @@
+.AuthBackdrop {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.AuthBackdrop_shape {
+  position: absolute;
+  width: 340px;
+  height: 340px;
+}
+
+/* Bleeds off the top-left corner, echoing the promo art's single green
+   ribbon in the upper field. */
+.AuthBackdrop_shape__green {
+  top: -110px;
+  left: -130px;
+}
+
+/* Bleeds off the bottom-right corner, rotated so it reads as a distinct
+   shape from the green one rather than a mirrored copy. */
+.AuthBackdrop_shape__navy {
+  bottom: -220px;
+  right: -180px;
+  width: 340px;
+  height: 340px;
+  transform: rotate(135deg);
+}

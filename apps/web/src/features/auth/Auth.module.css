@@ -1,0 +1,167 @@
+/* Shared styles for the register and login pages. */
+
+.Auth_page {
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+}
+
+.Auth {
+  position: relative;
+  z-index: 1;
+  max-width: 360px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  color: var(--text);
+  text-align: left;
+}
+
+.Auth_title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin: 0 0 4px;
+}
+
+.Auth_subtitle {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin: 0 0 24px;
+}
+
+.Auth_form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.Auth_field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.Auth_fieldLabel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.Auth_fieldLabel svg {
+  color: var(--text-muted);
+}
+
+.Auth_field input {
+  padding: 12px;
+  border: none;
+  border-radius: var(--radius-medium);
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--text);
+  background: var(--bg-surface);
+  transition: box-shadow 0.15s ease;
+  transition-delay: 0.05s;
+  border: 1px solid var(--outline);
+}
+
+.Auth_field input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--bg-primary-hover);
+}
+
+.Auth_logo {
+  display: block;
+  height: 96px;
+  width: 96px;
+  margin: 0 auto 24px;
+  padding: 12px 12px 6px 12px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+}
+
+/* Password input with its reveal toggle sitting inside the field. */
+.Auth_password {
+  position: relative;
+  display: flex;
+}
+
+.Auth_password input {
+  flex: 1;
+  /* Room for the toggle so long values don't run underneath it. */
+  padding-right: 44px;
+}
+
+.Auth_reveal {
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-small);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.Auth_reveal:hover {
+  background: var(--bg-surface-hover);
+  color: var(--text);
+}
+
+.Auth_reveal svg {
+  width: 19px;
+  height: 19px;
+}
+
+.Auth_submit {
+  margin-top: 8px;
+  padding: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+  border-radius: var(--radius-medium);
+  background: var(--bg-secondary);
+  color: var(--text-on-secondary);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.Auth_submit:hover:not(:disabled) {
+  background: var(--bg-secondary-hover);
+}
+
+.Auth_submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.Auth_errors {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--danger-600);
+  font-size: 0.85rem;
+}
+
+.Auth_alt {
+  margin-top: 18px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.Auth_alt a {
+  color: var(--text-primary);
+  font-weight: 600;
+}

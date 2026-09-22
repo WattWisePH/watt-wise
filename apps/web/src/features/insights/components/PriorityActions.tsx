@@ -1,7 +1,7 @@
-import "material-symbols/rounded.css";
-
 import styles from "../Insights.module.css";
+import duotone from "../../../styles/DuotoneIcon.module.css";
 import type { PriorityActionData } from "../types";
+import { CheckIcon, XIcon } from "@phosphor-icons/react";
 
 export const PriorityActions = () => {
   const prioActionsPlaceholder: PriorityActionData[] = [
@@ -56,21 +56,15 @@ export const PriorityActions = () => {
                   <button
                     className={`${styles.PriorityAction_button} ${styles.PriorityAction_button__action}`}
                   >
-                    <span
-                      className={`material-symbols-rounded ${styles.PriorityAction_icon}`}
-                    >
-                      check
-                    </span>
+                    <CheckIcon className={styles.PriorityAction_icon} />
                     Action Taken
                   </button>
                   <button
                     className={`${styles.PriorityAction_button} ${styles.PriorityAction_button__dismiss}`}
                   >
-                    <span
-                      className={`material-symbols-rounded ${styles.PriorityAction_icon}`}
-                    >
-                      close
-                    </span>
+                    <XIcon
+                      className={`${styles.PriorityAction_icon} ${duotone.neutral}`}
+                    />
                     Dismiss
                   </button>
                 </div>

@@ -1,0 +1,161 @@
+.MonthlyBillChart {
+  position: relative;
+  width: 100%;
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.MonthlyBillChart_svg {
+  width: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.MonthlyBillChart_empty {
+  height: 160px;
+  border-radius: var(--radius-medium);
+  background-color: var(--bg-surface);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}
+
+.MonthlyBillChart_gridline {
+  stroke: var(--outline);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.MonthlyBillChart_averageLine {
+  stroke: var(--neutral-400);
+  stroke-width: 2;
+  stroke-dasharray: 6 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.MonthlyBillChart_bar {
+  transition: opacity 100ms;
+}
+
+.MonthlyBillChart_bar[data-active="true"] {
+  opacity: 0.8;
+}
+
+.MonthlyBillChart_bar {
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.MonthlyBillChart[data-color="secondary"] .MonthlyBillChart_bar {
+  fill: var(--bg-secondary);
+  stroke: var(--bg-secondary);
+}
+
+.MonthlyBillChart[data-color="primary"] .MonthlyBillChart_bar {
+  fill: var(--primary-300);
+  stroke: var(--primary-700);
+}
+
+/* Highlights the current month — this is the brand accent color, not a
+   caution/warning state. */
+.MonthlyBillChart .MonthlyBillChart_bar[data-current="true"] {
+  fill: var(--accent-300);
+  stroke: var(--accent-700);
+}
+
+.MonthlyBillChart_hitArea {
+  fill: transparent;
+  cursor: pointer;
+}
+
+.MonthlyBillChart_xLabels {
+  display: flex;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.MonthlyBillChart_xLabel {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.MonthlyBillChart_xLabel[data-active="true"] {
+  color: var(--text-secondary);
+  font-weight: bold;
+}
+
+.MonthlyBillChart_tooltip {
+  position: absolute;
+  transform: translate(-50%, -100%) translateY(-10px);
+  background-color: var(--bg-secondary);
+  color: var(--text-on-secondary);
+  border-radius: var(--radius-medium);
+  padding: 6px 10px;
+  pointer-events: none;
+  text-align: center;
+  white-space: nowrap;
+  /* A floating tooltip is the one place a shadow earns its keep — kept soft
+     and tied to the ink color rather than a generic black, since the rest
+     of the app's surfaces are flat. */
+  box-shadow: 0px 4px 10px rgba(26, 24, 21, 0.18);
+  z-index: 1;
+}
+
+.MonthlyBillChart_tooltip[data-align="left"] {
+  transform: translate(0, -100%) translateY(-10px);
+}
+
+.MonthlyBillChart_tooltip[data-align="right"] {
+  transform: translate(-100%, -100%) translateY(-10px);
+}
+
+.MonthlyBillChart_tooltip[data-position="below"] {
+  transform: translate(-50%, 0) translateY(10px);
+}
+
+.MonthlyBillChart_tooltip[data-align="left"][data-position="below"] {
+  transform: translate(0, 0) translateY(10px);
+}
+
+.MonthlyBillChart_tooltip[data-align="right"][data-position="below"] {
+  transform: translate(-100%, 0) translateY(10px);
+}
+
+.MonthlyBillChart_tooltipValue {
+  margin: 0;
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.MonthlyBillChart_tooltipLabel {
+  margin: 0;
+  font-size: 10px;
+  opacity: 0.85;
+  line-height: 1.2;
+}
+
+.MonthlyBillChart_legend {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.MonthlyBillChart_legendSwatch {
+  display: inline-block;
+  width: 14px;
+  height: 0;
+  border-top: 2px dashed var(--neutral-400);
+  font-style: normal;
+}

@@ -19,6 +19,7 @@
 .Profile_sectionTitle {
   font-size: 20px;
   font-weight: bold;
+  color: var(--text-secondary);
   margin: 0;
 }
 
@@ -29,19 +30,20 @@
 
 .Profile_accountDetails {
   text-align: center;
-  padding: 24px 0px;
+  padding: 12px 0px;
 }
 
 .Profile_card {
   padding: 16px;
   border-radius: var(--radius-large);
   background-color: var(--bg-surface);
+  border: 1px solid var(--outline);
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.PropertiesList_container {
+.EstablishmentsList_container {
   list-style: none;
   padding-left: 0;
   margin: 0;
@@ -50,8 +52,8 @@
   gap: 4px;
 }
 
-.PropertiesList_button {
-  border: none;
+.EstablishmentsList_button {
+  border: 1px solid var(--outline);
   width: 100%;
   font-size: 14px;
   text-align: start;
@@ -65,21 +67,22 @@
   cursor: pointer;
 }
 
-.PropertiesList_button:hover {
+.EstablishmentsList_button:hover {
   background-color: var(--bg-surface-hover);
 }
 
-.PropertiesList_button__active {
+.EstablishmentsList_button__active {
   background-color: var(--bg-primary);
   color: var(--text-on-primary);
+  border-color: var(--bg-primary);
 }
 
-.PropertiesList_button__active:hover {
+.EstablishmentsList_button__active:hover {
   background-color: var(--bg-primary-hover);
   color: var(--text-on-primary);
 }
 
-.PropertiesList_button__add {
+.EstablishmentsList_button__add {
   text-align: center;
   font-weight: 600;
   color: var(--text-muted);
@@ -88,24 +91,32 @@
   justify-content: center;
   padding: 12px 8px;
 }
-.PropertiesList_button__add:hover {
+.EstablishmentsList_button__add:hover {
   background-color: var(--bg-surface);
 }
 
-.PropertiesList_propertyName {
+.EstablishmentsList_establishmentName {
   font-weight: bold;
   color: var(--text);
 }
 
-.PropertiesList_propertyContent {
+.EstablishmentsList_button__active .EstablishmentsList_establishmentName {
+  color: inherit;
+}
+
+.EstablishmentsList_establishmentContent {
   width: 100%;
 }
 
-.PropertiesList_icon {
+.EstablishmentsList_icon {
   padding: 4px;
   background-color: var(--background);
   border-radius: var(--radius-medium);
   display: flex;
+}
+
+.EstablishmentsList_button__active .EstablishmentsList_icon {
+  background-color: var(--bg-primary-hover);
 }
 
 .AccountOptions_container {
@@ -119,6 +130,7 @@
 
 .AccountOptions_button {
   border: none;
+  height: 48px;
   width: 100%;
   font-size: 14px;
   text-align: start;
@@ -139,7 +151,7 @@
 
 .AccountOptions_button__logout {
   background-color: var(--bg-danger);
-  color: var(--text);
+  color: var(--text-on-danger);
 }
 
 .AccountOptions_button__logout:hover {
@@ -151,4 +163,10 @@
   padding: 4px;
   border-radius: var(--radius-medium);
   display: flex;
+}
+
+.Profile_logo {
+  height: 128px;
+  width: 128px;
+  margin: -24px 0px;
 }

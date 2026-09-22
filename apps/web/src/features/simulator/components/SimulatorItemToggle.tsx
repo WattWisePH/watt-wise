@@ -1,5 +1,6 @@
 import styles from "../Simulator.module.css";
 import type { SimulatorItem } from "../types";
+import { CheckIcon } from "@phosphor-icons/react";
 
 interface SimulatorItemToggleProps {
   item: SimulatorItem;
@@ -12,10 +13,11 @@ export const SimulatorItemToggle = ({
   isEnabled,
   handleToggle,
 }: SimulatorItemToggleProps) => {
+  const ItemIcon = item.icon;
   return (
     <div onClick={handleToggle} className={styles.SimulatorItem_container}>
       <div className={styles.SimulatorItem_icon}>
-        <span className="material-symbols-rounded">{item.icon}</span>
+        <ItemIcon className={item.iconTint} />
       </div>
       <div className={styles.SimulatorItem_contentLayout}>
         <div className={styles.SimulatorItem_label}>{item.label}</div>
@@ -23,13 +25,20 @@ export const SimulatorItemToggle = ({
           Estimated savings: ₱{item.estSavings} / month
         </div>
       </div>
-      <div>
+      <div className={styles.SimulatorItem_toggleWrapper}>
         <input
           type="checkbox"
           checked={isEnabled}
           readOnly
           className={styles.SimulatorItem_toggle}
         />
+        {isEnabled && (
+          <CheckIcon
+            weight="bold"
+            size={18}
+            className={styles.SimulatorItem_toggleIcon}
+          />
+        )}
       </div>
     </div>
   );

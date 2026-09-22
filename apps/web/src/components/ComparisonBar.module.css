@@ -1,0 +1,130 @@
+.ComparisonBar {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 32px;
+}
+
+.ComparisonBar_endLabels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.ComparisonBar_track {
+  margin-top: 8px;
+  position: relative;
+  height: 8px;
+  border-radius: var(--radius-large);
+  background: linear-gradient(
+    90deg,
+    var(--primary-600) 0%,
+    var(--primary-600) 25%,
+    var(--secondary-800) 25%,
+    var(--secondary-800) 50%,
+    var(--accent-500) 50%,
+    var(--accent-500) 75%,
+    var(--danger-500) 75%,
+    var(--danger-500) 100%
+  );
+}
+
+.ComparisonBar_averageTick {
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  width: 2px;
+  height: 12px;
+  background-color: var(--text-muted);
+  transform: translateX(-50%);
+}
+
+.ComparisonBar_indicator {
+  position: absolute;
+  bottom: 100%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0px;
+  color: var(--neutral-600);
+}
+
+.ComparisonBar_indicator[data-zone="primary"] {
+  color: var(--primary-700);
+}
+
+.ComparisonBar_indicator[data-zone="secondary"] {
+  color: var(--secondary-800);
+}
+
+.ComparisonBar_indicator[data-zone="warning"] {
+  color: var(--accent-800);
+}
+
+.ComparisonBar_indicator[data-zone="danger"] {
+  color: var(--danger-700);
+}
+
+.ComparisonBar_labelName {
+  font-size: 12px;
+  font-weight: bold;
+  margin: 0;
+  white-space: nowrap;
+  color: var(--text);
+}
+
+.ComparisonBar_labelDelta {
+  font-size: 11px;
+  margin: -2px 0;
+  white-space: nowrap;
+}
+
+.ComparisonBar_indicatorIcon {
+  display: block;
+}
+
+.ComparisonBar_legend {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.ComparisonBar_legendItem {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ComparisonBar_legendSwatch {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  font-style: normal;
+}
+
+.ComparisonBar_legendSwatch[data-zone="primary"] {
+  background-color: var(--primary-600);
+}
+
+.ComparisonBar_legendSwatch[data-zone="secondary"] {
+  background-color: var(--secondary-800);
+}
+
+.ComparisonBar_legendSwatch[data-zone="warning"] {
+  background-color: var(--accent-500);
+}
+
+.ComparisonBar_legendSwatch[data-zone="danger"] {
+  background-color: var(--danger-500);
+}
+
+.ComparisonBar_legendSwatch__average {
+  width: 2px;
+  border-radius: 0;
+  background-color: var(--text-muted);
+}

@@ -13,6 +13,13 @@
 
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
+import {
+  StorefrontIcon,
+  TagIcon,
+  MapPinIcon,
+  PlugIcon,
+  ArrowRightIcon,
+} from "@phosphor-icons/react";
 
 import { ApiError } from "../../lib/api";
 import {
@@ -23,7 +30,8 @@ import {
   type EstablishmentType,
   type Provider,
 } from "../../lib/establishments";
-import "./EstablishmentSetup.css";
+import styles from "./EstablishmentSetup.module.css";
+import { AuthBackdrop } from "../../components/AuthBackdrop";
 
 export function EstablishmentSetup() {
   const [name, setName] = useState("");
@@ -103,16 +111,21 @@ export function EstablishmentSetup() {
   }
 
   return (
-    <div className="establishment-setup">
-      <h1 className="establishment-setup__title">Tell us about your place</h1>
-      <p className="establishment-setup__subtitle">
-        These details let WattWise compare your usage against similar
+    <div className={styles.EstablishmentSetup_page}>
+      <AuthBackdrop />
+      <div className={styles.EstablishmentSetup}>
+      <h1 className={styles.EstablishmentSetup_title}>Tell us about your place</h1>
+      <p className={styles.EstablishmentSetup_subtitle}>
+        These details let Watty compare your usage against similar
         establishments and read your bills correctly.
       </p>
 
-      <form className="establishment-setup__form" onSubmit={handleSubmit}>
-        <label className="establishment-setup__field">
-          <span>Name</span>
+      <form className={styles.EstablishmentSetup_form} onSubmit={handleSubmit}>
+        <label className={styles.EstablishmentSetup_field}>
+          <span className={styles.EstablishmentSetup_fieldLabel}>
+            <StorefrontIcon size={16} />
+            Name
+          </span>
           <input
             type="text"
             value={name}
@@ -123,8 +136,11 @@ export function EstablishmentSetup() {
           />
         </label>
 
-        <label className="establishment-setup__field">
-          <span>Type</span>
+        <label className={styles.EstablishmentSetup_field}>
+          <span className={styles.EstablishmentSetup_fieldLabel}>
+            <TagIcon size={16} />
+            Type
+          </span>
           <select
             value={typeId}
             onChange={(e) => setTypeId(e.target.value)}
@@ -142,9 +158,11 @@ export function EstablishmentSetup() {
 
         {/* Optional: it feeds benchmarking against nearby places, which
             falls back to a wider comparison when it's missing. */}
-        <label className="establishment-setup__field">
-          <span>
-            Address <span className="establishment-setup__optional">(optional)</span>
+        <label className={styles.EstablishmentSetup_field}>
+          <span className={styles.EstablishmentSetup_fieldLabel}>
+            <MapPinIcon size={16} />
+            Address{" "}
+            <span className={styles.EstablishmentSetup_optional}>(optional)</span>
           </span>
           <input
             type="text"
@@ -155,28 +173,33 @@ export function EstablishmentSetup() {
           />
         </label>
 
-        <label className="establishment-setup__field">
-          <span>Electric utility</span>
+        <label className={styles.EstablishmentSetup_field}>
+          <span className={styles.EstablishmentSetup_fieldLabel}>
+            <PlugIcon size={16} />
+            Electric utility
+          </span>
           <select
             value={providerId}
             onChange={(e) => setProviderId(e.target.value)}
             disabled={loading}
             required
           >
-            <option value="">{loading ? "Loading…" : "Select your utility"}</option>
+            <option value="">
+              {loading ? "Loading…" : "Select your utility"}
+            </option>
             {providers.map((provider) => (
               <option key={provider.id} value={provider.id}>
                 {providerLabel(provider)}
               </option>
             ))}
           </select>
-          <small className="establishment-setup__hint">
+          <small className={styles.EstablishmentSetup_hint}>
             The company named on your electricity bill.
           </small>
         </label>
 
         {errors.length > 0 && (
-          <ul className="establishment-setup__errors">
+          <ul className={styles.EstablishmentSetup_errors}>
             {errors.map((msg) => (
               <li key={msg}>{msg}</li>
             ))}
@@ -185,12 +208,14 @@ export function EstablishmentSetup() {
 
         <button
           type="submit"
-          className="establishment-setup__submit"
+          className={styles.EstablishmentSetup_submit}
           disabled={submitting || loading}
         >
           {submitting ? "Saving…" : "Continue"}
+          {!submitting && <ArrowRightIcon size={18} weight="bold" />}
         </button>
       </form>
+      </div>
     </div>
   );
 }

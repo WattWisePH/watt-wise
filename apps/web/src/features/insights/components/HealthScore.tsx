@@ -1,4 +1,16 @@
+import { ChartBarIcon, GaugeIcon } from "@phosphor-icons/react";
+
 import styles from "../Insights.module.css";
+import duotone from "../../../styles/DuotoneIcon.module.css";
+import { HealthScoreGauge } from "../../../components/HealthScoreGauge";
+import { ComparisonBar } from "../../../components/ComparisonBar";
+import { ConsumptionComparison } from "./ConsumptionComparison";
+import type { ConsumptionRow } from "../types";
+
+const consumptionRows: ConsumptionRow[] = [
+  { label: "Average Cafe", value: 265, isAverage: true },
+  { label: "Cafe Marie", value: 312 },
+];
 
 export const HealthScore = () => {
   return (
@@ -11,17 +23,12 @@ export const HealthScore = () => {
             Calculated based on your bills and appliances.
           </p>
         </div>
-        <div
-          className={`${styles.Insights_card} ${styles.Insights_card__primary}`}
-        >
-          <div className={styles.HealthCard_topRow}>
-            <p className={styles.HealthCard_value}>78%</p>
-            <div className={styles.HealthCard_badge}>Good</div>
-          </div>
-          <div className={styles.ProgressBar_container}>
-            <div className={styles.ProgressBar_value} />
-          </div>
-        </div>
+        <HealthScoreGauge
+          score={78}
+          label="Good"
+          showTitle={false}
+          insight="Better than 65% of similar cafes"
+        />
       </section>
 
       {/* Benchmark */}
@@ -37,32 +44,29 @@ export const HealthScore = () => {
             You consume{" "}
             <span className={styles.Benchmark_description__colored}>18%</span>{" "}
             more electricity than similar{" "}
-            <span className={styles.Benchmark_description__colored}>cafes</span>{" "}
+            <span className={styles.Benchmark_description__colored}>cafes</span>
             .
           </p>
         </div>
         <div className={styles.Insights_card}>
-          <div className={styles.Insights_cardTitle}>Comparison Bar</div>
-          <div className={styles.Comparison_placeholder}>placeholder</div>
+          <div className={styles.Insights_cardTitle}>
+            <GaugeIcon
+              size={20}
+              className={`${duotone.neutral} ${styles.Insights_cardIcon}`}
+            />
+            Comparison Bar
+          </div>
+          <ComparisonBar value={312} average={265} valueLabel="Cafe Marie" />
         </div>
         <div className={styles.Insights_card}>
           <div className={styles.Insights_cardTitle}>
-            Average KWH Consumption this Month
+            <ChartBarIcon
+              size={20}
+              className={`${duotone.neutral} ${styles.Insights_cardIcon}`}
+            />
+            Monthly Consumption
           </div>
-          <table className={styles.AverageConsumption_table}>
-            <tr>
-              <th>Building</th>
-              <th>Monthly Consumption</th>
-            </tr>
-            <tr>
-              <td>Cafes</td>
-              <td className={styles.AverageConsumption_number}>265 kWh</td>
-            </tr>
-            <tr>
-              <td>Cafe Marie</td>
-              <td className={styles.AverageConsumption_number}>312 kWh</td>
-            </tr>
-          </table>
+          <ConsumptionComparison rows={consumptionRows} />
         </div>
       </section>
     </div>

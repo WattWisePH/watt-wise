@@ -12,13 +12,25 @@
 import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  ArrowClockwiseIcon,
+  UploadSimpleIcon,
+  PlusIcon,
+  IdentificationBadgeIcon,
+  StorefrontIcon,
+  LightningIcon,
+  CurrencyCircleDollarIcon,
+  CalendarIcon,
+} from "@phosphor-icons/react";
+import {
   ApiError,
   createBill,
   scanBill,
   type BillFormData,
 } from "../../lib/api";
 import { formPatchFrom, scanNoteFor } from "./scanSummary";
-import "./BillUpload.css";
+import styles from "./BillUpload.module.css";
 
 // Client-side mirror of the server's file rules, so we can reject bad
 // files before uploading and show a friendly message immediately.
@@ -122,15 +134,16 @@ export function BillUpload() {
   }
 
   return (
-    <div className="bill-upload">
+    <div className={styles.BillUpload}>
       <button
-        className="bill-form__back"
+        className={styles.BillForm_back}
         onClick={() => navigate("/dashboard")}
       >
+        <ArrowLeftIcon size={16} weight="bold" />
         Back
       </button>
-      <h1 className="bill-upload__title">Scan Your Bill</h1>
-      <p className="bill-upload__subtitle">
+      <h1 className={styles.BillUpload_title}>Scan Your Bill</h1>
+      <p className={styles.BillUpload_subtitle}>
         Upload a photo of your electricity bill to auto-fill the form, or enter
         the numbers manually below.
       </p>
@@ -138,7 +151,9 @@ export function BillUpload() {
       {/* File dropzone — an image gets OCR'd to pre-fill the form. */}
       <button
         type="button"
-        className={scanning ? "dropzone dropzone--scanning" : "dropzone"}
+        className={
+          scanning ? `${styles.Dropzone} ${styles.Dropzone__scanning}` : styles.Dropzone
+        }
         onClick={() => fileInputRef.current?.click()}
         disabled={scanning}
         // Reading a bill can take tens of seconds, so the wait is announced
@@ -146,32 +161,18 @@ export function BillUpload() {
         aria-busy={scanning}
       >
         {scanning ? (
-          /* Spinner: a ring with a gap, rotated by CSS. */
-          <svg className="dropzone__spinner" viewBox="0 0 24 24" aria-hidden="true">
-            <circle
-              cx="12"
-              cy="12"
-              r="9"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeDasharray="42 14"
-            />
-          </svg>
+          <ArrowClockwiseIcon
+            className={styles.Dropzone_spinner}
+            size={30}
+            weight="bold"
+          />
         ) : (
-          /* Upload icon (inline SVG, not emoji, per project convention). */
-          <svg className="dropzone__icon" viewBox="0 0 24 24" aria-hidden="true">
-            <path
-              fill="currentColor"
-              d="M11 16V7.85l-2.6 2.6L7 9l5-5 5 5-1.4 1.45-2.6-2.6V16h-2Zm-6 4a2 2 0 0 1-2-2v-3h2v3h14v-3h2v3a2 2 0 0 1-2 2H5Z"
-            />
-          </svg>
+          <UploadSimpleIcon className={styles.Dropzone_icon} size={28} />
         )}
-        <span className="dropzone__label">
+        <span className={styles.Dropzone_label}>
           {scanning ? "Reading your bill…" : file ? file.name : "Upload from File"}
         </span>
-        <span className="dropzone__hint">
+        <span className={styles.Dropzone_hint}>
           {scanning
             ? "This can take up to a minute. You can type the details in below instead."
             : "JPG, PNG, or PDF · max 10 MB"}
@@ -180,23 +181,26 @@ export function BillUpload() {
 
       {/* Announced to screen readers, which never see the spinner. Kept
           outside the disabled button so it is still read out. */}
-      <span role="status" aria-live="polite" className="visually-hidden">
+      <span role="status" aria-live="polite" className={styles.VisuallyHidden}>
         {scanning ? "Reading your bill. This can take up to a minute." : ""}
       </span>
       <input
         ref={fileInputRef}
         type="file"
         accept="image/jpeg,image/png,application/pdf"
-        className="visually-hidden"
+        className={styles.VisuallyHidden}
         onChange={(e) => handleFile(e.target.files?.[0] ?? null)}
       />
-      {fileError && <p className="bill-upload__error">{fileError}</p>}
-      {scanNote && <p className="bill-upload__scan-note">{scanNote}</p>}
+      {fileError && <p className={styles.BillUpload_error}>{fileError}</p>}
+      {scanNote && <p className={styles.BillUpload_scanNote}>{scanNote}</p>}
 
       {/* Manual entry — the numbers the MVP relies on. */}
-      <form className="bill-form" onSubmit={handleSubmit}>
-        <label className="bill-form__field">
-          <span>Account name</span>
+      <form className={styles.BillForm} onSubmit={handleSubmit}>
+        <label className={styles.BillForm_field}>
+          <span className={styles.BillForm_fieldLabel}>
+            <IdentificationBadgeIcon size={16} />
+            Account name
+          </span>
           <input
             value={form.accountName}
             onChange={(e) => handleField("accountName", e.target.value)}
@@ -204,8 +208,11 @@ export function BillUpload() {
             required
           />
         </label>
-        <label className="bill-form__field">
-          <span>Provider</span>
+        <label className={styles.BillForm_field}>
+          <span className={styles.BillForm_fieldLabel}>
+            <StorefrontIcon size={16} />
+            Provider
+          </span>
           <input
             value={form.provider}
             onChange={(e) => handleField("provider", e.target.value)}
@@ -213,9 +220,12 @@ export function BillUpload() {
             required
           />
         </label>
-        <div className="bill-form__row">
-          <label className="bill-form__field">
-            <span>Energy used (kWh)</span>
+        <div className={styles.BillForm_row}>
+          <label className={styles.BillForm_field}>
+            <span className={styles.BillForm_fieldLabel}>
+              <LightningIcon size={16} />
+              Energy used (kWh)
+            </span>
             <input
               type="number"
               min="0"
@@ -226,8 +236,11 @@ export function BillUpload() {
               required
             />
           </label>
-          <label className="bill-form__field">
-            <span>Amount</span>
+          <label className={styles.BillForm_field}>
+            <span className={styles.BillForm_fieldLabel}>
+              <CurrencyCircleDollarIcon size={16} />
+              Amount
+            </span>
             <input
               type="number"
               min="0"
@@ -239,9 +252,12 @@ export function BillUpload() {
             />
           </label>
         </div>
-        <div className="bill-form__row">
-          <label className="bill-form__field">
-            <span>Period start</span>
+        <div className={styles.BillForm_row}>
+          <label className={styles.BillForm_field}>
+            <span className={styles.BillForm_fieldLabel}>
+              <CalendarIcon size={16} />
+              Period start
+            </span>
             <input
               type="date"
               value={form.periodStart}
@@ -249,8 +265,11 @@ export function BillUpload() {
               required
             />
           </label>
-          <label className="bill-form__field">
-            <span>Period end</span>
+          <label className={styles.BillForm_field}>
+            <span className={styles.BillForm_fieldLabel}>
+              <CalendarIcon size={16} />
+              Period end
+            </span>
             <input
               type="date"
               value={form.periodEnd}
@@ -262,7 +281,7 @@ export function BillUpload() {
 
         {/* Validation / server errors. */}
         {errors.length > 0 && (
-          <ul className="bill-upload__error-list">
+          <ul className={styles.BillUpload_errorList}>
             {errors.map((msg) => (
               <li key={msg}>{msg}</li>
             ))}
@@ -272,19 +291,21 @@ export function BillUpload() {
             away automatically — someone logging a monthly bill shouldn't be
             pushed into the appliance survey every time. */}
         {savedMessage && (
-          <div className="bill-upload__saved">
-            <p className="bill-upload__success">{savedMessage}</p>
-            <Link className="bill-upload__next" to="/appliances">
+          <div className={styles.BillUpload_saved}>
+            <p className={styles.BillUpload_success}>{savedMessage}</p>
+            <Link className={styles.BillUpload_next} to="/appliances">
               Next: add your appliances
+              <ArrowRightIcon size={16} weight="bold" />
             </Link>
           </div>
         )}
 
         <button
           type="submit"
-          className="bill-form__submit"
+          className={styles.BillForm_submit}
           disabled={submitting}
         >
+          {!submitting && <PlusIcon size={18} weight="bold" />}
           {submitting ? "Saving…" : "Add bill"}
         </button>
       </form>

@@ -1,0 +1,5 @@
+.HomeLayout {
+  /* Reserves space for the fixed NavigationBar so it never overlaps the
+     last card/section of a scrolled page. */
+  padding-bottom: 80px;
+}
