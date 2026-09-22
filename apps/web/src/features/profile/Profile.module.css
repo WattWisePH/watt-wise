@@ -65,6 +65,7 @@
   gap: 8px;
   align-items: center;
   cursor: pointer;
+  transition: background-color 200ms;
 }
 
 .EstablishmentsList_button:hover {
@@ -143,6 +144,7 @@
   font-weight: 600;
   align-items: center;
   cursor: pointer;
+  border: 1px solid var(--outline);
 }
 
 .AccountOptions_button:hover {

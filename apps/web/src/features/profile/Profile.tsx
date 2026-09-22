@@ -1,3 +1,4 @@
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import {
   CaretRightIcon,
@@ -9,6 +10,7 @@ import {
 const logo = "/images/watty-logo.svg";
 import { logout } from "../../lib/auth";
 import styles from "./Profile.module.css";
+import { listProviders, type Provider } from "../../lib/establishments";
 import { useEstablishment } from "../establishment/hooks/useEstablishment";
 import { EstablishmentIcon } from "../establishment/components/EstablishmentIcon";
 
@@ -16,11 +18,39 @@ export const Profile = () => {
   const navigate = useNavigate();
   const { establishments, activeEstablishmentId, setActiveEstablishmentId } =
     useEstablishment();
+  const [providerList, setProviderList] = useState<Provider[]>([]);
 
   async function handleLogOut() {
     await logout();
     navigate("/login", { replace: true });
   }
+
+  useEffect(() => {
+    async function fetchProviders() {
+      try {
+        const data = await listProviders();
+        setProviderList(data);
+      } catch (err) {
+        console.error(err, "Failed to fetch providers");
+      }
+    }
+
+    fetchProviders();
+  }, []);
+
+  const establishmentWithProvider = useMemo(() => {
+    if (!providerList.length || !establishments.length) return [];
+
+    const providerMap = new Map(providerList.map((prov) => [prov.id, prov]));
+
+    return establishments.map((est) => {
+      const provider = providerMap.get(est.providerId);
+      return {
+        ...est,
+        provider: provider || null,
+      };
+    });
+  }, [providerList, establishments]);
 
   return (
     <div className={styles.Profile}>
@@ -41,7 +71,7 @@ export const Profile = () => {
           </p>
         </div>
         <ul className={styles.EstablishmentsList_container}>
-          {establishments.map((establishment) => {
+          {establishmentWithProvider.map((establishment) => {
             const active = establishment.id === activeEstablishmentId;
             return (
               <li key={establishment.id}>
@@ -63,7 +93,11 @@ export const Profile = () => {
                     <p className={styles.EstablishmentsList_establishmentName}>
                       {establishment.name}
                     </p>
-                    <p>{establishment.address}</p>
+                    <p>
+                      {establishment.provider !== null &&
+                        `${establishment.provider?.acronym} • `}
+                      {establishment.address}
+                    </p>
                   </div>
                   {active && "Selected"}
                   <CaretRightIcon size={20} />
