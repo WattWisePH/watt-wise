@@ -19,8 +19,7 @@ import duotone from "../../styles/DuotoneIcon.module.css";
 import { MonthlyBillChart } from "./components/MonthlyBillChart";
 import { DashboardStats } from "./components/DashboardStats";
 import { HealthScoreGauge } from "../../components/HealthScoreGauge";
-import { EstablishmentIcon } from "../establishment/EstablishmentIcon";
-import { useEstablishment } from "../establishment/hooks/useEstablishment";
+import { EstablishmentSelector } from "../establishment/components/EstablishmentSelector";
 
 const BILL_HISTORY = [
   { month: "Apr", amount: 15420 },
@@ -37,29 +36,11 @@ const BILL_HISTORY = [
  */
 export function Dashboard() {
   const navigate = useNavigate();
-  const { activeEstablishment } = useEstablishment();
-  console.log("Active Establishment:", activeEstablishment);
 
   return (
     <div className={styles.Dashboard}>
       <div className={styles.Dashboard_header}>
-        <button className={styles.Selector}>
-          {activeEstablishment && (
-            <EstablishmentIcon
-              establishment={activeEstablishment}
-              size={24}
-              className={duotone.navy}
-            />
-          )}
-          <div className={styles.Selector_label}>
-            {activeEstablishment?.name || "Set your establishment first."}
-          </div>
-          {/* <CaretDownIcon
-            size={16}
-            weight="bold"
-            className={styles.Selector_caret}
-          /> */}
-        </button>
+        <EstablishmentSelector />
         <BellIcon size={24} className={duotone.amber} />
       </div>
       <HealthScoreGauge

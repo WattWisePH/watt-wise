@@ -10,7 +10,7 @@ const logo = "/images/watty-logo.svg";
 import { logout } from "../../lib/auth";
 import styles from "./Profile.module.css";
 import { useEstablishment } from "../establishment/hooks/useEstablishment";
-import { EstablishmentIcon } from "../establishment/EstablishmentIcon";
+import { EstablishmentIcon } from "../establishment/components/EstablishmentIcon";
 
 export const Profile = () => {
   const navigate = useNavigate();

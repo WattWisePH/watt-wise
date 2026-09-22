@@ -1,0 +1,74 @@
+.Selector {
+  position: relative;
+}
+
+.Selector_summary {
+  background-color: var(--background);
+  color: var(--text);
+  border-radius: var(--radius-large);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  transition: background-color 200ms;
+}
+
+.Selector_summary::-webkit-details-marker {
+  display: none;
+}
+
+.Selector_summary:hover {
+  background-color: var(--bg-surface);
+}
+
+.Selector_label {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0px 4px;
+}
+
+.Selector_caret {
+  color: var(--text-muted);
+  margin-left: -2px;
+}
+
+.Selector_menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 220px;
+  z-index: 10;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--outline);
+  border-radius: var(--radius-large);
+}
+
+.Selector_menuItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px;
+  border: none;
+  background: none;
+  color: var(--text);
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--radius-medium);
+  transition: background-color 200ms;
+}
+
+.Selector_menuItem:hover {
+  background-color: var(--bg-surface-hover);
+}
+
+.Selector_icon {
+  flex-shrink: 0;
+}

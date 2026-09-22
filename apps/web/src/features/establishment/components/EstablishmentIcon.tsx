@@ -17,7 +17,7 @@ import {
 import {
   listEstablishmentTypes,
   type Establishment,
-} from "../../lib/establishments";
+} from "../../../lib/establishments";
 
 // Keyed by establishment_types.name (supabase/migrations/20260814000200_lookup_tables.sql).
 // A type added later just falls back to HouseIcon below.
