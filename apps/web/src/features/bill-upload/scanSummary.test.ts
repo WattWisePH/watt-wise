@@ -25,13 +25,7 @@ const fullScan: ScanResult = {
 
 describe("what a scan found", () => {
   it("lists every field of a complete read", () => {
-    expect(fieldsFoundIn(fullScan)).toEqual([
-      "account name",
-      "provider",
-      "kWh",
-      "amount",
-      "period",
-    ]);
+    expect(fieldsFoundIn(fullScan)).toEqual(["kWh", "amount", "period"]);
   });
 
   it("reports the period once, not twice", () => {
@@ -79,8 +73,6 @@ describe("the note shown to the user", () => {
 describe("the patch applied to the form", () => {
   it("fills every field a full scan supplied", () => {
     expect(formPatchFrom(fullScan)).toEqual({
-      accountName: "VIPINOSA, JONATHAN",
-      provider: "CAPIZ ELECTRIC COOPERATIVE, INC.",
       kwhUsed: "122",
       amount: "1633.26",
       periodStart: "2026-06-05",

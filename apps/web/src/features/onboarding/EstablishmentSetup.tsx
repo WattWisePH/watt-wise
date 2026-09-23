@@ -19,6 +19,7 @@ import {
   MapPinIcon,
   PlugIcon,
   ArrowRightIcon,
+  ArrowLeftIcon,
 } from "@phosphor-icons/react";
 
 import { ApiError } from "../../lib/api";
@@ -32,6 +33,7 @@ import {
 } from "../../lib/establishments";
 import styles from "./EstablishmentSetup.module.css";
 import { AuthBackdrop } from "../../components/AuthBackdrop";
+import { useEstablishment } from "../establishment/hooks/useEstablishment";
 
 export function EstablishmentSetup() {
   const [name, setName] = useState("");
@@ -48,6 +50,9 @@ export function EstablishmentSetup() {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const { establishments, setEstablishments, setActiveEstablishmentId } =
+    useEstablishment();
+  const isFirst = establishments.length === 0;
   // Register passes along wherever the user was originally headed.
   const from = (location.state as { from?: string } | null)?.from ?? "/";
 
@@ -96,7 +101,14 @@ export function EstablishmentSetup() {
     setSubmitting(true);
     setErrors([]);
     try {
-      await createEstablishment({ name, typeId, providerId, address });
+      const established = await createEstablishment({
+        name,
+        typeId,
+        providerId,
+        address,
+      });
+      setEstablishments((prev) => [established, ...prev]);
+      setActiveEstablishmentId(established.id);
       navigate(from, { replace: true });
     } catch (err) {
       // ApiError carries the API's per-field validation messages.
@@ -114,107 +126,129 @@ export function EstablishmentSetup() {
     <div className={styles.EstablishmentSetup_page}>
       <AuthBackdrop />
       <div className={styles.EstablishmentSetup}>
-      <h1 className={styles.EstablishmentSetup_title}>Tell us about your place</h1>
-      <p className={styles.EstablishmentSetup_subtitle}>
-        These details let Watty compare your usage against similar
-        establishments and read your bills correctly.
-      </p>
-
-      <form className={styles.EstablishmentSetup_form} onSubmit={handleSubmit}>
-        <label className={styles.EstablishmentSetup_field}>
-          <span className={styles.EstablishmentSetup_fieldLabel}>
-            <StorefrontIcon size={16} />
-            Name
-          </span>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="e.g. Home, Brew Corner Cafe"
-            autoComplete="organization"
-            required
-          />
-        </label>
-
-        <label className={styles.EstablishmentSetup_field}>
-          <span className={styles.EstablishmentSetup_fieldLabel}>
-            <TagIcon size={16} />
-            Type
-          </span>
-          <select
-            value={typeId}
-            onChange={(e) => setTypeId(e.target.value)}
-            disabled={loading}
-            required
+        {!isFirst && (
+          <button
+            type="button"
+            className={styles.EstablishmentSetup_back}
+            onClick={() => navigate(-1)}
           >
-            <option value="">{loading ? "Loading…" : "Select a type"}</option>
-            {types.map((type) => (
-              <option key={type.id} value={type.id}>
-                {type.name}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        {/* Optional: it feeds benchmarking against nearby places, which
-            falls back to a wider comparison when it's missing. */}
-        <label className={styles.EstablishmentSetup_field}>
-          <span className={styles.EstablishmentSetup_fieldLabel}>
-            <MapPinIcon size={16} />
-            Address{" "}
-            <span className={styles.EstablishmentSetup_optional}>(optional)</span>
-          </span>
-          <input
-            type="text"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            placeholder="Street, city"
-            autoComplete="street-address"
-          />
-        </label>
-
-        <label className={styles.EstablishmentSetup_field}>
-          <span className={styles.EstablishmentSetup_fieldLabel}>
-            <PlugIcon size={16} />
-            Electric utility
-          </span>
-          <select
-            value={providerId}
-            onChange={(e) => setProviderId(e.target.value)}
-            disabled={loading}
-            required
-          >
-            <option value="">
-              {loading ? "Loading…" : "Select your utility"}
-            </option>
-            {providers.map((provider) => (
-              <option key={provider.id} value={provider.id}>
-                {providerLabel(provider)}
-              </option>
-            ))}
-          </select>
-          <small className={styles.EstablishmentSetup_hint}>
-            The company named on your electricity bill.
-          </small>
-        </label>
-
-        {errors.length > 0 && (
-          <ul className={styles.EstablishmentSetup_errors}>
-            {errors.map((msg) => (
-              <li key={msg}>{msg}</li>
-            ))}
-          </ul>
+            <ArrowLeftIcon size={18} weight="bold" />
+            Back
+          </button>
         )}
+        <h1 className={styles.EstablishmentSetup_title}>
+          {isFirst ? "Tell us about your place" : "Add another establishment"}
+        </h1>
+        <p className={styles.EstablishmentSetup_subtitle}>
+          {isFirst
+            ? "These details let Watty compare your usage against similar establishments and read your bills correctly."
+            : "Add another place to track its bills and appliances separately."}
+        </p>
 
-        <button
-          type="submit"
-          className={styles.EstablishmentSetup_submit}
-          disabled={submitting || loading}
+        <form
+          className={styles.EstablishmentSetup_form}
+          onSubmit={handleSubmit}
         >
-          {submitting ? "Saving…" : "Continue"}
-          {!submitting && <ArrowRightIcon size={18} weight="bold" />}
-        </button>
-      </form>
+          <label className={styles.EstablishmentSetup_field}>
+            <span className={styles.EstablishmentSetup_fieldLabel}>
+              <StorefrontIcon size={16} />
+              Name
+            </span>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="e.g. Home, Brew Corner Cafe"
+              autoComplete="organization"
+              required
+            />
+          </label>
+
+          <label className={styles.EstablishmentSetup_field}>
+            <span className={styles.EstablishmentSetup_fieldLabel}>
+              <TagIcon size={16} />
+              Type
+            </span>
+            <select
+              value={typeId}
+              onChange={(e) => setTypeId(e.target.value)}
+              disabled={loading}
+              required
+            >
+              <option value="">{loading ? "Loading…" : "Select a type"}</option>
+              {types.map((type) => (
+                <option key={type.id} value={type.id}>
+                  {type.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          {/* Optional: it feeds benchmarking against nearby places, which
+            falls back to a wider comparison when it's missing. */}
+          <label className={styles.EstablishmentSetup_field}>
+            <span className={styles.EstablishmentSetup_fieldLabel}>
+              <MapPinIcon size={16} />
+              Address{" "}
+              <span className={styles.EstablishmentSetup_optional}>
+                (optional)
+              </span>
+            </span>
+            <input
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="Street, city"
+              autoComplete="street-address"
+            />
+          </label>
+
+          <label className={styles.EstablishmentSetup_field}>
+            <span className={styles.EstablishmentSetup_fieldLabel}>
+              <PlugIcon size={16} />
+              Electric utility
+            </span>
+            <select
+              value={providerId}
+              onChange={(e) => setProviderId(e.target.value)}
+              disabled={loading}
+              required
+            >
+              <option value="">
+                {loading ? "Loading…" : "Select your utility"}
+              </option>
+              {providers.map((provider) => (
+                <option key={provider.id} value={provider.id}>
+                  {providerLabel(provider)}
+                </option>
+              ))}
+            </select>
+            <small className={styles.EstablishmentSetup_hint}>
+              The company named on your electricity bill.
+            </small>
+          </label>
+
+          {errors.length > 0 && (
+            <ul className={styles.EstablishmentSetup_errors}>
+              {errors.map((msg) => (
+                <li key={msg}>{msg}</li>
+              ))}
+            </ul>
+          )}
+
+          <button
+            type="submit"
+            className={styles.EstablishmentSetup_submit}
+            disabled={submitting || loading}
+          >
+            {submitting
+              ? "Saving…"
+              : isFirst
+                ? "Continue"
+                : "Add Establishment"}
+            {!submitting && <ArrowRightIcon size={18} weight="bold" />}
+          </button>
+        </form>
       </div>
     </div>
   );

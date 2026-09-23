@@ -18,6 +18,25 @@
   text-align: left;
 }
 
+.EstablishmentSetup_back {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 16px;
+  padding: 8px 12px;
+  border: 1px solid var(--outline);
+  background: none;
+  color: var(--text-muted);
+  font-size: 12px !important;
+  cursor: pointer;
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-large);
+}
+
+.EstablishmentSetup_back:hover {
+  background-color: var(--bg-surface-hover);
+}
+
 .EstablishmentSetup_title {
   font-size: 1.5rem;
   font-weight: 700;

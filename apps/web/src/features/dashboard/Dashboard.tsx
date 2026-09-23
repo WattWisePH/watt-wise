@@ -12,8 +12,6 @@ import {
   ArrowCircleRightIcon,
   SealWarningIcon,
   WarningIcon,
-  CaretDownIcon,
-  CoffeeIcon,
 } from "@phosphor-icons/react";
 
 import styles from "./Dashboard.module.css";
@@ -21,6 +19,7 @@ import duotone from "../../styles/DuotoneIcon.module.css";
 import { MonthlyBillChart } from "./components/MonthlyBillChart";
 import { DashboardStats } from "./components/DashboardStats";
 import { HealthScoreGauge } from "../../components/HealthScoreGauge";
+import { EstablishmentSelector } from "../establishment/components/EstablishmentSelector";
 
 const BILL_HISTORY = [
   { month: "Apr", amount: 15420 },
@@ -41,15 +40,7 @@ export function Dashboard() {
   return (
     <div className={styles.Dashboard}>
       <div className={styles.Dashboard_header}>
-        <div className={styles.Selector}>
-          <CoffeeIcon size={24} className={duotone.navy} />
-          <div className={styles.Selector_label}>Cafe Marie</div>
-          <CaretDownIcon
-            size={16}
-            weight="bold"
-            className={styles.Selector_caret}
-          />
-        </div>
+        <EstablishmentSelector />
         <BellIcon size={24} className={duotone.amber} />
       </div>
       <HealthScoreGauge

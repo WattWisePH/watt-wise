@@ -18,6 +18,7 @@ import { PriorityActions } from "./features/insights/components/PriorityActions.
 import { Simulator } from "./features/simulator/Simulator.tsx";
 import { Profile } from "./features/profile/Profile.tsx";
 import { EstablishmentSetup } from "./features/onboarding/EstablishmentSetup.tsx";
+import { EstablishmentProvider } from "./providers/EstablishmentProvider.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -26,38 +27,48 @@ createRoot(document.getElementById("root")!).render(
         replaces the whole context value rather than merging with Phosphor's
         defaults, so the other fields must be restated here too. */}
     <IconContext.Provider
-      value={{ color: "currentColor", size: "1em", weight: "duotone", mirrored: false }}
+      value={{
+        color: "currentColor",
+        size: "1em",
+        weight: "duotone",
+        mirrored: false,
+      }}
     >
-      <BrowserRouter>
-        <Routes>
-          <Route element={<App />}>
-            {/* Public: reachable while signed out. */}
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
+      <EstablishmentProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<App />}>
+              {/* Public: reachable while signed out. */}
+              <Route path="login" element={<Login />} />
+              <Route path="register" element={<Register />} />
 
-            {/* Everything else needs a session — RequireAuth redirects to
+              {/* Everything else needs a session — RequireAuth redirects to
                 /login when there isn't a valid one. */}
-            <Route element={<RequireAuth />}>
-              <Route index element={<Navigate to={"dashboard"} />} />
-              {/* Onboarding: registration sends new users here, because bills
+              <Route element={<RequireAuth />}>
+                <Route index element={<Navigate to={"dashboard"} />} />
+                {/* Onboarding: registration sends new users here, because bills
                   and appliances can't be recorded without an establishment. */}
-              <Route path="establishment" element={<EstablishmentSetup />} />
-              <Route path="upload" element={<BillUpload />} />
-              <Route element={<HomeLayout />}>
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="insights" element={<InsightsPage />}>
-                  <Route index element={<Navigate to={"health-score"} />} />
-                  <Route path="health-score" element={<HealthScore />} />
-                  <Route path="priority-actions" element={<PriorityActions />} />
+                <Route path="establishment" element={<EstablishmentSetup />} />
+                <Route path="upload" element={<BillUpload />} />
+                <Route element={<HomeLayout />}>
+                  <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="insights" element={<InsightsPage />}>
+                    <Route index element={<Navigate to={"health-score"} />} />
+                    <Route path="health-score" element={<HealthScore />} />
+                    <Route
+                      path="priority-actions"
+                      element={<PriorityActions />}
+                    />
+                  </Route>
+                  <Route path="simulator" element={<Simulator />} />
+                  <Route path="profile" element={<Profile />} />
                 </Route>
-                <Route path="simulator" element={<Simulator />} />
-                <Route path="profile" element={<Profile />} />
+                <Route path="appliances" element={<ApplianceSurvey />} />
               </Route>
-              <Route path="appliances" element={<ApplianceSurvey />} />
             </Route>
-          </Route>
-        </Routes>
-      </BrowserRouter>
+          </Routes>
+        </BrowserRouter>
+      </EstablishmentProvider>
     </IconContext.Provider>
   </StrictMode>,
 );

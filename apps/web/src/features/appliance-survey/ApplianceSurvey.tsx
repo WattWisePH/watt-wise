@@ -37,9 +37,9 @@ import { ApiError, saveAppliances, type ApplianceDraft } from "../../lib/api";
 import {
   fetchApplianceOptions,
   subtypesForKind,
-  toIsInverter,
   type ApplianceOptions,
 } from "../../lib/lookups";
+import { useEstablishment } from "../establishment/hooks/useEstablishment";
 import styles from "./ApplianceSurvey.module.css";
 
 /** Fitting icon per appliance kind, matched by name.
@@ -73,6 +73,7 @@ function emptyCard(kindId = ""): CardDraft {
 }
 
 export function ApplianceSurvey() {
+  const { activeEstablishment } = useEstablishment();
   const [options, setOptions] = useState<ApplianceOptions | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [cards, setCards] = useState<CardDraft[]>([emptyCard()]);
@@ -133,27 +134,26 @@ export function ApplianceSurvey() {
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     if (!options) return;
+    if (!activeEstablishment) {
+      setErrors(["Select an establishment before saving appliances."]);
+      return;
+    }
 
     setSubmitting(true);
     setErrors([]);
     setSavedMessage(null);
     try {
-      // The API still describes an appliance by kind name and an inverter
-      // flag, so translate here. Moving it onto the schema's kind and
-      // subtype ids is a follow-up, once appliances are stored in Postgres
-      // instead of the API's in-memory list.
-      const drafts: ApplianceDraft[] = cards.map((card) => {
-        const kind = options.kinds.find((k) => k.id === card.kindId);
-        const subtype = options.subtypes.find((s) => s.id === card.subtypeId);
-        return {
-          type: kind?.applianceName ?? "",
-          count: card.count,
-          isInverter: toIsInverter(subtype?.subtypeName),
-          ageYears: card.ageYears,
-        };
-      });
+      // The cards already hold the lookup ids the API stores, so they submit
+      // as they are — the names and the inverter flag are resolved server
+      // side, from the same tables these ids came from.
+      const drafts: ApplianceDraft[] = cards.map((card) => ({
+        kindId: card.kindId,
+        subtypeId: card.subtypeId,
+        count: card.count,
+        ageYears: card.ageYears,
+      }));
 
-      const saved = await saveAppliances(drafts);
+      const saved = await saveAppliances(activeEstablishment.id, drafts);
       setSavedMessage(
         `Saved ${saved.length} appliance${saved.length === 1 ? "" : "s"}.`,
       );

@@ -79,18 +79,3 @@ export function subtypesForKind(
   if (!kindId) return [];
   return subtypes.filter((s) => s.kindId === kindId);
 }
-
-/**
- * Map a subtype name onto the boolean the recommendation engine's
- * non-inverter rule reads.
- *
- * The schema models variants generally ("OLED", "CRT"), but the engine still
- * asks a yes/no question about inverters. Anything that isn't an explicit
- * inverter answer stays undefined rather than defaulting to false — the rule
- * must not treat "unknown" as "not an inverter".
- */
-export function toIsInverter(subtypeName: string | undefined): boolean | undefined {
-  if (subtypeName === "Inverter") return true;
-  if (subtypeName === "Non-inverter") return false;
-  return undefined;
-}

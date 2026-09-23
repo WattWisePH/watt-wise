@@ -82,6 +82,11 @@ export function listProviders(): Promise<Provider[]> {
   return getJson<Provider[]>("/api/establishments/providers", "Failed to load providers");
 }
 
+/** The signed-in user's establishments, newest first. */
+export function listEstablishments(): Promise<Establishment[]> {
+  return getJson<Establishment[]>("/api/establishments", "Failed to load establishments");
+}
+
 /**
  * Create the signed-in user's establishment. The owning account is taken
  * from the access token by the API, so it isn't sent here.

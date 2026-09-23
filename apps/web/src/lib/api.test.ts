@@ -50,9 +50,9 @@ function headersOf(mock: ReturnType<typeof mockFetch>, call = 0): Record<string,
   return (init?.headers ?? {}) as Record<string, string>;
 }
 
+const ESTABLISHMENT_ID = "est-1";
+
 const billForm = {
-  accountName: "Cafe Marie",
-  provider: "Meralco",
   kwhUsed: "312",
   amount: "1785.50",
   periodStart: "2026-06-01",
@@ -68,21 +68,21 @@ afterEach(() => {
 describe("authorisation", () => {
   it("sends the access token when creating a bill", async () => {
     const fetchMock = mockFetch({ id: "1" });
-    await createBill(billForm, null);
+    await createBill(ESTABLISHMENT_ID, billForm, null);
 
     expect(headersOf(fetchMock).Authorization).toBe("Bearer access-token-123");
   });
 
   it("sends the token when listing bills", async () => {
     const fetchMock = mockFetch([]);
-    await listBills();
+    await listBills(ESTABLISHMENT_ID);
 
     expect(headersOf(fetchMock).Authorization).toBe("Bearer access-token-123");
   });
 
   it("sends the token when saving appliances", async () => {
     const fetchMock = mockFetch([]);
-    await saveAppliances([{ type: "Air Conditioner", count: 1 }]);
+    await saveAppliances(ESTABLISHMENT_ID, [{ kindId: "kind-1", count: 1 }]);
 
     expect(headersOf(fetchMock).Authorization).toBe("Bearer access-token-123");
   });
@@ -98,7 +98,7 @@ describe("authorisation", () => {
     // An absent header is right; "Bearer null" would be a confusing 401.
     signedOut();
     const fetchMock = mockFetch([]);
-    await listBills();
+    await listBills(ESTABLISHMENT_ID);
 
     expect(headersOf(fetchMock).Authorization).toBeUndefined();
   });
@@ -107,9 +107,9 @@ describe("authorisation", () => {
     // Supabase rotates the access token on refresh, so it must be read per
     // request rather than cached at module load.
     const fetchMock = mockFetch([]);
-    await listBills();
+    await listBills(ESTABLISHMENT_ID);
     signedIn("rotated-token");
-    await listBills();
+    await listBills(ESTABLISHMENT_ID);
 
     expect(headersOf(fetchMock, 1).Authorization).toBe("Bearer rotated-token");
   });
@@ -119,7 +119,7 @@ describe("multipart requests", () => {
   it("does not set Content-Type when creating a bill", async () => {
     // The browser must set it, so the multipart boundary is included.
     const fetchMock = mockFetch({ id: "1" });
-    await createBill(billForm, null);
+    await createBill(ESTABLISHMENT_ID, billForm, null);
 
     expect(headersOf(fetchMock)["Content-Type"]).toBeUndefined();
   });
@@ -133,16 +133,16 @@ describe("multipart requests", () => {
 
   it("sends the manual fields as form data", async () => {
     const fetchMock = mockFetch({ id: "1" });
-    await createBill(billForm, null);
+    await createBill(ESTABLISHMENT_ID, billForm, null);
 
     const body = fetchMock.mock.calls[0]?.[1]?.body as FormData;
-    expect(body.get("accountName")).toBe("Cafe Marie");
     expect(body.get("kwhUsed")).toBe("312");
+    expect(body.get("amount")).toBe("1785.50");
   });
 
   it("attaches the file only when one was chosen", async () => {
     const fetchMock = mockFetch({ id: "1" });
-    await createBill(billForm, null);
+    await createBill(ESTABLISHMENT_ID, billForm, null);
 
     const body = fetchMock.mock.calls[0]?.[1]?.body as FormData;
     expect(body.get("file")).toBeNull();
@@ -152,7 +152,7 @@ describe("multipart requests", () => {
 describe("JSON requests", () => {
   it("sets Content-Type for the appliance survey", async () => {
     const fetchMock = mockFetch([]);
-    await saveAppliances([{ type: "Television", count: 1 }]);
+    await saveAppliances(ESTABLISHMENT_ID, [{ kindId: "kind-2", count: 1 }]);
 
     expect(headersOf(fetchMock)["Content-Type"]).toBe("application/json");
   });
@@ -160,7 +160,7 @@ describe("JSON requests", () => {
   it("keeps the auth header alongside Content-Type", async () => {
     // Spreading one object into another is easy to get wrong.
     const fetchMock = mockFetch([]);
-    await saveAppliances([{ type: "Television", count: 1 }]);
+    await saveAppliances(ESTABLISHMENT_ID, [{ kindId: "kind-2", count: 1 }]);
 
     expect(headersOf(fetchMock).Authorization).toBe("Bearer access-token-123");
   });
@@ -170,7 +170,7 @@ describe("error handling", () => {
   it("throws an ApiError carrying the status", async () => {
     mockFetch({ error: "VALIDATION_FAILED" }, { ok: false, status: 400 });
 
-    await expect(createBill(billForm, null)).rejects.toBeInstanceOf(ApiError);
+    await expect(createBill(ESTABLISHMENT_ID, billForm, null)).rejects.toBeInstanceOf(ApiError);
   });
 
   it("surfaces the per-field details so the form can show them", async () => {
@@ -179,7 +179,7 @@ describe("error handling", () => {
       { ok: false, status: 400 },
     );
 
-    await expect(createBill(billForm, null)).rejects.toMatchObject({
+    await expect(createBill(ESTABLISHMENT_ID, billForm, null)).rejects.toMatchObject({
       status: 400,
       details: ["kwhUsed must be a non-negative number"],
     });
@@ -188,7 +188,7 @@ describe("error handling", () => {
   it("prefers the server's message over the error code", async () => {
     mockFetch({ error: "FILE_TOO_LARGE", message: "Max file size is 10 MB." }, { ok: false, status: 400 });
 
-    await expect(createBill(billForm, null)).rejects.toThrow("Max file size is 10 MB.");
+    await expect(createBill(ESTABLISHMENT_ID, billForm, null)).rejects.toThrow("Max file size is 10 MB.");
   });
 
   it("falls back to a readable message when the body isn't JSON", async () => {
@@ -198,7 +198,7 @@ describe("error handling", () => {
       json: async () => { throw new Error("not json"); },
     })));
 
-    await expect(createBill(billForm, null)).rejects.toThrow("Failed to save bill");
+    await expect(createBill(ESTABLISHMENT_ID, billForm, null)).rejects.toThrow("Failed to save bill");
   });
 
   it("reports a failed scan rather than returning empty suggestions", async () => {
