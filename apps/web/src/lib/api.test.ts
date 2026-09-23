@@ -82,7 +82,7 @@ describe("authorisation", () => {
 
   it("sends the token when saving appliances", async () => {
     const fetchMock = mockFetch([]);
-    await saveAppliances([{ type: "Air Conditioner", count: 1 }]);
+    await saveAppliances(ESTABLISHMENT_ID, [{ kindId: "kind-1", count: 1 }]);
 
     expect(headersOf(fetchMock).Authorization).toBe("Bearer access-token-123");
   });
@@ -152,7 +152,7 @@ describe("multipart requests", () => {
 describe("JSON requests", () => {
   it("sets Content-Type for the appliance survey", async () => {
     const fetchMock = mockFetch([]);
-    await saveAppliances([{ type: "Television", count: 1 }]);
+    await saveAppliances(ESTABLISHMENT_ID, [{ kindId: "kind-2", count: 1 }]);
 
     expect(headersOf(fetchMock)["Content-Type"]).toBe("application/json");
   });
@@ -160,7 +160,7 @@ describe("JSON requests", () => {
   it("keeps the auth header alongside Content-Type", async () => {
     // Spreading one object into another is easy to get wrong.
     const fetchMock = mockFetch([]);
-    await saveAppliances([{ type: "Television", count: 1 }]);
+    await saveAppliances(ESTABLISHMENT_ID, [{ kindId: "kind-2", count: 1 }]);
 
     expect(headersOf(fetchMock).Authorization).toBe("Bearer access-token-123");
   });

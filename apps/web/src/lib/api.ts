@@ -111,10 +111,16 @@ export async function listBills(establishmentId: string): Promise<Bill[]> {
   return (await res.json()) as Bill[];
 }
 
-/** One appliance as recorded by the survey. */
+/**
+ * One appliance as recorded by the survey. `type` and `isInverter` are
+ * resolved from the lookup tables by the API on the way out — they're what
+ * the recommendation engine reads, not what the survey submits.
+ */
 export interface Appliance {
   id: string;
-  accountId: string;
+  establishmentId: string;
+  kindId: string;
+  subtypeId: string | null;
   type: string;
   count: number;
   isInverter?: boolean;
@@ -122,27 +128,36 @@ export interface Appliance {
   createdAt: string;
 }
 
-/** What the survey form collects for one appliance before submitting. */
+/**
+ * What the survey form collects for one appliance before submitting.
+ * Ids from the lookup tables, not free text: "Aircon", "aircon" and "Air
+ * Conditioner" would otherwise all arrive as different appliances.
+ */
 export interface ApplianceDraft {
-  type: string;
+  kindId: string;
+  /** Absent when the kind has no variants, or the user skipped the detail. */
+  subtypeId?: string;
   count: number;
-  isInverter?: boolean;
   ageYears?: number;
 }
 
 /**
- * Submit the whole survey in one request. The API validates every entry
- * before saving any of them, so a bad row rejects the batch rather than
- * leaving a partial survey.
+ * Submit the whole survey for an establishment in one request. The API
+ * validates every entry before saving any of them, so a bad row rejects the
+ * batch rather than leaving a partial survey.
  */
 export async function saveAppliances(
+  establishmentId: string,
   drafts: ApplianceDraft[],
 ): Promise<Appliance[]> {
-  const res = await fetch(`${API_URL}/api/appliances`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json", ...(await authHeaders()) },
-    body: JSON.stringify(drafts),
-  });
+  const res = await fetch(
+    `${API_URL}/api/establishments/${establishmentId}/appliances`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...(await authHeaders()) },
+      body: JSON.stringify(drafts),
+    },
+  );
   const data = await res.json().catch(() => ({}));
 
   if (!res.ok) {

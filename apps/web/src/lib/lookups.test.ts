@@ -16,7 +16,7 @@ vi.mock("./supabase", () => ({
   isSupabaseConfigured: true,
 }));
 
-const { fetchApplianceOptions, subtypesForKind, toIsInverter } = await import("./lookups");
+const { fetchApplianceOptions, subtypesForKind } = await import("./lookups");
 
 /** Stub the two table reads the loader performs. */
 function mockTables(kinds: unknown, subtypes: unknown, errors: Record<string, string> = {}) {
@@ -104,26 +104,5 @@ describe("filtering subtypes by kind", () => {
 
   it("returns nothing when no kind is selected", () => {
     expect(subtypesForKind(subtypes, undefined)).toEqual([]);
-  });
-});
-
-describe("translating a subtype for the engine", () => {
-  it("recognises an inverter", () => {
-    expect(toIsInverter("Inverter")).toBe(true);
-  });
-
-  it("recognises a non-inverter", () => {
-    expect(toIsInverter("Non-inverter")).toBe(false);
-  });
-
-  it("leaves unrelated variants undefined", () => {
-    // "OLED" says nothing about inverters. Returning false would make the
-    // engine claim the user owns non-inverter appliances they never reported.
-    expect(toIsInverter("OLED")).toBeUndefined();
-    expect(toIsInverter("CRT")).toBeUndefined();
-  });
-
-  it("leaves an unanswered subtype undefined", () => {
-    expect(toIsInverter(undefined)).toBeUndefined();
   });
 });
