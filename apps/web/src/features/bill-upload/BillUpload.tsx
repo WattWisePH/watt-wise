@@ -9,7 +9,7 @@
  * multipart/form-data via the API client.
  */
 
-import { useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import {
   ArrowLeftIcon,
@@ -29,6 +29,12 @@ import {
   scanBill,
   type BillFormData,
 } from "../../lib/api";
+import {
+  listProviders,
+  providerLabel,
+  type Provider,
+} from "../../lib/establishments";
+import { useEstablishment } from "../establishment/hooks/useEstablishment";
 import { formPatchFrom, scanNoteFor } from "./scanSummary";
 import styles from "./BillUpload.module.css";
 
@@ -39,8 +45,6 @@ const ALLOWED_TYPES = ["image/jpeg", "image/png", "application/pdf"];
 
 /** Blank form state used on first render and after a successful save. */
 const EMPTY_FORM: BillFormData = {
-  accountName: "",
-  provider: "",
   kwhUsed: "",
   amount: "",
   periodStart: "",
@@ -48,7 +52,9 @@ const EMPTY_FORM: BillFormData = {
 };
 
 export function BillUpload() {
+  const { activeEstablishment } = useEstablishment();
   const [form, setForm] = useState<BillFormData>(EMPTY_FORM);
+  const [providers, setProviders] = useState<Provider[]>([]);
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -58,6 +64,20 @@ export function BillUpload() {
   const [scanNote, setScanNote] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
+
+  // Fetched once to resolve the establishment's providerId into a
+  // human-readable acronym; the bill itself never sends a provider.
+  useEffect(() => {
+    listProviders()
+      .then(setProviders)
+      .catch((err) => console.error(err, "Failed to fetch providers"));
+  }, []);
+
+  const activeProvider = useMemo(
+    () =>
+      providers.find((p) => p.id === activeEstablishment?.providerId) ?? null,
+    [providers, activeEstablishment],
+  );
 
   /** Update one field of the manual form as the user types. */
   function handleField(field: keyof BillFormData, value: string) {
@@ -112,12 +132,16 @@ export function BillUpload() {
   /** Submit the form to the API and reflect success/failure in the UI. */
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+    if (!activeEstablishment) {
+      setErrors(["Select an establishment before adding a bill."]);
+      return;
+    }
     setSubmitting(true);
     setErrors([]);
     setSavedMessage(null);
     try {
-      const bill = await createBill(form, file);
-      setSavedMessage(`Saved ${bill.accountName} — ${bill.kwhUsed} kWh.`);
+      const bill = await createBill(activeEstablishment.id, form, file);
+      setSavedMessage(`Saved — ${bill.kwhUsed} kWh.`);
       setForm(EMPTY_FORM);
       setFile(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -152,7 +176,9 @@ export function BillUpload() {
       <button
         type="button"
         className={
-          scanning ? `${styles.Dropzone} ${styles.Dropzone__scanning}` : styles.Dropzone
+          scanning
+            ? `${styles.Dropzone} ${styles.Dropzone__scanning}`
+            : styles.Dropzone
         }
         onClick={() => fileInputRef.current?.click()}
         disabled={scanning}
@@ -170,7 +196,11 @@ export function BillUpload() {
           <UploadSimpleIcon className={styles.Dropzone_icon} size={28} />
         )}
         <span className={styles.Dropzone_label}>
-          {scanning ? "Reading your bill…" : file ? file.name : "Upload from File"}
+          {scanning
+            ? "Reading your bill…"
+            : file
+              ? file.name
+              : "Upload from File"}
         </span>
         <span className={styles.Dropzone_hint}>
           {scanning
@@ -196,30 +226,22 @@ export function BillUpload() {
 
       {/* Manual entry — the numbers the MVP relies on. */}
       <form className={styles.BillForm} onSubmit={handleSubmit}>
-        <label className={styles.BillForm_field}>
+        <div className={styles.BillForm_field}>
           <span className={styles.BillForm_fieldLabel}>
             <IdentificationBadgeIcon size={16} />
-            Account name
+            Establishment
           </span>
-          <input
-            value={form.accountName}
-            onChange={(e) => handleField("accountName", e.target.value)}
-            placeholder="Cafe Marie"
-            required
-          />
-        </label>
-        <label className={styles.BillForm_field}>
+          <p>{activeEstablishment?.name ?? "No establishment selected"}</p>
+        </div>
+        {/* Read-only field of provider. Bill's provider is always set to
+         *  the establishment'sconfigured provider. */}
+        <div className={styles.BillForm_field}>
           <span className={styles.BillForm_fieldLabel}>
             <StorefrontIcon size={16} />
             Provider
           </span>
-          <input
-            value={form.provider}
-            onChange={(e) => handleField("provider", e.target.value)}
-            placeholder="Meralco"
-            required
-          />
-        </label>
+          <p>{activeProvider ? providerLabel(activeProvider) : "—"}</p>
+        </div>
         <div className={styles.BillForm_row}>
           <label className={styles.BillForm_field}>
             <span className={styles.BillForm_fieldLabel}>
