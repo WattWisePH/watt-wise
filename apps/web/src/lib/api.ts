@@ -28,20 +28,23 @@ export function apiUrl(path: string): string {
 /** Shape of a bill as returned by the API (mirrors apps/api Bill type). */
 export interface Bill {
   id: string;
-  accountName: string;
-  provider: string;
+  establishmentId: string;
+  providerId: string | null;
   kwhUsed: number;
   amount: number;
-  periodStart: string;
-  periodEnd: string;
+  periodStart: string | null;
+  periodEnd: string | null;
   file: { originalName: string; mimeType: string; size: number } | null;
   createdAt: string;
 }
 
-/** The manual fields the upload form collects. */
+/**
+ * The manual fields the upload form collects. No accountName or provider
+ * here: both belong to the establishment the bill is filed under (the API
+ * path names it, and the server defaults providerId from it), not the bill
+ * itself.
+ */
 export interface BillFormData {
-  accountName: string;
-  provider: string;
   kwhUsed: string; // kept as strings from the form inputs
   amount: string;
   periodStart: string;
@@ -62,25 +65,26 @@ export class ApiError extends Error {
 }
 
 /**
- * Create a bill. Sends multipart/form-data so the optional scanned file
- * rides along with the manual fields — exactly what the API's multer
- * middleware expects. `file` is optional (manual entry works on its own).
+ * Create a bill under an establishment. Sends multipart/form-data so the
+ * optional scanned file rides along with the manual fields — exactly what
+ * the API's multer middleware expects. `file` is optional (manual entry
+ * works on its own). The provider is never sent from here: the server
+ * always files the bill under the establishment's own provider.
  */
 export async function createBill(
+  establishmentId: string,
   form: BillFormData,
   file: File | null,
 ): Promise<Bill> {
   const body = new FormData();
   // Append each manual field; FormData sends them as text parts.
-  body.append("accountName", form.accountName);
-  body.append("provider", form.provider);
   body.append("kwhUsed", form.kwhUsed);
   body.append("amount", form.amount);
   body.append("periodStart", form.periodStart);
   body.append("periodEnd", form.periodEnd);
   if (file) body.append("file", file);
 
-  const res = await fetch(`${API_URL}/api/bills`, {
+  const res = await fetch(`${API_URL}/api/establishments/${establishmentId}/bills`, {
     method: "POST",
     headers: await authHeaders(),
     body,
@@ -98,9 +102,9 @@ export async function createBill(
   return data as Bill;
 }
 
-/** Fetch all stored bills, newest first. */
-export async function listBills(): Promise<Bill[]> {
-  const res = await fetch(`${API_URL}/api/bills`, {
+/** Fetch an establishment's bills, newest first. */
+export async function listBills(establishmentId: string): Promise<Bill[]> {
+  const res = await fetch(`${API_URL}/api/establishments/${establishmentId}/bills`, {
     headers: await authHeaders(),
   });
   if (!res.ok) throw new ApiError("Failed to load bills", res.status);

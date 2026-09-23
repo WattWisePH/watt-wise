@@ -12,11 +12,14 @@
 
 import type { ScanResult } from "../../lib/api";
 
-/** The human names of the fields a scan actually recognised, in form order. */
+/**
+ * The human names of the fields a scan actually recognised, in form order.
+ * accountName and provider are read from the scan but not reported here:
+ * neither is a form field any more — the bill is filed under the
+ * establishment, which already fixes its provider.
+ */
 export function fieldsFoundIn(scan: ScanResult): string[] {
   const found: string[] = [];
-  if (scan.accountName) found.push("account name");
-  if (scan.provider) found.push("provider");
   if (scan.kwhUsed !== undefined) found.push("kWh");
   if (scan.amount !== undefined) found.push("amount");
   // Start and end are filled together and reported as one thing, so the
@@ -37,8 +40,6 @@ export function scanNoteFor(scan: ScanResult): string {
  *  partial scan never blanks out something the user already typed. */
 export function formPatchFrom(scan: ScanResult): Record<string, string> {
   const patch: Record<string, string> = {};
-  if (scan.accountName) patch.accountName = scan.accountName;
-  if (scan.provider) patch.provider = scan.provider;
   if (scan.kwhUsed !== undefined) patch.kwhUsed = String(scan.kwhUsed);
   if (scan.amount !== undefined) patch.amount = String(scan.amount);
   if (scan.periodStart) patch.periodStart = scan.periodStart;
