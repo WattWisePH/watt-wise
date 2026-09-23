@@ -6,11 +6,12 @@
   margin: 0 auto;
   list-style: none;
   padding-left: 0;
+  padding: 12px;
   display: flex;
   gap: 6px;
   justify-content: space-evenly;
-  max-width: 56rem;
-  margin: 12px;
+  max-width: 480px;
+  margin: 0 auto;
   margin-bottom: 0;
 }
 
