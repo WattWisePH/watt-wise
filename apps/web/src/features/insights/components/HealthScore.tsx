@@ -5,14 +5,38 @@ import duotone from "../../../styles/DuotoneIcon.module.css";
 import { HealthScoreGauge } from "../../../components/HealthScoreGauge";
 import { ComparisonBar } from "../../../components/ComparisonBar";
 import { ConsumptionComparison } from "./ConsumptionComparison";
+import { useInsightsData } from "../useInsights";
+import type { BenchmarkContext } from "../../../lib/insights";
 import type { ConsumptionRow } from "../types";
 
-const consumptionRows: ConsumptionRow[] = [
-  { label: "Average Cafe", value: 265, isAverage: true },
-  { label: "Cafe Marie", value: 312 },
-];
+/**
+ * What to call the figure being compared against.
+ *
+ * A cohort that was too small to disclose falls back to a published
+ * reference average, and saying "similar establishments" over that number
+ * would claim a comparison that never happened.
+ */
+function peerLabel(benchmark: BenchmarkContext): string {
+  return benchmark.source === "peers"
+    ? `Average of ${benchmark.cohortSize} similar`
+    : "Reference average";
+}
+
+/** "18% above" / "4% below" / "in line with", from the signed percentage. */
+function gapPhrase(deltaPct: number): string {
+  if (deltaPct === 0) return "in line with";
+  return `${Math.abs(deltaPct)}% ${deltaPct > 0 ? "above" : "below"}`;
+}
 
 export const HealthScore = () => {
+  const { result, benchmark, basedOn } = useInsightsData();
+  const { peerAverageKwh, deltaPct } = result.benchmark;
+
+  const consumptionRows: ConsumptionRow[] = [
+    { label: peerLabel(benchmark), value: peerAverageKwh, isAverage: true },
+    { label: result.accountName, value: basedOn.kwhUsed },
+  ];
+
   return (
     <div className={styles.Insights}>
       {/* Energy Health Score */}
@@ -24,10 +48,14 @@ export const HealthScore = () => {
           </p>
         </div>
         <HealthScoreGauge
-          score={78}
-          label="Good"
+          score={result.healthScore}
+          label={result.healthLabel}
           showTitle={false}
-          insight="Better than 65% of similar cafes"
+          insight={
+            benchmark.source === "peers"
+              ? `${gapPhrase(deltaPct)} the average of ${benchmark.cohortSize} similar establishments`
+              : "Compared against a reference average — not enough similar establishments yet"
+          }
         />
       </section>
 
@@ -36,16 +64,20 @@ export const HealthScore = () => {
         <div>
           <h1 className={styles.Insights_sectionTitle}>Benchmark</h1>
           <p className={`${styles.Insights_sectionSubtitle}`}>
-            See how you compare to other users.
+            {benchmark.source === "peers"
+              ? "See how you compare to other users."
+              : "A real comparison needs more establishments like yours."}
           </p>
         </div>
         <div className={styles.Insights_card}>
           <p className={styles.Benchmark_description}>
             You consume{" "}
-            <span className={styles.Benchmark_description__colored}>18%</span>{" "}
-            more electricity than similar{" "}
-            <span className={styles.Benchmark_description__colored}>cafes</span>
-            .
+            <span className={styles.Benchmark_description__colored}>
+              {gapPhrase(deltaPct)}
+            </span>{" "}
+            {benchmark.source === "peers"
+              ? "the average of similar establishments."
+              : "a published reference average."}
           </p>
         </div>
         <div className={styles.Insights_card}>
@@ -56,7 +88,11 @@ export const HealthScore = () => {
             />
             Comparison Bar
           </div>
-          <ComparisonBar value={312} average={265} valueLabel="Cafe Marie" />
+          <ComparisonBar
+            value={basedOn.kwhUsed}
+            average={peerAverageKwh}
+            valueLabel={result.accountName}
+          />
         </div>
         <div className={styles.Insights_card}>
           <div className={styles.Insights_cardTitle}>

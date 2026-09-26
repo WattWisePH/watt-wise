@@ -71,7 +71,7 @@ export function EstablishmentSetup() {
         if (!active) return;
         setErrors([
           err instanceof ApiError
-            ? err.message
+             ? err.message
             : "Couldn't load the options. Is the API running on :4000?",
         ]);
       })
