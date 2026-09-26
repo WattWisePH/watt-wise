@@ -84,6 +84,8 @@ insightsRouter.get("/", async (req, res, next) => {
         billId: latest.id,
         periodStart: latest.periodStart,
         periodEnd: latest.periodEnd,
+        kwhUsed: latest.kwhUsed,
+        amount: latest.amount,
       },
     };
     return res.json(body);

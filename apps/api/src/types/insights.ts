@@ -29,11 +29,20 @@ export interface BenchmarkContext {
   cohortSize: number;
 }
 
-/** Which bill the figures describe. */
+/**
+ * Which bill the figures describe, and what it said.
+ *
+ * The engine's result reports the peer average and the percentage gap but
+ * not the establishment's own consumption, so the readings are repeated
+ * here — a comparison chart needs both ends of it, and recovering one from
+ * a rounded percentage would disagree with the bill the user can see.
+ */
 export interface InsightsBasis {
   billId: string;
   periodStart: string | null;
   periodEnd: string | null;
+  kwhUsed: number;
+  amount: number;
 }
 
 export type InsightsResponse =

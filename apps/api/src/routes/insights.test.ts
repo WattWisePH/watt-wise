@@ -152,13 +152,18 @@ describe("when the establishment has bills", () => {
     expect(res.body.result).toEqual(engineResult);
   });
 
-  it("reports which period the figures describe", async () => {
+  it("reports which period the figures describe, and what the bill said", async () => {
+    // The readings are repeated here because the engine's result reports
+    // the gap but not this establishment's own consumption, and a chart
+    // needs both ends of the comparison.
     const res = await get();
 
     expect(res.body.basedOn).toEqual({
       billId: "bill-june",
       periodStart: "2026-06-01",
       periodEnd: "2026-06-30",
+      kwhUsed: 312,
+      amount: 1785.5,
     });
   });
 });
