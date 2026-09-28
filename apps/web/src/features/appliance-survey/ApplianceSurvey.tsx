@@ -16,6 +16,7 @@
  */
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 import {
   PlusIcon,
   TrashIcon,
@@ -80,6 +81,7 @@ export function ApplianceSurvey() {
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState<string[]>([]);
   const [savedMessage, setSavedMessage] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   // Load the option lists once. Supabase is an external system, which is
   // what an effect is for.
@@ -158,6 +160,11 @@ export function ApplianceSurvey() {
         `Saved ${saved.length} appliance${saved.length === 1 ? "" : "s"}.`,
       );
       setCards([emptyCard(options.kinds[0]?.id ?? "")]);
+      // The survey is the last thing the analysis waits on, so go straight
+      // to the result rather than leaving the user on a form they've
+      // finished. Insights recomputes on arrival, so the appliances just
+      // saved are already reflected in the score.
+      navigate("/insights");
     } catch (err) {
       // ApiError carries per-row details ("appliance 2: type is required").
       if (err instanceof ApiError) {
