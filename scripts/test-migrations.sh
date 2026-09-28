@@ -235,6 +235,115 @@ select count(*) from removed;
 SQL
 
 echo
+echo "Peer benchmark"
+
+# peer_benchmark is security definer, so it reads past RLS on purpose. These
+# checks are the ones standing between "an aggregate" and "a way to read
+# someone else's consumption", so they matter more than most.
+
+expect_eq "nobody can call it without being signed in" "f" <<'SQL'
+select has_function_privilege('public', 'public.peer_benchmark(uuid)', 'execute');
+SQL
+
+expect_eq "withholds an average when there are no peers at all" "null/0" <<'SQL'
+set role authenticated;
+set request.jwt.claim.sub = '11111111-1111-1111-1111-111111111111';
+select coalesce(peer_average_kwh::text, 'null') || '/' || cohort_size
+from public.peer_benchmark((select id from establishment_types where name='Cafe'));
+SQL
+
+# Four peer cafes: one short of the floor.
+psql -q -d "${DB}" >/dev/null <<'SQL'
+insert into auth.users (id, email)
+select ('55555555-5555-5555-5555-55555555000' || g)::uuid, 'peer' || g || '@t.com'
+from generate_series(1, 5) g;
+
+insert into public.establishments (id, account_id, type_id, provider_id, name)
+select ('66666666-6666-6666-6666-66666666000' || g)::uuid,
+       ('55555555-5555-5555-5555-55555555000' || g)::uuid,
+       (select id from establishment_types where name = 'Cafe'),
+       (select id from providers where acronym = 'Meralco'),
+       'Peer Cafe ' || g
+from generate_series(1, 5) g;
+
+-- 100, 200, 300, 400 so far: mean 250, which is NOT what a five-peer cohort
+-- averages. If the floor leaked, the next assertion would show that number.
+insert into public.bills (establishment_id, kwh_used, amount, period_start, period_end)
+select ('66666666-6666-6666-6666-66666666000' || g)::uuid,
+       g * 100, g * 500,
+       current_date - interval '2 months', current_date - interval '1 month'
+from generate_series(1, 4) g;
+SQL
+
+expect_eq "still withholds the average one peer short of the floor" "null/4" <<'SQL'
+set role authenticated;
+set request.jwt.claim.sub = '11111111-1111-1111-1111-111111111111';
+select coalesce(peer_average_kwh::text, 'null') || '/' || cohort_size
+from public.peer_benchmark((select id from establishment_types where name='Cafe'));
+SQL
+
+# The fifth peer reaches the floor. 100+200+300+400+500 = 1500, mean 300.
+psql -q -d "${DB}" >/dev/null <<'SQL'
+insert into public.bills (establishment_id, kwh_used, amount, period_start, period_end)
+values (('66666666-6666-6666-6666-666666660005')::uuid, 500, 2500,
+        current_date - interval '2 months', current_date - interval '1 month');
+SQL
+
+# 300 exactly. Cafe Marie (the caller's own, at 312 kWh) would drag this to
+# 302 if it were counted, so this number is also the exclusion check.
+expect_eq "averages the cohort once the floor is met, excluding the caller's own" "300.00/5" <<'SQL'
+set role authenticated;
+set request.jwt.claim.sub = '11111111-1111-1111-1111-111111111111';
+select peer_average_kwh::text || '/' || cohort_size
+from public.peer_benchmark((select id from establishment_types where name='Cafe'));
+SQL
+
+expect_eq "counts an establishment once however many bills it has" "300.00/5" <<'SQL'
+-- A second bill for one peer must not give it two votes: the function
+-- averages per establishment first, then across establishments.
+insert into public.bills (establishment_id, kwh_used, amount, period_start, period_end)
+values (('66666666-6666-6666-6666-666666660001')::uuid, 100, 500,
+        current_date - interval '4 months', current_date - interval '3 months');
+set role authenticated;
+set request.jwt.claim.sub = '11111111-1111-1111-1111-111111111111';
+select peer_average_kwh::text || '/' || cohort_size
+from public.peer_benchmark((select id from establishment_types where name='Cafe'));
+SQL
+
+expect_eq "ignores bills older than the benchmark window" "300.00/5" <<'SQL'
+-- A tariff era ago. Counting it would move the mean; it must not.
+insert into public.bills (establishment_id, kwh_used, amount, period_start, period_end)
+values (('66666666-6666-6666-6666-666666660002')::uuid, 9000, 45000,
+        current_date - interval '25 months', current_date - interval '24 months');
+set role authenticated;
+set request.jwt.claim.sub = '11111111-1111-1111-1111-111111111111';
+select peer_average_kwh::text || '/' || cohort_size
+from public.peer_benchmark((select id from establishment_types where name='Cafe'));
+SQL
+
+expect_eq "a bill with no period is outside the window entirely" "null/0" <<'SQL'
+-- Bob Diner's only bill records no period, so there is no way to place its
+-- consumption in time. The API always sets one; a row like this can only
+-- arrive by hand, and counting it would silently date-shift the benchmark.
+set role authenticated;
+set request.jwt.claim.sub = '11111111-1111-1111-1111-111111111111';
+select coalesce(peer_average_kwh::text, 'null') || '/' || cohort_size
+from public.peer_benchmark((select id from establishment_types where name='Restaurant'));
+SQL
+
+expect_eq "a different type has its own cohort" "null/1" <<'SQL'
+-- Give Bob Diner a dated bill and it becomes the Restaurant cohort's only
+-- member: separate from the five cafes, and still below the floor.
+insert into public.bills (establishment_id, kwh_used, amount, period_start, period_end)
+values ('44444444-4444-4444-4444-444444444444', 200, 900,
+        current_date - interval '2 months', current_date - interval '1 month');
+set role authenticated;
+set request.jwt.claim.sub = '11111111-1111-1111-1111-111111111111';
+select coalesce(peer_average_kwh::text, 'null') || '/' || cohort_size
+from public.peer_benchmark((select id from establishment_types where name='Restaurant'));
+SQL
+
+echo
 if (( FAILURES > 0 )); then
   echo "${FAILURES} check(s) failed."
   exit 1

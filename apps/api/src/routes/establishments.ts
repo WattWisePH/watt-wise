@@ -21,6 +21,7 @@ import { requireDatabase } from "../middleware/requireDatabase.js";
 import { requireEstablishment } from "../middleware/requireEstablishment.js";
 import { appliancesRouter } from "./appliances.js";
 import { billsRouter } from "./bills.js";
+import { insightsRouter } from "./insights.js";
 import {
   createEstablishment,
   listEstablishments,
@@ -46,6 +47,11 @@ establishmentsRouter.use(
   "/:establishmentId/appliances",
   requireEstablishment,
   appliancesRouter,
+);
+establishmentsRouter.use(
+  "/:establishmentId/insights",
+  requireEstablishment,
+  insightsRouter,
 );
 
 /** How a database failure reads to someone filling in the survey. */

@@ -1,29 +1,37 @@
-import styles from "../Insights.module.css";
-import duotone from "../../../styles/DuotoneIcon.module.css";
-import type { PriorityActionData } from "../types";
 import { CheckIcon, XIcon } from "@phosphor-icons/react";
 
+import styles from "../Insights.module.css";
+import duotone from "../../../styles/DuotoneIcon.module.css";
+import { useInsightsData } from "../useInsights";
+import type { ImpactLevel } from "../../../lib/insights";
+
+/** "high" -> "High Impact", as the badge reads it. */
+function impactLabel(impact: ImpactLevel): string {
+  return `${impact.charAt(0).toUpperCase()}${impact.slice(1)} Impact`;
+}
+
 export const PriorityActions = () => {
-  const prioActionsPlaceholder: PriorityActionData[] = [
-    {
-      title: "Your evening usage is higher than similar cafes.",
-      description:
-        "Your power usage is 18% higher between 6PM–10PM compared to peers. Consider optimizing lighting and cooling during these hours.",
-      impact: "High Impact",
-    },
-    {
-      title: "Non-inverter appliances may be driving up costs.",
-      description:
-        "Your non-inverter AC units add extra baseline weight. Replacing them with inverter types could significantly lower daily consumption.",
-      impact: "Medium Impact",
-    },
-    {
-      title: "Baseline consumption is consistently high.",
-      description:
-        "You have a high idle draw even when closed. Check for appliances that can be completely unplugged overnight.",
-      impact: "Medium Impact",
-    },
-  ];
+  const { result } = useInsightsData();
+  const { recommendations } = result;
+
+  // Every rule passing is a good outcome, not an empty screen — say so,
+  // rather than leaving the section blank and looking unfinished.
+  if (recommendations.length === 0) {
+    return (
+      <div className={styles.Insights}>
+        <section className={styles.Insights_section}>
+          <div>
+            <h1 className={styles.Insights_sectionTitle}>Priority Actions</h1>
+          </div>
+          <div className={styles.Insights_card}>
+            <p className={styles.Insights_sectionSubtitle}>
+              Nothing needs attention right now — your usage looks healthy.
+            </p>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.Insights}>
@@ -36,21 +44,22 @@ export const PriorityActions = () => {
         </div>
 
         <div className={styles.PriorityAction_actionList}>
-          {prioActionsPlaceholder.map((prioAction) => {
+          {/* Already ordered most-impactful first by the engine. */}
+          {recommendations.map((recommendation) => {
             return (
-              <div className={`${styles.Insights_card}`}>
+              <div className={`${styles.Insights_card}`} key={recommendation.id}>
                 <div className={styles.PriorityAction_heading}>
                   <h3 className={styles.Insights_cardTitle}>
-                    {prioAction.title}
+                    {recommendation.title}
                   </h3>
                   <div
-                    className={`${styles.PriorityAction_badge} ${prioAction.impact === "Medium Impact" ? styles.PriorityAction_badge__medium : ""}`}
+                    className={`${styles.PriorityAction_badge} ${recommendation.impact === "medium" ? styles.PriorityAction_badge__medium : ""}`}
                   >
-                    {prioAction.impact}
+                    {impactLabel(recommendation.impact)}
                   </div>
                 </div>
                 <p className={styles.PriorityAction_description}>
-                  {prioAction.description}
+                  {recommendation.description}
                 </p>
                 <div className={styles.PriorityAction_buttonContainer}>
                   <button
