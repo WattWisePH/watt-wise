@@ -67,6 +67,34 @@ export interface InsightsBasis {
   amount: number;
 }
 
+/**
+ * A suggestion written by the language model rather than derived from a
+ * rule.
+ *
+ * Kept apart from Recommendation deliberately. A rule's finding is
+ * traceable to the figures that produced it; this is a model's judgement
+ * about those figures, and the screen has to let a reader tell which is
+ * which before acting on it.
+ */
+export interface NarrativeAction {
+  title: string;
+  description: string;
+  impact: ImpactLevel;
+}
+
+/**
+ * The model-written layer, which arrives after the score rather than with
+ * it.
+ *
+ * "failed" is an ordinary outcome, not an error: the rules have already
+ * produced the analysis, so a model being rate-limited costs the prose and
+ * nothing else. The screen renders everything else exactly as it would.
+ */
+export type NarrativeState =
+  | { status: "pending" }
+  | { status: "failed" }
+  | { status: "ready"; summary: string; actions: NarrativeAction[] };
+
 export type Insights =
   | { available: false; reason: "NO_BILLS" | "NO_APPLIANCES" }
   | {
@@ -74,6 +102,7 @@ export type Insights =
       result: RecommendationResult;
       benchmark: BenchmarkContext;
       basedOn: InsightsBasis;
+      narrative: NarrativeState;
     };
 
 /** "18% above" / "4% below" / "in line with", from the signed percentage. */

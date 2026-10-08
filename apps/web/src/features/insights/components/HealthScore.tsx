@@ -27,7 +27,7 @@ function peerLabel(benchmark: BenchmarkContext): string {
 }
 
 export const HealthScore = () => {
-  const { result, benchmark, basedOn } = useInsightsData();
+  const { result, benchmark, basedOn, narrative } = useInsightsData();
   const { peerAverageKwh, deltaPct } = result.benchmark;
 
   const consumptionRows: ConsumptionRow[] = [
@@ -51,6 +51,17 @@ export const HealthScore = () => {
           showTitle={false}
           insight={scoreInsight(result, benchmark)}
         />
+        {/* Written by a model after the score, so it arrives a moment
+            later. Absent entirely when it couldn't be written — the
+            analysis above is complete without it. */}
+        {narrative.status === "pending" && (
+          <p className={styles.Insights_sectionSubtitle}>Writing a summary…</p>
+        )}
+        {narrative.status === "ready" && (
+          <div className={styles.Insights_card}>
+            <p className={styles.Benchmark_description}>{narrative.summary}</p>
+          </div>
+        )}
       </section>
 
       {/* Benchmark */}
