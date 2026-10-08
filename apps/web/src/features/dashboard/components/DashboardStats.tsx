@@ -13,10 +13,12 @@ import duotone from "../../../styles/DuotoneIcon.module.css";
 export interface DashboardStatsProps {
   currentMonthAmount: number;
   currentMonthUnit: string;
-  vsLastMonthPercent: number;
+  /** Null when there's no earlier bill to compare against. */
+  vsLastMonthPercent: number | null;
   totalConsumption: number;
   totalConsumptionUnit: string;
-  costPerUnit: number;
+  /** Null when the bill recorded no consumption to divide by. */
+  costPerUnit: number | null;
   costPerUnitLabel: string;
 }
 
@@ -29,7 +31,8 @@ export function DashboardStats({
   costPerUnit,
   costPerUnitLabel,
 }: DashboardStatsProps) {
-  const isIncrease = vsLastMonthPercent >= 0;
+  const hasComparison = vsLastMonthPercent !== null;
+  const isIncrease = hasComparison && vsLastMonthPercent >= 0;
   const TrendIcon = isIncrease ? TrendUpIcon : TrendDownIcon;
 
   return (
@@ -59,7 +62,11 @@ export function DashboardStats({
 
       <div
         className={`${dashboardStyles.Dashboard_card} ${dashboardStyles.Stats_card} ${
-          isIncrease ? styles.Stats_card__increase : styles.Stats_card__decrease
+          !hasComparison
+            ? ""
+            : isIncrease
+              ? styles.Stats_card__increase
+              : styles.Stats_card__decrease
         }`}
       >
         <div className={styles.Stats_header}>
@@ -72,10 +79,14 @@ export function DashboardStats({
         </div>
         <div>
           <span className={dashboardStyles.Stats_value}>
-            {Math.abs(vsLastMonthPercent)}%
+            {hasComparison ? `${Math.abs(vsLastMonthPercent)}%` : "—"}
           </span>
           <span className={dashboardStyles.Stats_label}>
-            {isIncrease ? "increase" : "decrease"}
+            {!hasComparison
+              ? "no earlier bill"
+              : isIncrease
+                ? "increase"
+                : "decrease"}
           </span>
         </div>
       </div>
@@ -115,7 +126,9 @@ export function DashboardStats({
           </p>
         </div>
         <div>
-          <span className={dashboardStyles.Stats_value}>{costPerUnit}</span>
+          <span className={dashboardStyles.Stats_value}>
+            {costPerUnit === null ? "—" : costPerUnit.toFixed(2)}
+          </span>
           <span
             className={`${dashboardStyles.Stats_label} ${dashboardStyles.Text_muted}`}
           >

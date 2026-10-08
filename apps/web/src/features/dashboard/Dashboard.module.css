@@ -33,6 +33,13 @@ p {
   background-color: var(--bg-primary);
 }
 
+/* The button classes are written for <button>; as a Link it also needs the
+   underline cleared. */
+.Dashboard_button__link {
+  text-decoration: none;
+  box-sizing: border-box;
+}
+
 .Card_header {
   display: flex;
   align-items: center;

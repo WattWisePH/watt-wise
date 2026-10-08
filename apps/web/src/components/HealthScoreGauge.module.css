@@ -23,6 +23,16 @@
   color: var(--text-on-danger);
 }
 
+.HealthScoreGauge__empty {
+  background-color: var(--bg-surface);
+  color: var(--text);
+}
+
+.HealthScoreGauge_action {
+  display: flex;
+  margin-top: 12px;
+}
+
 .HealthScoreGauge_header {
   display: flex;
   align-items: center;
