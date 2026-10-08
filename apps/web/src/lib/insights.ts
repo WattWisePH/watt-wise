@@ -68,7 +68,7 @@ export interface InsightsBasis {
 }
 
 export type Insights =
-  | { available: false; reason: "NO_BILLS" }
+  | { available: false; reason: "NO_BILLS" | "NO_APPLIANCES" }
   | {
       available: true;
       result: RecommendationResult;
@@ -93,7 +93,7 @@ export function scoreInsight(
 ): string {
   return benchmark.source === "peers"
     ? `${gapPhrase(result.benchmark.deltaPct)} the average of ${benchmark.cohortSize} similar establishments`
-    : "Compared against a reference average — not enough similar establishments yet";
+    : "Compared against a reference average, not enough similar establishments yet";
 }
 
 /**

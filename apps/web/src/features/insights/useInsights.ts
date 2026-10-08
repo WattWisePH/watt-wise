@@ -28,6 +28,7 @@ export type InsightsState =
   | { status: "loading" }
   | { status: "no-establishment" }
   | { status: "empty" }
+  | { status: "no-appliances" }
   | { status: "error"; message: string }
   | { status: "ready"; insights: ReadyInsights };
 
@@ -48,6 +49,8 @@ export function message(
       return "Set up an establishment first — your insights are calculated per location.";
     case "empty":
       return "No bills yet. Upload one and your score will appear here.";
+    case "no-appliances":
+      return "One more step: tell us what appliances you use, and your score will appear here.";
     case "error":
       return state.message;
   }
@@ -65,6 +68,7 @@ export const NEXT_STEP: Partial<
 > = {
   "no-establishment": { to: "/establishment", label: "Set up an establishment" },
   empty: { to: "/upload", label: "Upload a bill" },
+  "no-appliances": { to: "/appliances", label: "Add your appliances" },
 };
 
 /** A settled result, remembered against the establishment it describes. */
@@ -89,7 +93,9 @@ export function useInsights(): InsightsState {
           id: activeEstablishmentId,
           state: insights.available
             ? { status: "ready", insights }
-            : { status: "empty" },
+            : insights.reason === "NO_APPLIANCES"
+              ? { status: "no-appliances" }
+              : { status: "empty" },
         });
       })
       .catch((err: unknown) => {

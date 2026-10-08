@@ -48,8 +48,12 @@ export interface InsightsBasis {
 export type InsightsResponse =
   | {
       available: false;
-      /** Nothing has been uploaded for this establishment yet. */
-      reason: "NO_BILLS";
+      /**
+       * NO_BILLS: nothing has been uploaded yet. NO_APPLIANCES: there is a
+       * bill but no survey, and without one the appliance rules have
+       * nothing to read — the score would look complete while missing them.
+       */
+      reason: "NO_BILLS" | "NO_APPLIANCES";
     }
   | {
       available: true;
