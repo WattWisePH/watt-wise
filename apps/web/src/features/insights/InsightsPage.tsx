@@ -1,7 +1,8 @@
-import { Link, Outlet } from "react-router";
+import { Outlet } from "react-router";
 
 import styles from "./Insights.module.css";
 import { InsightsTabs } from "./components/InsightsTabs";
+import { HealthScoreGauge } from "../../components/HealthScoreGauge";
 import { NEXT_STEP, message, useInsights } from "./useInsights";
 
 export const InsightsPage = () => {
@@ -11,20 +12,20 @@ export const InsightsPage = () => {
 
   return (
     <div>
-      <InsightsTabs />
+      {/* Tabs only while there's something to switch between. */}
       {state.status === "ready" ? (
-        <Outlet context={state.insights} />
+        <>
+          <InsightsTabs />
+          <Outlet context={state.insights} />
+        </>
       ) : (
         <div className={styles.Insights}>
           <section className={styles.Insights_section}>
-            <div className={styles.Insights_card}>
-              <p className={styles.Insights_sectionSubtitle}>{message(state)}</p>
-              {NEXT_STEP[state.status] && (
-                <Link to={NEXT_STEP[state.status]!.to}>
-                  {NEXT_STEP[state.status]!.label}
-                </Link>
-              )}
-            </div>
+            <HealthScoreGauge
+              showTitle={false}
+              insight={message(state)}
+              action={NEXT_STEP[state.status]}
+            />
           </section>
         </div>
       )}

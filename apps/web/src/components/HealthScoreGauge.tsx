@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
-import { HeartIcon } from "@phosphor-icons/react";
+import { Link } from "react-router";
+import { ArrowCircleRightIcon, HeartIcon } from "@phosphor-icons/react";
 import styles from "./HealthScoreGauge.module.css";
 import duotone from "../styles/DuotoneIcon.module.css";
 
@@ -32,8 +32,8 @@ export interface HealthScoreGaugeProps {
   showLabel?: boolean;
   size?: number;
   insight?: string;
-  /** Shown under the gauge, e.g. a link to the next step. */
-  action?: ReactNode;
+  /** A button under the gauge linking to the next step. */
+  action?: { to: string; label: string };
 }
 
 export function HealthScoreGauge({
@@ -113,7 +113,12 @@ export function HealthScoreGauge({
           )}
         </div>
       </div>
-      {action && <div className={styles.HealthScoreGauge_action}>{action}</div>}
+      {action && (
+        <Link to={action.to} className={styles.HealthScoreGauge_action}>
+          {action.label}
+          <ArrowCircleRightIcon size={20} />
+        </Link>
+      )}
     </div>
   );
 }

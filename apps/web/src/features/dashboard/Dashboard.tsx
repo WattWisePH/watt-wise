@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 import {
   BellIcon,
@@ -54,17 +54,7 @@ export function Dashboard() {
             ? scoreInsight(insights.insights.result, insights.insights.benchmark)
             : message(insights)
         }
-        action={
-          nextStep && (
-            <Link
-              to={nextStep.to}
-              className={`${styles.Dashboard_button} ${styles.Dashboard_button__primary} ${styles.Dashboard_button__withIcon} ${styles.Dashboard_button__link}`}
-            >
-              {nextStep.label}
-              <ArrowCircleRightIcon size={20} />
-            </Link>
-          )
-        }
+        action={nextStep}
       />
       <ul className={`${styles.Dashboard_card} ${styles.QuickLinks}`}>
         <li className={styles.QuickLinks_item}>
