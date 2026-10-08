@@ -11,7 +11,35 @@
  * expected empty screen as a failure.
  */
 
-import type { RecommendationResult } from "./recommendation.js";
+import type { ImpactLevel, RecommendationResult } from "./recommendation.js";
+
+/**
+ * A suggestion written by the language model rather than derived from a
+ * rule.
+ *
+ * Kept apart from Recommendation on purpose. A rule's finding is traceable
+ * to the figures that produced it; this one is a model's judgement about
+ * those figures, and the UI has to be able to tell a reader which is which.
+ */
+export interface NarrativeAction {
+  title: string;
+  description: string;
+  impact: ImpactLevel;
+}
+
+/**
+ * The model-written layer, which arrives after the score rather than with
+ * it.
+ *
+ * "failed" is a first-class outcome, not an error: the rules have already
+ * produced the score by the time this is attempted, so a model being
+ * rate-limited costs the prose and nothing else. The client renders the
+ * analysis without it.
+ */
+export type NarrativeState =
+  | { status: "pending" }
+  | { status: "failed" }
+  | { status: "ready"; summary: string; actions: NarrativeAction[] };
 
 /** Where the peer average in the result came from. */
 export interface BenchmarkContext {
