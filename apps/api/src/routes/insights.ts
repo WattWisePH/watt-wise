@@ -55,6 +55,10 @@ insightsRouter.get("/", async (req, res, next) => {
       const empty: InsightsResponse = { available: false, reason: "NO_BILLS" };
       return res.json(empty);
     }
+    if (appliances.length === 0) {
+      const empty: InsightsResponse = { available: false, reason: "NO_APPLIANCES" };
+      return res.json(empty);
+    }
 
     const profile: EnergyProfile = {
       accountName: establishment.name,
