@@ -88,4 +88,6 @@ export type InsightsResponse =
       result: RecommendationResult;
       benchmark: BenchmarkContext;
       basedOn: InsightsBasis;
+      /** The model-written layer. Always present; often still pending. */
+      narrative: NarrativeState;
     };

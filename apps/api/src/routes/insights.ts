@@ -19,14 +19,95 @@
 
 import { Router } from "express";
 import { getRecommendationEngine } from "../engine/index.js";
+import { generateNarrative, type NarrativeInput } from "../engine/llmNarrative.js";
+import {
+  claimNarrative,
+  failNarrative,
+  getNarrative,
+  profileFingerprint,
+  saveNarrative,
+} from "../store/narrativeStore.js";
 import { listAppliances } from "../store/applianceStore.js";
 import { getPeerBenchmark } from "../store/benchmarkStore.js";
 import { listBills } from "../store/billStore.js";
 import { respondToStoreError, type StoreErrorMessages } from "./storeErrors.js";
 import type { EnergyProfile } from "../types/recommendation.js";
-import type { InsightsResponse } from "../types/insights.js";
+import type { InsightsResponse, NarrativeState } from "../types/insights.js";
 
 export const insightsRouter = Router({ mergeParams: true });
+
+/**
+ * Start generating a narrative, without waiting for it.
+ *
+ * Deliberately not awaited: the score is already on its way to the client,
+ * and a free endpoint can take tens of seconds or never answer at all.
+ * Everything is caught in here, because an unhandled rejection in a
+ * detached promise takes the whole process down in Node.
+ */
+function startGeneration(
+  accessToken: string,
+  billId: string,
+  profileHash: string,
+  input: NarrativeInput,
+): void {
+  void (async () => {
+    try {
+      const narrative = await generateNarrative(input);
+      await saveNarrative(accessToken, billId, narrative, profileHash);
+    } catch (err) {
+      console.error(`[insights] narrative generation failed for bill ${billId}:`, err);
+      try {
+        // Recorded so the next page view doesn't immediately try again. The
+        // usual cause is a rate limit, and retrying on every view keeps it
+        // tripped.
+        await failNarrative(accessToken, billId, profileHash);
+      } catch (markErr) {
+        console.error("[insights] could not mark the narrative failed:", markErr);
+      }
+    }
+  })();
+}
+
+/**
+ * The narrative for this bill: already written, being written, or started
+ * now.
+ *
+ * Never throws. A narrative is an addition to an analysis the rules have
+ * already completed, so a database or model problem here must cost the
+ * prose and nothing else — failing the request would throw away a perfectly
+ * good score because the decoration was unavailable.
+ */
+async function resolveNarrative(
+  accessToken: string,
+  billId: string,
+  input: NarrativeInput,
+): Promise<NarrativeState> {
+  const profileHash = profileFingerprint(input);
+
+  try {
+    const existing = await getNarrative(accessToken, billId);
+
+    // A row describing these exact figures is the answer, whatever state
+    // it is in. A different fingerprint means the bill or the appliance
+    // survey has changed since, and the prose has to be rewritten.
+    if (existing && existing.profileHash === profileHash) {
+      if (existing.status === "ready" && existing.summary) {
+        return { status: "ready", summary: existing.summary, actions: existing.actions };
+      }
+      return { status: existing.status === "failed" ? "failed" : "pending" };
+    }
+
+    // Only the caller that wins the claim starts a model; a loser reports
+    // pending and picks up the winner's result on a later request.
+    if (await claimNarrative(accessToken, billId, profileHash, existing)) {
+      startGeneration(accessToken, billId, profileHash, input);
+    }
+    return { status: "pending" };
+  } catch (err) {
+    console.error("[insights] could not resolve the narrative:", err);
+    return { status: "failed" };
+  }
+}
 
 /** How a database failure reads to someone looking at their dashboard. */
 const ERRORS: StoreErrorMessages = {
@@ -76,12 +157,32 @@ insightsRouter.get("/", async (req, res, next) => {
     };
 
     const result = await getRecommendationEngine().generate(profile);
+    const comparedWithPeers = benchmark.peerAverageKwh !== null;
+
+    // The model is asked about the same figures the engine used, plus its
+    // conclusions — never the establishment's name or address. See
+    // engine/llmNarrative.ts for why that matters on a free endpoint.
+    const narrativeInput: NarrativeInput = {
+      kwhUsed: latest.kwhUsed,
+      amount: latest.amount,
+      peerAverageKwh: result.benchmark.peerAverageKwh,
+      comparedWithPeers,
+      deltaPct: result.benchmark.deltaPct,
+      healthScore: result.healthScore,
+      appliances: appliances.map((a) => ({
+        type: a.type,
+        count: a.count,
+        isInverter: a.isInverter,
+        ageYears: a.ageYears,
+      })),
+      findings: result.recommendations.map((r) => ({ title: r.title, impact: r.impact })),
+    };
 
     const body: InsightsResponse = {
       available: true,
       result,
       benchmark: {
-        source: benchmark.peerAverageKwh !== null ? "peers" : "reference",
+        source: comparedWithPeers ? "peers" : "reference",
         cohortSize: benchmark.cohortSize,
       },
       basedOn: {
@@ -91,6 +192,7 @@ insightsRouter.get("/", async (req, res, next) => {
         kwhUsed: latest.kwhUsed,
         amount: latest.amount,
       },
+      narrative: await resolveNarrative(token, latest.id, narrativeInput),
     };
     return res.json(body);
   } catch (err) {
