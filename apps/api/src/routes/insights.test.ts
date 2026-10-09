@@ -98,7 +98,9 @@ beforeEach(() => {
     providerId: "33333333-3333-3333-3333-333333333333",
   });
   listBills.mockResolvedValue([latestBill, olderBill]);
-  listAppliances.mockResolvedValue([]);
+  listAppliances.mockResolvedValue([
+    { id: "a0", type: "Refrigerator", count: 1, isInverter: true },
+  ]);
   getPeerBenchmark.mockResolvedValue({ peerAverageKwh: 300, cohortSize: 7 });
   generate.mockResolvedValue(engineResult);
 });
@@ -215,6 +217,19 @@ describe("when the establishment has no bills", () => {
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ available: false, reason: "NO_BILLS" });
+    expect(generate).not.toHaveBeenCalled();
+  });
+});
+
+describe("when the establishment has bills but no appliances", () => {
+  it("asks for the survey before scoring", async () => {
+    // Scoring without it would silently skip the appliance rules.
+    listAppliances.mockResolvedValue([]);
+
+    const res = await get();
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ available: false, reason: "NO_APPLIANCES" });
     expect(generate).not.toHaveBeenCalled();
   });
 });

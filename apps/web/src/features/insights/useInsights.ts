@@ -28,8 +28,48 @@ export type InsightsState =
   | { status: "loading" }
   | { status: "no-establishment" }
   | { status: "empty" }
+  | { status: "no-appliances" }
   | { status: "error"; message: string }
   | { status: "ready"; insights: ReadyInsights };
+
+/**
+ * What to show when there is no analysis to show.
+ *
+ * Each state gets its own wording. They all look like "no data" on screen
+ * otherwise, and the user's next step differs completely between them —
+ * set up an establishment, upload a bill, or check the API is running.
+ */
+export function message(
+  state: Exclude<InsightsState, { status: "ready" }>,
+): string {
+  switch (state.status) {
+    case "loading":
+      return "Working out your energy health score…";
+    case "no-establishment":
+      return "Set up an establishment first — your insights are calculated per location.";
+    case "empty":
+      return "No bills yet. Upload one and your score will appear here.";
+    case "no-appliances":
+      return "One more step: tell us what appliances you use, and your score will appear here.";
+    case "error":
+      return state.message;
+  }
+}
+
+/**
+ * Where to send someone who can't be shown a score yet.
+ *
+ * Two of these states are reachable straight after finishing the appliance
+ * survey, which routes to Insights on save. Without a way onward that would
+ * be a dead end on the screen meant to be the payoff.
+ */
+export const NEXT_STEP: Partial<
+  Record<InsightsState["status"], { to: string; label: string }>
+> = {
+  "no-establishment": { to: "/establishment", label: "Set up an establishment" },
+  empty: { to: "/upload", label: "Upload a bill" },
+  "no-appliances": { to: "/appliances", label: "Add your appliances" },
+};
 
 /** A settled result, remembered against the establishment it describes. */
 type Settled = Exclude<InsightsState, { status: "loading" | "no-establishment" }>;
@@ -53,7 +93,9 @@ export function useInsights(): InsightsState {
           id: activeEstablishmentId,
           state: insights.available
             ? { status: "ready", insights }
-            : { status: "empty" },
+            : insights.reason === "NO_APPLIANCES"
+              ? { status: "no-appliances" }
+              : { status: "empty" },
         });
       })
       .catch((err: unknown) => {

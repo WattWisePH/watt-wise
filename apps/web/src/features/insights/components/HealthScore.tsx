@@ -6,7 +6,11 @@ import { HealthScoreGauge } from "../../../components/HealthScoreGauge";
 import { ComparisonBar } from "../../../components/ComparisonBar";
 import { ConsumptionComparison } from "./ConsumptionComparison";
 import { useInsightsData } from "../useInsights";
-import type { BenchmarkContext } from "../../../lib/insights";
+import {
+  gapPhrase,
+  scoreInsight,
+  type BenchmarkContext,
+} from "../../../lib/insights";
 import type { ConsumptionRow } from "../types";
 
 /**
@@ -20,12 +24,6 @@ function peerLabel(benchmark: BenchmarkContext): string {
   return benchmark.source === "peers"
     ? `Average of ${benchmark.cohortSize} similar`
     : "Reference average";
-}
-
-/** "18% above" / "4% below" / "in line with", from the signed percentage. */
-function gapPhrase(deltaPct: number): string {
-  if (deltaPct === 0) return "in line with";
-  return `${Math.abs(deltaPct)}% ${deltaPct > 0 ? "above" : "below"}`;
 }
 
 export const HealthScore = () => {
@@ -51,11 +49,7 @@ export const HealthScore = () => {
           score={result.healthScore}
           label={result.healthLabel}
           showTitle={false}
-          insight={
-            benchmark.source === "peers"
-              ? `${gapPhrase(deltaPct)} the average of ${benchmark.cohortSize} similar establishments`
-              : "Compared against a reference average — not enough similar establishments yet"
-          }
+          insight={scoreInsight(result, benchmark)}
         />
       </section>
 

@@ -68,13 +68,33 @@ export interface InsightsBasis {
 }
 
 export type Insights =
-  | { available: false; reason: "NO_BILLS" }
+  | { available: false; reason: "NO_BILLS" | "NO_APPLIANCES" }
   | {
       available: true;
       result: RecommendationResult;
       benchmark: BenchmarkContext;
       basedOn: InsightsBasis;
     };
+
+/** "18% above" / "4% below" / "in line with", from the signed percentage. */
+export function gapPhrase(deltaPct: number): string {
+  if (deltaPct === 0) return "in line with";
+  return `${Math.abs(deltaPct)}% ${deltaPct > 0 ? "above" : "below"}`;
+}
+
+/**
+ * The one-line reading under the health score gauge. Shared by the
+ * dashboard and the Health Score tab so the two can't describe the same
+ * score differently.
+ */
+export function scoreInsight(
+  result: RecommendationResult,
+  benchmark: BenchmarkContext,
+): string {
+  return benchmark.source === "peers"
+    ? `${gapPhrase(result.benchmark.deltaPct)} the average of ${benchmark.cohortSize} similar establishments`
+    : "Compared against a reference average, not enough similar establishments yet";
+}
 
 /**
  * Fetch one establishment's insights.

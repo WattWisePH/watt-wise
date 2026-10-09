@@ -1,4 +1,5 @@
-import { HeartIcon } from "@phosphor-icons/react";
+import { Link } from "react-router";
+import { ArrowCircleRightIcon, HeartIcon } from "@phosphor-icons/react";
 import styles from "./HealthScoreGauge.module.css";
 import duotone from "../styles/DuotoneIcon.module.css";
 
@@ -20,13 +21,19 @@ const RADIUS = 40;
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 export interface HealthScoreGaugeProps {
-  score: number;
-  label: HealthScoreLabel;
+  /**
+   * Leave score and label off when there's no score yet: the gauge renders
+   * empty and neutral, with `insight` saying why and `action` the way on.
+   */
+  score?: number;
+  label?: HealthScoreLabel;
   showTitle?: boolean;
   showScore?: boolean;
   showLabel?: boolean;
   size?: number;
   insight?: string;
+  /** A button under the gauge linking to the next step. */
+  action?: { to: string; label: string };
 }
 
 export function HealthScoreGauge({
@@ -37,12 +44,18 @@ export function HealthScoreGauge({
   showLabel = true,
   size = 84,
   insight,
+  action,
 }: HealthScoreGaugeProps) {
-  const clampedScore = Math.max(0, Math.min(100, score));
+  const empty = score === undefined || label === undefined;
+  const clampedScore = empty ? 0 : Math.max(0, Math.min(100, score));
   const offset = CIRCUMFERENCE * (1 - clampedScore / 100);
 
   return (
-    <div className={`${styles.HealthScoreGauge} ${LABEL_STYLES[label]}`}>
+    <div
+      className={`${styles.HealthScoreGauge} ${
+        empty ? styles.HealthScoreGauge__empty : LABEL_STYLES[label]
+      }`}
+    >
       <div className={styles.HealthScoreGauge_body}>
         <div className={styles.HealthScoreGauge_ring}>
           <svg
@@ -73,7 +86,7 @@ export function HealthScoreGauge({
             />
           </svg>
           <HeartIcon
-            className={`${LABEL_ICON_COLORS[label]} ${styles.HealthScoreGauge_icon}`}
+            className={`${empty ? duotone.neutral : LABEL_ICON_COLORS[label]} ${styles.HealthScoreGauge_icon}`}
           />
         </div>
 
@@ -85,19 +98,27 @@ export function HealthScoreGauge({
               </h3>
             </div>
           )}
-          <div className={styles.HealthScoreGauge_valueRow}>
-            {showScore && (
-              <p className={styles.HealthScoreGauge_value}>{clampedScore}%</p>
-            )}
-            {showLabel && (
-              <div className={styles.HealthScoreGauge_badge}>{label}</div>
-            )}
-          </div>
+          {!empty && (
+            <div className={styles.HealthScoreGauge_valueRow}>
+              {showScore && (
+                <p className={styles.HealthScoreGauge_value}>{clampedScore}%</p>
+              )}
+              {showLabel && (
+                <div className={styles.HealthScoreGauge_badge}>{label}</div>
+              )}
+            </div>
+          )}
           {insight && (
             <p className={styles.HealthScoreGauge_insight}>{insight}</p>
           )}
         </div>
       </div>
+      {action && (
+        <Link to={action.to} className={styles.HealthScoreGauge_action}>
+          {action.label}
+          <ArrowCircleRightIcon size={20} />
+        </Link>
+      )}
     </div>
   );
 }
