@@ -46,6 +46,19 @@ const MAX_ACTIONS = 3;
 
 /** What the model is given: figures and findings, never an identity. */
 export interface NarrativeInput {
+  /**
+   * The kind of place — "Cafe", "Household". Not identifying, and advice
+   * depends on it: a household has no opening hours to stagger and no
+   * customers to keep comfortable.
+   */
+  establishmentType: string;
+  /**
+   * The bill history, already reduced to sentences. Deliberately not the
+   * raw bills: handing those over would leave the model doing the
+   * arithmetic, and a percentage it worked out itself is a number no rule
+   * produced and nobody can check.
+   */
+  history: string;
   kwhUsed: number;
   amount: number;
   /** Peer average when one could be disclosed, else the reference figure. */
@@ -97,14 +110,23 @@ function buildPrompt(input: NarrativeInput): string {
     ? `${Math.abs(input.deltaPct)}% ${input.deltaPct >= 0 ? "above" : "below"} the average of similar establishments (${input.peerAverageKwh} kWh)`
     : `${Math.abs(input.deltaPct)}% ${input.deltaPct >= 0 ? "above" : "below"} a published reference average (${input.peerAverageKwh} kWh). There are too few similar establishments to compare against real ones, so do NOT claim a comparison with other businesses.`;
 
-  return `You are an energy efficiency adviser for a Philippine small business.
+  // A household is not a business. Advising a family on their opening
+  // hours is the kind of thing that makes everything else sound unreliable.
+  const isHousehold = /household|home|residential/i.test(input.establishmentType);
+  const audience = isHousehold
+    ? "a Philippine household"
+    : `a Philippine ${input.establishmentType.toLowerCase()}`;
 
-Here is one month of data:
+  return `You are an energy efficiency adviser for ${audience}.
+
+Here is their most recent month of data:
 - Electricity used: ${input.kwhUsed} kWh
 - Amount billed: PHP ${input.amount}
 - Comparison: ${comparison}
 - Energy health score: ${input.healthScore} out of 100
 - Appliances: ${appliances}
+
+History: ${input.history}
 
 An analysis has already produced these findings:
 ${findings}
@@ -114,7 +136,8 @@ Write a short plain-language summary of the situation, then suggest up to ${MAX_
 Rules you must follow:
 - Use ONLY the figures given above. Never state a number that is not listed here, and never estimate your own — no invented peso savings, no invented percentages.
 - Do not repeat the findings listed above; add angles they miss.
-- Write for a small business owner, not an engineer. Two or three sentences for the summary.
+- Write for ${isHousehold ? "a homeowner" : "a small business owner"}, not an engineer. Two or three sentences for the summary.
+- Only describe a trend if the History section states one. Never work out a percentage or a peso figure yourself.
 - If there is nothing useful to add, return an empty actions array.
 
 Reply with ONLY a JSON object, no markdown and no prose around it:

@@ -41,4 +41,13 @@ export interface Establishment extends EstablishmentInput {
   accountId: string;
   address?: string;
   createdAt: string;
+  /**
+   * The type's display name ("Cafe", "Household"), joined on read.
+   *
+   * Optional because only the single-establishment read joins it — the
+   * list doesn't need it. Advice depends on it: a household has no
+   * opening hours to optimise, and telling a family to stagger their
+   * trading day is how a recommendation stops being credible.
+   */
+  typeName?: string;
 }

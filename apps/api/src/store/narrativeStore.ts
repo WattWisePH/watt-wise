@@ -46,6 +46,8 @@ const NARRATIVE_COLUMNS = "status, summary, actions, profile_hash";
  * reorder the list and look like new information.
  */
 export function profileFingerprint(input: {
+  establishmentType: string;
+  history: string;
   kwhUsed: number;
   amount: number;
   peerAverageKwh: number;
@@ -60,6 +62,10 @@ export function profileFingerprint(input: {
   return createHash("sha256")
     .update(
       [
+        // The whole history sentence, not the figures behind it: it is what
+        // the model is actually told, and a new bill rewrites it.
+        input.establishmentType,
+        input.history,
         input.kwhUsed,
         input.amount,
         input.peerAverageKwh,

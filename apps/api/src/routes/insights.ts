@@ -19,6 +19,7 @@
 
 import { Router } from "express";
 import { getRecommendationEngine } from "../engine/index.js";
+import { billTrend, describeTrend } from "../engine/billTrend.js";
 import { generateNarrative, type NarrativeInput } from "../engine/llmNarrative.js";
 import {
   claimNarrative,
@@ -163,6 +164,12 @@ insightsRouter.get("/", async (req, res, next) => {
     // conclusions — never the establishment's name or address. See
     // engine/llmNarrative.ts for why that matters on a free endpoint.
     const narrativeInput: NarrativeInput = {
+      // Falls back to a neutral word rather than leaving the model to guess
+      // from the appliance list — it would assume a business.
+      establishmentType: establishment.typeName ?? "establishment",
+      // Reduced to sentences here so the model is never the thing doing the
+      // arithmetic on a bill history.
+      history: describeTrend(billTrend(bills)),
       kwhUsed: latest.kwhUsed,
       amount: latest.amount,
       peerAverageKwh: result.benchmark.peerAverageKwh,

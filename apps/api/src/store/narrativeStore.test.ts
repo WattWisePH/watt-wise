@@ -12,6 +12,8 @@ import { describe, expect, it } from "vitest";
 import { profileFingerprint } from "./narrativeStore.js";
 
 const base = {
+  establishmentType: "Cafe",
+  history: "This is bill number 3 on record. Consumption is 4% higher than the previous bill.",
   kwhUsed: 312,
   amount: 1785.5,
   peerAverageKwh: 300,
@@ -101,5 +103,24 @@ describe("inputs that have genuinely changed", () => {
     expect(profileFingerprint({ ...base, peerAverageKwh: 280 })).not.toBe(
       profileFingerprint(base),
     );
+  });
+
+  it("notices the establishment type changing", () => {
+    // The prompt addresses a household differently from a cafe, so prose
+    // written for one is wrong for the other.
+    expect(profileFingerprint({ ...base, establishmentType: "Household" })).not.toBe(
+      profileFingerprint(base),
+    );
+  });
+
+  it("notices a new bill rewriting the history", () => {
+    // The history sentence is what the model is actually told. Uploading
+    // another month changes it, so the write-up has to be redone.
+    const withNewBill = {
+      ...base,
+      history: "This is bill number 4 on record. Consumption is 12% lower than the previous bill.",
+    };
+
+    expect(profileFingerprint(withNewBill)).not.toBe(profileFingerprint(base));
   });
 });

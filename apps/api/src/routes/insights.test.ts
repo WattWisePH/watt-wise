@@ -116,7 +116,11 @@ const profileSent = () => generate.mock.calls[0][0];
  * instead of both drifting together.
  */
 const { profileFingerprint } = await import("../store/narrativeStore.js");
+const { billTrend, describeTrend } = await import("../engine/billTrend.js");
 const CURRENT_HASH = profileFingerprint({
+  // No typeName on the mocked establishment, so the route's own fallback.
+  establishmentType: "establishment",
+  history: describeTrend(billTrend([latestBill, olderBill])),
   kwhUsed: latestBill.kwhUsed,
   amount: latestBill.amount,
   peerAverageKwh: engineResult.benchmark.peerAverageKwh,
