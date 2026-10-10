@@ -28,6 +28,21 @@ interface EstablishmentRow {
   provider_id: string;
   address: string | null;
   created_at: string;
+  /** Present only on the single read, which joins the type's name. */
+  establishment_types?: { name: string } | { name: string }[] | null;
+}
+
+/**
+ * Read the joined type's name off a row.
+ *
+ * PostgREST returns an embedded resource as an object for a many-to-one
+ * like this one, but as an array in other shapes — accept both rather than
+ * silently losing the name if that ever changes.
+ */
+function embeddedTypeName(row: EstablishmentRow): string | undefined {
+  const embedded = row.establishment_types;
+  if (!embedded) return undefined;
+  return Array.isArray(embedded) ? embedded[0]?.name : embedded.name;
 }
 
 /** Map a row onto the domain type; a null address becomes undefined. */
@@ -40,6 +55,7 @@ function toEstablishment(row: EstablishmentRow): Establishment {
     providerId: row.provider_id,
     address: row.address ?? undefined,
     createdAt: row.created_at,
+    typeName: embeddedTypeName(row),
   };
 }
 
@@ -123,7 +139,13 @@ export async function getEstablishment(
 ): Promise<Establishment | null> {
   const { data, error } = await userClient(accessToken)
     .from("establishments")
-    .select(ESTABLISHMENT_COLUMNS)
+    // Written out rather than built from ESTABLISHMENT_COLUMNS: supabase-js
+    // reads the select list at the type level, and a joined string defeats
+    // that. The type's name is joined because advice depends on it — a
+    // household has no opening hours to stagger.
+    .select(
+      "id, account_id, name, type_id, provider_id, address, created_at, establishment_types(name)",
+    )
     .eq("id", id)
     // maybeSingle, not single: no matching row is an ordinary outcome here,
     // and single() would report it as an error.
