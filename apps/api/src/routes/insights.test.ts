@@ -56,6 +56,29 @@ vi.mock("../engine/index.js", () => ({
   getRecommendationEngine: () => ({ name: "test-engine", generate }),
 }));
 
+const generateNarrative = vi.fn();
+vi.mock("../engine/llmNarrative.js", () => ({ generateNarrative }));
+
+const getNarrative = vi.fn();
+const claimNarrative = vi.fn();
+const saveNarrative = vi.fn();
+const failNarrative = vi.fn();
+// profileFingerprint stays real: it is a pure function, and the tests about
+// staleness only mean anything if the hashing is the hashing in production.
+vi.mock("../store/narrativeStore.js", async () => {
+  const actual =
+    await vi.importActual<typeof import("../store/narrativeStore.js")>(
+      "../store/narrativeStore.js",
+    );
+  return {
+    profileFingerprint: actual.profileFingerprint,
+    getNarrative,
+    claimNarrative,
+    saveNarrative,
+    failNarrative,
+  };
+});
+
 const { DatabaseError } = await import("../store/supabaseClient.js");
 const { createApp } = await import("../app.js");
 const app = createApp();
@@ -85,6 +108,26 @@ const engineResult = {
 /** The profile handed to the engine on the most recent call. */
 const profileSent = () => generate.mock.calls[0][0];
 
+/**
+ * The fingerprint the route will compute for the default fixtures.
+ *
+ * Built with the real hashing function rather than a literal, so a change to
+ * what the fingerprint covers makes these tests disagree with the route
+ * instead of both drifting together.
+ */
+const { profileFingerprint } = await import("../store/narrativeStore.js");
+const { billTrend, describeTrend } = await import("../engine/billTrend.js");
+const CURRENT_HASH = profileFingerprint({
+  // No typeName on the mocked establishment, so the route's own fallback.
+  establishmentType: "establishment",
+  history: describeTrend(billTrend([latestBill, olderBill])),
+  kwhUsed: latestBill.kwhUsed,
+  amount: latestBill.amount,
+  peerAverageKwh: engineResult.benchmark.peerAverageKwh,
+  comparedWithPeers: true,
+  appliances: [{ type: "Refrigerator", count: 1, isInverter: true }],
+});
+
 beforeEach(() => {
   vi.clearAllMocks();
   process.env.SUPABASE_URL = "https://project.supabase.co";
@@ -103,6 +146,16 @@ beforeEach(() => {
   ]);
   getPeerBenchmark.mockResolvedValue({ peerAverageKwh: 300, cohortSize: 7 });
   generate.mockResolvedValue(engineResult);
+
+  getNarrative.mockResolvedValue(null);
+  claimNarrative.mockResolvedValue(true);
+  generateNarrative.mockResolvedValue({
+    summary: "Your aircon is the biggest single draw.",
+    actions: [],
+    model: "test-model",
+  });
+  saveNarrative.mockResolvedValue(undefined);
+  failNarrative.mockResolvedValue(undefined);
 });
 
 describe("authentication and ownership", () => {
@@ -231,6 +284,94 @@ describe("when the establishment has bills but no appliances", () => {
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ available: false, reason: "NO_APPLIANCES" });
     expect(generate).not.toHaveBeenCalled();
+  });
+});
+
+describe("the model-written narrative", () => {
+  it("answers pending and starts generating when nothing is stored", async () => {
+    const res = await get();
+
+    expect(res.body.narrative).toEqual({ status: "pending" });
+    expect(claimNarrative).toHaveBeenCalled();
+  });
+
+  it("does not make the score wait for the model", async () => {
+    // The whole point of generating in the background: a free endpoint can
+    // take tens of seconds, and the score is ready immediately.
+    generateNarrative.mockReturnValue(new Promise(() => {}));
+
+    const res = await get();
+
+    expect(res.status).toBe(200);
+    expect(res.body.result).toEqual(engineResult);
+  });
+
+  it("returns a stored narrative written about these same figures", async () => {
+    getNarrative.mockResolvedValue({
+      status: "ready",
+      summary: "Your aircon is the biggest single draw.",
+      actions: [{ title: "Service the AC", description: "Clean the filters.", impact: "low" }],
+      profileHash: CURRENT_HASH,
+    });
+
+    const res = await get();
+
+    expect(res.body.narrative.status).toBe("ready");
+    expect(res.body.narrative.summary).toBe("Your aircon is the biggest single draw.");
+    expect(claimNarrative).not.toHaveBeenCalled();
+  });
+
+  it("rewrites prose that describes figures which have since changed", async () => {
+    // Keyed by bill, but the appliance survey is an input too — stale text
+    // would go on describing appliances the user has corrected.
+    getNarrative.mockResolvedValue({
+      status: "ready",
+      summary: "Written about last month's numbers.",
+      actions: [],
+      profileHash: "a-hash-from-different-figures",
+    });
+
+    const res = await get();
+
+    expect(res.body.narrative).toEqual({ status: "pending" });
+    expect(claimNarrative).toHaveBeenCalled();
+  });
+
+  it("does not start a second model when another request already claimed it", async () => {
+    claimNarrative.mockResolvedValue(false);
+
+    const res = await get();
+
+    expect(res.body.narrative).toEqual({ status: "pending" });
+    expect(generateNarrative).not.toHaveBeenCalled();
+  });
+
+  it("reports a failure without retrying it on every page view", async () => {
+    // The usual cause is a rate limit, and retrying on each view keeps it
+    // tripped — so a recorded failure stays recorded until the figures move.
+    getNarrative.mockResolvedValue({
+      status: "failed",
+      summary: null,
+      actions: [],
+      profileHash: CURRENT_HASH,
+    });
+
+    const res = await get();
+
+    expect(res.body.narrative).toEqual({ status: "failed" });
+    expect(claimNarrative).not.toHaveBeenCalled();
+  });
+
+  it("still returns the score when the narrative store is unreachable", async () => {
+    // The rules have already produced the analysis by this point. Losing
+    // the prose must not throw away a perfectly good score.
+    getNarrative.mockRejectedValue(new DatabaseError("relation does not exist"));
+
+    const res = await get();
+
+    expect(res.status).toBe(200);
+    expect(res.body.result).toEqual(engineResult);
+    expect(res.body.narrative).toEqual({ status: "failed" });
   });
 });
 

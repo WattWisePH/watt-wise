@@ -344,6 +344,62 @@ from public.peer_benchmark((select id from establishment_types where name='Resta
 SQL
 
 echo
+echo "LLM narrative"
+
+# A bill with a known id, so the checks below can name it directly. Going
+# through a subquery instead would prove nothing: RLS hides the row from the
+# other user, so their insert would write zero rows and raise nothing —
+# looking like a passing test while the policy went unexercised.
+psql -q -d "${DB}" >/dev/null <<'SQL'
+insert into public.bills (id, establishment_id, kwh_used, amount, period_start, period_end)
+values ('77777777-7777-7777-7777-777777777777',
+        '22222222-2222-2222-2222-222222222222', 300, 1500,
+        current_date - interval '2 months', current_date - interval '1 month');
+SQL
+
+expect_eq "a user can store a narrative for their own bill" "1" <<'SQL'
+set role authenticated;
+set request.jwt.claim.sub = '11111111-1111-1111-1111-111111111111';
+with written as (
+  insert into public.bill_insights (bill_id, profile_hash, status, summary)
+  values ('77777777-7777-7777-7777-777777777777', 'hash-1', 'ready',
+          'Your aircon is the biggest draw.')
+  returning bill_id
+)
+select count(*) from written;
+SQL
+
+expect_error "a narrative cannot be written against another user's bill" <<'SQL'
+set role authenticated;
+set request.jwt.claim.sub = '33333333-3333-3333-3333-333333333333';
+insert into public.bill_insights (bill_id, profile_hash, status)
+values ('77777777-7777-7777-7777-777777777777', 'hash-2', 'pending');
+SQL
+
+expect_eq "another user cannot read it either" "0" <<'SQL'
+-- RLS hides the row rather than refusing the read, so an attacker learns
+-- nothing about whether a narrative exists.
+set role authenticated;
+set request.jwt.claim.sub = '33333333-3333-3333-3333-333333333333';
+select count(*) from public.bill_insights;
+SQL
+
+expect_error "an unknown status is rejected" <<'SQL'
+set role authenticated;
+set request.jwt.claim.sub = '11111111-1111-1111-1111-111111111111';
+update public.bill_insights set status = 'half-done';
+SQL
+
+expect_eq "deleting a bill takes its narrative with it" "0" <<'SQL'
+-- Commentary about figures nobody can see any more would be worse than
+-- nothing, so the row cascades rather than lingering.
+set role authenticated;
+set request.jwt.claim.sub = '11111111-1111-1111-1111-111111111111';
+delete from public.bills where establishment_id = '22222222-2222-2222-2222-222222222222';
+select count(*) from public.bill_insights;
+SQL
+
+echo
 if (( FAILURES > 0 )); then
   echo "${FAILURES} check(s) failed."
   exit 1

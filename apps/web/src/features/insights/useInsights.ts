@@ -74,10 +74,26 @@ export const NEXT_STEP: Partial<
 /** A settled result, remembered against the establishment it describes. */
 type Settled = Exclude<InsightsState, { status: "loading" | "no-establishment" }>;
 
+/** How long to wait before asking again for a narrative still being written. */
+const POLL_MS = 6000;
+
+/**
+ * How many times to ask. The model is on a rate-limited free tier, so a
+ * narrative that hasn't arrived after this long probably isn't coming —
+ * and polling forever would keep a tab making requests all day. The score
+ * is already on screen either way.
+ */
+const MAX_POLLS = 5;
+
 /** Load insights for whichever establishment is currently selected. */
 export function useInsights(): InsightsState {
   const { activeEstablishmentId } = useEstablishment();
   const [settled, setSettled] = useState<{ id: string; state: Settled } | null>(null);
+  // Counted per establishment, so switching to another one starts its own
+  // budget rather than inheriting an exhausted count.
+  const [polls, setPolls] = useState<{ id: string; count: number }>({ id: "", count: 0 });
+
+  const pollCount = polls.id === activeEstablishmentId ? polls.count : 0;
 
   useEffect(() => {
     if (!activeEstablishmentId) return;
@@ -85,6 +101,7 @@ export function useInsights(): InsightsState {
     // Guards against a slow response for the previous establishment
     // arriving after the user has switched to another one.
     let active = true;
+    let timer: ReturnType<typeof setTimeout> | undefined;
 
     getInsights(activeEstablishmentId)
       .then((insights) => {
@@ -97,6 +114,19 @@ export function useInsights(): InsightsState {
               ? { status: "no-appliances" }
               : { status: "empty" },
         });
+
+        // The narrative is written in the background, so ask again shortly
+        // rather than leaving "writing…" on screen forever. Scheduled from
+        // the callback, never synchronously in the effect body.
+        if (
+          insights.available &&
+          insights.narrative.status === "pending" &&
+          pollCount < MAX_POLLS
+        ) {
+          timer = setTimeout(() => {
+            setPolls({ id: activeEstablishmentId, count: pollCount + 1 });
+          }, POLL_MS);
+        }
       })
       .catch((err: unknown) => {
         if (!active) return;
@@ -114,8 +144,9 @@ export function useInsights(): InsightsState {
 
     return () => {
       active = false;
+      if (timer) clearTimeout(timer);
     };
-  }, [activeEstablishmentId]);
+  }, [activeEstablishmentId, pollCount]);
 
   // Derived during render rather than written from the effect. Storing the
   // result against its establishment id is what makes that possible: on a
