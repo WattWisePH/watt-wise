@@ -22,6 +22,10 @@ export interface MonthlyBillChartProps {
   /** Currency/unit suffix shown in the tooltip, e.g. "pesos". */
   unit?: string;
   height?: number;
+  /** When given, each bar's value is printed above it, formatted by this. */
+  valueLabel?: (value: number) => string;
+  /** Value the bars start from. Defaults to 0; raise it to magnify small differences. */
+  axisMin?: number;
 }
 
 const VIEW_WIDTH = 320;
@@ -58,6 +62,8 @@ export function MonthlyBillChart({
   showAverage = true,
   unit,
   height = 160,
+  valueLabel,
+  axisMin = 0,
 }: MonthlyBillChartProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
@@ -69,6 +75,7 @@ export function MonthlyBillChart({
   const { bars, averageY, baseline } = useMemo(() => {
     const values = points.map((p) => p.amount);
     const max = Math.max(...values, 1);
+    const span = Math.max(max - axisMin, 1);
     const avg = values.reduce((sum, v) => sum + v, 0) / (values.length || 1);
     const plotWidth = VIEW_WIDTH - PADDING.left - PADDING.right;
     const plotHeight = height - PADDING.top - PADDING.bottom;
@@ -79,7 +86,7 @@ export function MonthlyBillChart({
 
     const barList = points.map((p, i) => {
       const slotCenter = PADDING.left + slotWidth * (i + 0.5);
-      const barHeight = max === 0 ? 0 : (p.amount / max) * plotHeight;
+      const barHeight = (Math.max(p.amount - axisMin, 0) / span) * plotHeight;
       return {
         point: p,
         x: slotCenter - barWidth / 2,
@@ -94,10 +101,10 @@ export function MonthlyBillChart({
 
     return {
       bars: barList,
-      averageY: max === 0 ? base : base - (avg / max) * plotHeight,
+      averageY: base - (Math.max(avg - axisMin, 0) / span) * plotHeight,
       baseline: base,
     };
-  }, [points, height]);
+  }, [points, height, axisMin]);
 
   if (points.length === 0) {
     return (
@@ -195,6 +202,20 @@ export function MonthlyBillChart({
           </span>
         ))}
       </div>
+
+      {valueLabel &&
+        bars.map((bar, i) => (
+          <span
+            key={`${bar.point.month}-value-${i}`}
+            className={styles.MonthlyBillChart_value}
+            style={{
+              left: `${(bar.centerX / VIEW_WIDTH) * 100}%`,
+              top: `${(bar.y / height) * 100}%`,
+            }}
+          >
+            {valueLabel(bar.point.amount)}
+          </span>
+        ))}
 
       {activeBar && (
         <div

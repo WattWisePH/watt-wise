@@ -81,9 +81,10 @@ const POLL_MS = 6000;
  * How many times to ask. The model is on a rate-limited free tier, so a
  * narrative that hasn't arrived after this long probably isn't coming —
  * and polling forever would keep a tab making requests all day. The score
- * is already on screen either way.
+ * is already on screen either way. 25 × 6s outlasts the API's 2-minute
+ * model timeout, which the savings estimates can come close to.
  */
-const MAX_POLLS = 5;
+const MAX_POLLS = 25;
 
 /** Load insights for whichever establishment is currently selected. */
 export function useInsights(): InsightsState {

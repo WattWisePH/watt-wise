@@ -125,6 +125,7 @@ export interface Appliance {
   count: number;
   isInverter?: boolean;
   ageYears?: number;
+  hoursPerDay?: number;
   createdAt: string;
 }
 
@@ -139,6 +140,8 @@ export interface ApplianceDraft {
   subtypeId?: string;
   count: number;
   ageYears?: number;
+  /** Hours per day each unit runs: 0 = never, 24 = always on. */
+  hoursPerDay?: number;
 }
 
 /**

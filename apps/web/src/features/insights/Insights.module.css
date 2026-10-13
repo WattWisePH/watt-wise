@@ -271,3 +271,34 @@
 .PriorityAction_button__dismiss:hover {
   background-color: var(--bg-surface-hover);
 }
+
+.PriorityAction_savings {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary-600);
+}
+
+/* "Action taken" / "Dismiss": a quick pop, then the card is removed. */
+.PriorityAction_card__leaving {
+  animation: priority-action-pop 320ms ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes priority-action-pop {
+  30% {
+    transform: scale(1.03);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Still has to end, so the card is removed. */
+  .PriorityAction_card__leaving {
+    animation-duration: 1ms;
+  }
+}

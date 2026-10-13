@@ -25,6 +25,17 @@ export interface NarrativeAction {
   title: string;
   description: string;
   impact: ImpactLevel;
+  savings: Savings;
+}
+
+/**
+ * A model's estimate of what acting on something saves per month. The kWh
+ * is the model's; the peso figure is that kWh at the bill's own effective
+ * rate, worked out here so it always agrees with the bill.
+ */
+export interface Savings {
+  kwh: number;
+  php: number;
 }
 
 /**
@@ -39,7 +50,13 @@ export interface NarrativeAction {
 export type NarrativeState =
   | { status: "pending" }
   | { status: "failed" }
-  | { status: "ready"; summary: string; actions: NarrativeAction[] };
+  | {
+      status: "ready";
+      summary: string;
+      actions: NarrativeAction[];
+      /** Estimates for the rule engine's recommendations, keyed by their id. */
+      ruleSavings: Record<string, Savings>;
+    };
 
 /** Where the peer average in the result came from. */
 export interface BenchmarkContext {

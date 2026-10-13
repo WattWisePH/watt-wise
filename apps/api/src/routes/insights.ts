@@ -93,7 +93,12 @@ async function resolveNarrative(
     // survey has changed since, and the prose has to be rewritten.
     if (existing && existing.profileHash === profileHash) {
       if (existing.status === "ready" && existing.summary) {
-        return { status: "ready", summary: existing.summary, actions: existing.actions };
+        return {
+          status: "ready",
+          summary: existing.summary,
+          actions: existing.actions,
+          ruleSavings: existing.ruleSavings,
+        };
       }
       return { status: existing.status === "failed" ? "failed" : "pending" };
     }
@@ -181,8 +186,13 @@ insightsRouter.get("/", async (req, res, next) => {
         count: a.count,
         isInverter: a.isInverter,
         ageYears: a.ageYears,
+        hoursPerDay: a.hoursPerDay,
       })),
-      findings: result.recommendations.map((r) => ({ title: r.title, impact: r.impact })),
+      findings: result.recommendations.map((r) => ({
+        id: r.id,
+        title: r.title,
+        impact: r.impact,
+      })),
     };
 
     const body: InsightsResponse = {

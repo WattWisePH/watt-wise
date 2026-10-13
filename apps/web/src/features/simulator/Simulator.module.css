@@ -232,3 +232,26 @@
   color: var(--text-on-primary);
   pointer-events: none;
 }
+
+.Simulator_projection {
+  padding: 16px;
+  border-radius: var(--radius-large);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--outline);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.Simulator_projectionTitle {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.Simulator_projectionDelta {
+  margin: 4px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-600);
+}

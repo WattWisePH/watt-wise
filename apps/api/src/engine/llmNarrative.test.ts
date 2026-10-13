@@ -17,6 +17,8 @@ import { describe, expect, it } from "vitest";
 import { parseNarrativeReply } from "./llmNarrative.js";
 
 const MODEL = "test-model";
+/** 300 kWh for PHP 3,600: a PHP 12/kWh rate. */
+const BILL = { kwhUsed: 300, amount: 3600 };
 
 /** A well-formed reply, as the prompt asks for. */
 const clean = JSON.stringify({
@@ -32,7 +34,7 @@ const clean = JSON.stringify({
 
 describe("a well-formed reply", () => {
   it("reads the summary and the actions", () => {
-    const narrative = parseNarrativeReply(clean, MODEL);
+    const narrative = parseNarrativeReply(clean, MODEL, BILL);
 
     expect(narrative?.summary).toMatch(/little above average/);
     expect(narrative?.actions).toHaveLength(1);
@@ -42,30 +44,30 @@ describe("a well-formed reply", () => {
   it("records which model wrote it", () => {
     // Free endpoints are swapped often; when old wording looks wrong this
     // is the only way to know what produced it.
-    expect(parseNarrativeReply(clean, MODEL)?.model).toBe(MODEL);
+    expect(parseNarrativeReply(clean, MODEL, BILL)?.model).toBe(MODEL);
   });
 });
 
 describe("a reply that isn't bare JSON", () => {
   it("reads it out of a markdown fence", () => {
-    expect(parseNarrativeReply("```json\n" + clean + "\n```", MODEL)?.summary).toBeTruthy();
+    expect(parseNarrativeReply("```json\n" + clean + "\n```", MODEL, BILL)?.summary).toBeTruthy();
   });
 
   it("reads it out of surrounding chat", () => {
     const chatty = `Sure! Here is the analysis you asked for:\n\n${clean}\n\nHope this helps!`;
 
-    expect(parseNarrativeReply(chatty, MODEL)?.summary).toBeTruthy();
+    expect(parseNarrativeReply(chatty, MODEL, BILL)?.summary).toBeTruthy();
   });
 });
 
 describe("a reply that can't be used", () => {
   it("rejects one with no JSON at all", () => {
     // Seen in the wild: a model answering the prompt as a conversation.
-    expect(parseNarrativeReply("I'd be happy to help with that!", MODEL)).toBeNull();
+    expect(parseNarrativeReply("I'd be happy to help with that!", MODEL, BILL)).toBeNull();
   });
 
   it("rejects malformed JSON", () => {
-    expect(parseNarrativeReply('{"summary": "unterminated', MODEL)).toBeNull();
+    expect(parseNarrativeReply('{"summary": "unterminated', MODEL, BILL)).toBeNull();
   });
 
   it("rejects one with no summary", () => {
@@ -73,11 +75,11 @@ describe("a reply that can't be used", () => {
     // as free-floating advice with no stated reason.
     const noSummary = JSON.stringify({ actions: [{ title: "a", description: "b" }] });
 
-    expect(parseNarrativeReply(noSummary, MODEL)).toBeNull();
+    expect(parseNarrativeReply(noSummary, MODEL, BILL)).toBeNull();
   });
 
   it("rejects a blank summary", () => {
-    expect(parseNarrativeReply(JSON.stringify({ summary: "   " }), MODEL)).toBeNull();
+    expect(parseNarrativeReply(JSON.stringify({ summary: "   " }), MODEL, BILL)).toBeNull();
   });
 });
 
@@ -91,7 +93,7 @@ describe("actions that are only partly filled in", () => {
       ],
     });
 
-    const actions = parseNarrativeReply(reply, MODEL)?.actions;
+    const actions = parseNarrativeReply(reply, MODEL, BILL)?.actions;
     expect(actions).toHaveLength(1);
     expect(actions?.[0].title).toBe("Keeps this");
   });
@@ -104,7 +106,7 @@ describe("actions that are only partly filled in", () => {
       actions: [{ title: "Bare heading" }],
     });
 
-    expect(parseNarrativeReply(reply, MODEL)?.actions).toHaveLength(0);
+    expect(parseNarrativeReply(reply, MODEL, BILL)?.actions).toHaveLength(0);
   });
 
   it("ignores entries that aren't objects", () => {
@@ -113,7 +115,7 @@ describe("actions that are only partly filled in", () => {
       actions: ["just a string", null, { title: "Real", description: "Yes." }],
     });
 
-    expect(parseNarrativeReply(reply, MODEL)?.actions).toHaveLength(1);
+    expect(parseNarrativeReply(reply, MODEL, BILL)?.actions).toHaveLength(1);
   });
 
   it("treats an unrecognised impact as medium", () => {
@@ -124,13 +126,13 @@ describe("actions that are only partly filled in", () => {
       actions: [{ title: "a", description: "b", impact: "critical" }],
     });
 
-    expect(parseNarrativeReply(reply, MODEL)?.actions[0].impact).toBe("medium");
+    expect(parseNarrativeReply(reply, MODEL, BILL)?.actions[0].impact).toBe("medium");
   });
 
   it("copes with actions missing entirely", () => {
     // The prompt allows an empty list when there's nothing to add, and some
     // models omit the key rather than sending [].
-    expect(parseNarrativeReply(JSON.stringify({ summary: "Fine." }), MODEL)?.actions).toEqual([]);
+    expect(parseNarrativeReply(JSON.stringify({ summary: "Fine." }), MODEL, BILL)?.actions).toEqual([]);
   });
 });
 
@@ -146,6 +148,37 @@ describe("a reply that is too long", () => {
       })),
     });
 
-    expect(parseNarrativeReply(reply, MODEL)?.actions).toHaveLength(3);
+    expect(parseNarrativeReply(reply, MODEL, BILL)?.actions).toHaveLength(3);
+  });
+});
+
+describe("savings estimates", () => {
+  it("prices the model's kWh at the bill's own rate", () => {
+    const reply = JSON.stringify({
+      summary: "Fine.",
+      findingSavings: { "non-inverter-appliances": 40 },
+      actions: [{ title: "a", description: "b", kwhSavedPerMonth: 10 }],
+    });
+    const narrative = parseNarrativeReply(reply, MODEL, BILL);
+
+    expect(narrative?.actions[0].savings).toEqual({ kwh: 10, php: 120 });
+    expect(narrative?.ruleSavings["non-inverter-appliances"]).toEqual({ kwh: 40, php: 480 });
+  });
+
+  it("never lets an estimate go negative or past the whole bill", () => {
+    const reply = JSON.stringify({
+      summary: "Fine.",
+      findingSavings: { big: 9999, negative: -5, junk: "lots" },
+    });
+    const { ruleSavings } = parseNarrativeReply(reply, MODEL, BILL)!;
+
+    expect(ruleSavings.big.kwh).toBe(300);
+    expect(ruleSavings.negative.kwh).toBe(0);
+    expect(ruleSavings.junk.kwh).toBe(0);
+  });
+
+  it("reads a missing estimate as zero rather than dropping the action", () => {
+    const actions = parseNarrativeReply(clean, MODEL, BILL)?.actions;
+    expect(actions?.[0].savings).toEqual({ kwh: 0, php: 0 });
   });
 });

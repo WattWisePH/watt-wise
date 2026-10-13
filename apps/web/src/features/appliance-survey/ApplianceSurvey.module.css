@@ -209,3 +209,11 @@
   font-size: 0.9rem;
   font-weight: 600;
 }
+
+/* The text-input border and padding would box the slider in. */
+.ApplianceCard_field input.ApplianceCard_slider {
+  padding: 0;
+  border: none;
+  background: none;
+  accent-color: var(--primary-600);
+}

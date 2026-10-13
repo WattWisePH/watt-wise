@@ -1,9 +1,12 @@
 import type { Icon } from "@phosphor-icons/react";
 
+import type { Savings } from "../../lib/insights";
+
 export interface SimulatorItem {
-  id: number;
+  /** The recommendation's id, or "ai-<n>" for a model suggestion. */
+  id: string;
   icon: Icon;
   iconTint: string;
   label: string;
-  estSavings: number;
+  savings: Savings;
 }

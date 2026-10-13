@@ -166,6 +166,13 @@ describe("validation", () => {
     expect(res.body.details[0]).toMatch(/ageYears/);
   });
 
+  it("rejects hours outside a day", async () => {
+    const res = await post("u1", { kindId: KIND_ID, hoursPerDay: 25 });
+
+    expect(res.status).toBe(400);
+    expect(res.body.details[0]).toMatch(/hoursPerDay/);
+  });
+
   it("names the row that is wrong", async () => {
     // The survey shows a card per appliance; the position is how the client
     // knows which one to mark.

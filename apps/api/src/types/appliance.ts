@@ -47,6 +47,8 @@ export interface ApplianceSurveyInput {
   count: number;
   /** Approximate age in years; older units tend to be less efficient. */
   ageYears?: number;
+  /** Hours per day each unit runs: 0 = never, 24 = always on. */
+  hoursPerDay?: number;
 }
 
 /**

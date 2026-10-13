@@ -32,6 +32,7 @@ import {
   HashIcon,
   TagIcon,
   CalendarIcon,
+  ClockIcon,
   type Icon,
 } from "@phosphor-icons/react";
 import { ApiError, saveAppliances, type ApplianceDraft } from "../../lib/api";
@@ -66,11 +67,19 @@ interface CardDraft {
   subtypeId?: string;
   count: number;
   ageYears?: number;
+  hoursPerDay: number;
 }
 
 /** A blank card, matching the mockup's default quantity of 1. */
 function emptyCard(kindId = ""): CardDraft {
-  return { kindId, count: 1 };
+  return { kindId, count: 1, hoursPerDay: 8 };
+}
+
+/** How the hours slider reads at each stop. */
+function hoursLabel(hours: number): string {
+  if (hours === 0) return "Never";
+  if (hours === 24) return "Always on";
+  return `${hours} hr${hours === 1 ? "" : "s"}/day`;
 }
 
 export function ApplianceSurvey() {
@@ -153,6 +162,7 @@ export function ApplianceSurvey() {
         subtypeId: card.subtypeId,
         count: card.count,
         ageYears: card.ageYears,
+        hoursPerDay: card.hoursPerDay,
       }));
 
       const saved = await saveAppliances(activeEstablishment.id, drafts);
@@ -320,6 +330,25 @@ export function ApplianceSurvey() {
                           ? undefined
                           : Number(e.target.value),
                     })
+                  }
+                />
+              </label>
+
+              <label className={styles.ApplianceCard_field}>
+                <span className={styles.ApplianceCard_fieldLabel}>
+                  <ClockIcon size={16} />
+                  Daily use: {hoursLabel(card.hoursPerDay)}
+                </span>
+                <input
+                  type="range"
+                  min="0"
+                  max="24"
+                  step="1"
+                  className={styles.ApplianceCard_slider}
+                  value={card.hoursPerDay}
+                  aria-valuetext={hoursLabel(card.hoursPerDay)}
+                  onChange={(e) =>
+                    updateCard(index, { hoursPerDay: Number(e.target.value) })
                   }
                 />
               </label>

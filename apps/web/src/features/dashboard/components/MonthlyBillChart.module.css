@@ -159,3 +159,14 @@
   border-top: 2px dashed var(--neutral-400);
   font-style: normal;
 }
+
+/* Value printed above a bar; sits in the chart's top padding. */
+.MonthlyBillChart_value {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 4px));
+  font-size: 13px;
+  font-weight: bold;
+  color: var(--text);
+  white-space: nowrap;
+  pointer-events: none;
+}

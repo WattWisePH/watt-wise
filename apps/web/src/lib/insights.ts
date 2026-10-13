@@ -80,6 +80,16 @@ export interface NarrativeAction {
   title: string;
   description: string;
   impact: ImpactLevel;
+  savings: Savings;
+}
+
+/**
+ * The model's monthly savings estimate for one action. The kWh is the
+ * model's; the pesos are that kWh at the bill's own rate.
+ */
+export interface Savings {
+  kwh: number;
+  php: number;
 }
 
 /**
@@ -93,7 +103,13 @@ export interface NarrativeAction {
 export type NarrativeState =
   | { status: "pending" }
   | { status: "failed" }
-  | { status: "ready"; summary: string; actions: NarrativeAction[] };
+  | {
+      status: "ready";
+      summary: string;
+      actions: NarrativeAction[];
+      /** Estimates for the rule engine's recommendations, keyed by their id. */
+      ruleSavings: Record<string, Savings>;
+    };
 
 export type Insights =
   | { available: false; reason: "NO_BILLS" | "NO_APPLIANCES" }
