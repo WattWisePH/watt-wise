@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router";
 
 import { PiggyBankIcon } from "@phosphor-icons/react";
 
@@ -7,7 +6,7 @@ import styles from "./Simulator.module.css";
 import { toItems, totals } from "./savings";
 import { SimulatorItemToggle } from "./components/SimulatorItemToggle";
 import { MonthlyBillChart } from "../dashboard/components/MonthlyBillChart";
-import { NEXT_STEP, message, useInsights } from "../insights/useInsights";
+import { useInsightsData } from "../insights/useInsights";
 
 /**
  * How far the "with changes" bar drops, as a share of the "current" bar's
@@ -33,13 +32,12 @@ const peso = (n: number) =>
   });
 
 export const Simulator = () => {
-  const state = useInsights();
+  const insights = useInsightsData();
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [showProjection, setShowProjection] = useState(false);
 
-  const insights = state.status === "ready" ? state.insights : null;
-  const items = useMemo(() => (insights ? toItems(insights) : []), [insights]);
-  const bill = insights?.basedOn ?? { amount: 0, kwhUsed: 0 };
+  const items = useMemo(() => toItems(insights), [insights]);
+  const bill = insights.basedOn;
 
   const handleItemToggle = (itemId: string) => {
     setSelectedItems((prev) =>
@@ -50,24 +48,24 @@ export const Simulator = () => {
   };
 
   const selected = items.filter((item) => selectedItems.includes(item.id));
-  const { php: totalPhp, kwh: totalKwh, percent: reductionPercent } = totals(selected, bill);
+  const {
+    php: totalPhp,
+    kwh: totalKwh,
+    percent: reductionPercent,
+  } = totals(selected, bill);
   // The most the options could save together; fixes the projection's axis.
   const maxPhp = totals(items, bill).php;
 
   const listMessage =
-    state.status !== "ready"
-      ? message(state)
-      : state.insights.narrative.status === "pending"
-        ? "Estimating savings for your actions…"
-        : state.insights.narrative.status === "failed"
-          ? "Savings estimates aren't available right now. Try again later."
-          : items.length === 0
-            ? "No actions with measurable savings — your usage looks healthy."
-            : selectedItems.length === 0
-              ? "Select an option below."
-              : `Selected ${selectedItems.length} ${selectedItems.length === 1 ? "option" : "options"}.`;
-  const nextStep =
-    state.status !== "ready" ? NEXT_STEP[state.status] : undefined;
+    insights.narrative.status === "pending"
+      ? "Estimating savings for your actions…"
+      : insights.narrative.status === "failed"
+        ? "Savings estimates aren't available right now. Try again later."
+        : items.length === 0
+          ? "No actions with measurable savings — your usage looks healthy."
+          : selectedItems.length === 0
+            ? "Select an option below."
+            : `Selected ${selectedItems.length} ${selectedItems.length === 1 ? "option" : "options"}.`;
 
   return (
     <div className={styles.Simulator}>
@@ -133,20 +131,12 @@ export const Simulator = () => {
               </p>
             </div>
             <p className={styles.Simulator_sectionSubtitle}>
-              Bars start above zero to make the change easier to see. Estimates
-              are AI-generated from your bill and appliance survey.
+              *Bars do not start at zero. Estimates are AI-generated from your
+              bill and appliance survey.
             </p>
           </div>
         )}
-        <p className={styles.Simulator_sectionSubtitle}>
-          {listMessage}
-          {nextStep && (
-            <>
-              {" "}
-              <Link to={nextStep.to}>{nextStep.label}</Link>
-            </>
-          )}
-        </p>
+        <p className={styles.Simulator_sectionSubtitle}>{listMessage}</p>
         <div className={styles.Simulator_itemList}>
           {items.map((item) => (
             <SimulatorItemToggle

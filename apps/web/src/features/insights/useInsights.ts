@@ -1,7 +1,7 @@
 /**
  * Loading the active establishment's insights.
  *
- * Fetched once by InsightsPage and handed to the tab screens through the
+ * Fetched once by AnalysisLayout and handed to the tab screens through the
  * router outlet, rather than fetched by each of them: Health Score and
  * Priority Actions are two views of one analysis, and fetching per tab
  * would re-run the whole pipeline every time someone switched.
@@ -171,7 +171,7 @@ export function useInsights(): InsightsState {
 /**
  * The insights, read by a tab screen from the outlet.
  *
- * Safe to assume present: InsightsPage renders the outlet only once the
+ * Safe to assume present: AnalysisLayout renders the outlet only once the
  * data is ready, and shows its own message in every other state.
  */
 export function useInsightsData(): InsightsContext {

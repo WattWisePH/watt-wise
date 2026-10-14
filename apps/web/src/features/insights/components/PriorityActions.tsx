@@ -65,7 +65,8 @@ function ActionCard({
       <p className={styles.PriorityAction_description}>{description}</p>
       {savings && savings.kwh > 0 && (
         <p className={styles.PriorityAction_savings}>
-          Est. savings: ₱{savings.php.toLocaleString()} ({savings.kwh} kWh) / month
+          Est. savings: ₱{savings.php.toLocaleString()} ({savings.kwh} kWh) /
+          month
         </p>
       )}
       <div className={styles.PriorityAction_buttonContainer}>
@@ -82,7 +83,9 @@ function ActionCard({
           onClick={onDismiss}
           disabled={leaving}
         >
-          <XIcon className={`${styles.PriorityAction_icon} ${duotone.neutral}`} />
+          <XIcon
+            className={`${styles.PriorityAction_icon} ${duotone.neutral}`}
+          />
           Dismiss
         </button>
       </div>
@@ -91,15 +94,18 @@ function ActionCard({
 }
 
 export const PriorityActions = () => {
-  const { result, narrative, basedOn, archived, setArchived } = useInsightsData();
+  const { result, narrative, basedOn, archived, setArchived } =
+    useInsightsData();
   const { activeEstablishmentId } = useEstablishment();
   // Cards whose exit animation has finished but whose save hasn't come back
   // yet. Kept hidden meanwhile; put back if the save fails.
   const [gone, setGone] = useState<string[]>([]);
   const [leaving, setLeaving] = useState<string[]>([]);
-  const [toast, setToast] = useState<{ id: number; text: string; error?: boolean } | null>(
-    null,
-  );
+  const [toast, setToast] = useState<{
+    id: number;
+    text: string;
+    error?: boolean;
+  } | null>(null);
 
   useEffect(() => {
     if (!toast) return;
@@ -115,14 +121,20 @@ export const PriorityActions = () => {
   const isShown = (id: string) => !hidden.has(id) && !gone.includes(id);
   const ruleSavings = narrative.status === "ready" ? narrative.ruleSavings : {};
   const recommendations = result.recommendations.filter((r) => isShown(r.id));
-  const suggestions = (narrative.status === "ready" ? narrative.actions : []).filter((s) =>
-    isShown(s.id),
-  );
+  const suggestions = (
+    narrative.status === "ready" ? narrative.actions : []
+  ).filter((s) => isShown(s.id));
 
   /** Save a card's status, archiving it on success and restoring it on failure. */
   const archive = async (
     status: ActionStatus,
-    card: { id: string; title: string; description: string; impact: ImpactLevel; savings?: Savings },
+    card: {
+      id: string;
+      title: string;
+      description: string;
+      impact: ImpactLevel;
+      savings?: Savings;
+    },
   ) => {
     setLeaving((prev) => [...prev, card.id]);
     const action = {
@@ -149,7 +161,12 @@ export const PriorityActions = () => {
         showToast(`Nice work! "${card.title}" marked as done.`);
       }
     } catch (err) {
-      showToast(err instanceof ApiError ? err.message : "Couldn't save that. Try again.", true);
+      showToast(
+        err instanceof ApiError
+          ? err.message
+          : "Couldn't save that. Try again.",
+        true,
+      );
     } finally {
       setLeaving((prev) => prev.filter((k) => k !== card.id));
       setGone((prev) => prev.filter((k) => k !== card.id));
@@ -164,7 +181,9 @@ export const PriorityActions = () => {
     onLeft: () => setGone((prev) => [...prev, card.id]),
   });
 
-  const toastEl = toast && <Toast key={toast.id} message={toast.text} error={toast.error} />;
+  const toastEl = toast && (
+    <Toast key={toast.id} message={toast.text} error={toast.error} />
+  );
 
   // On whichever section heading comes first, so it is always on screen.
   const archiveLink = (
@@ -204,14 +223,14 @@ export const PriorityActions = () => {
     <div className={styles.Insights}>
       {recommendations.length > 0 && (
         <section className={styles.Insights_section}>
-          <div>
-            <div className={styles.Insights_titleRow}>
+          <div className={styles.Insights_titleRow}>
+            <div>
               <h1 className={styles.Insights_sectionTitle}>Priority Actions</h1>
-              {archiveLink}
+              <p className={`${styles.Insights_sectionSubtitle}`}>
+                Possible steps to take to improve energy efficiency.
+              </p>
             </div>
-            <p className={`${styles.Insights_sectionSubtitle}`}>
-              Possible steps to take to improve energy efficiency.
-            </p>
+            {archiveLink}
           </div>
 
           <div className={styles.PriorityAction_actionList}>
@@ -223,7 +242,10 @@ export const PriorityActions = () => {
                 description={recommendation.description}
                 impact={recommendation.impact}
                 savings={ruleSavings[recommendation.id]}
-                {...cardActions({ ...recommendation, savings: ruleSavings[recommendation.id] })}
+                {...cardActions({
+                  ...recommendation,
+                  savings: ruleSavings[recommendation.id],
+                })}
               />
             ))}
           </div>
@@ -239,12 +261,14 @@ export const PriorityActions = () => {
         <section className={styles.Insights_section}>
           <div>
             <div className={styles.Insights_titleRow}>
-              <h1 className={styles.Insights_sectionTitle}>Also worth considering</h1>
+              <h1 className={styles.Insights_sectionTitle}>
+                Also worth considering
+              </h1>
               {recommendations.length === 0 && archiveLink}
             </div>
             <p className={`${styles.Insights_sectionSubtitle}`}>
-              Suggested by AI from the same figures. Check these against your own
-              setup before acting on them.
+              Suggested by AI from the same figures. Check these against your
+              own setup before acting on them.
             </p>
           </div>
 

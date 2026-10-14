@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { ArrowCounterClockwiseIcon, ArrowLeftIcon } from "@phosphor-icons/react";
+import {
+  ArrowCounterClockwiseIcon,
+  ArrowLeftIcon,
+} from "@phosphor-icons/react";
 import { Link } from "react-router";
 
 import styles from "../Insights.module.css";
@@ -43,10 +46,17 @@ export const ArchivedActions = () => {
     const key = keyOf(action);
     setRestoring((prev) => [...prev, key]);
     try {
-      await clearActionStatus(activeEstablishmentId!, action.billId, action.actionId);
+      await clearActionStatus(
+        activeEstablishmentId!,
+        action.billId,
+        action.actionId,
+      );
       setArchived((prev) => prev.filter((a) => keyOf(a) !== key));
     } catch (err) {
-      const text = err instanceof ApiError ? err.message : "Couldn't restore that. Try again.";
+      const text =
+        err instanceof ApiError
+          ? err.message
+          : "Couldn't restore that. Try again.";
       // A new id per message, so the toast's entrance replays.
       setError((prev) => ({ id: (prev?.id ?? 0) + 1, text }));
     } finally {
@@ -64,23 +74,24 @@ export const ArchivedActions = () => {
   return (
     <div className={styles.Insights}>
       <section className={styles.Insights_section}>
-        <div>
-          <div className={styles.Insights_titleRow}>
+        <div className={styles.Insights_titleRow}>
+          <div>
             <h1 className={styles.Insights_sectionTitle}>Archived Actions</h1>
-            <Link to="../priority-actions" className={styles.Insights_headerLink}>
-              <ArrowLeftIcon size={16} />
-              Back
-            </Link>
+            <p className={styles.Insights_sectionSubtitle}>
+              Actions you've marked done or dismissed. Restore one to put it
+              back in Priority Actions.
+            </p>
           </div>
-          <p className={styles.Insights_sectionSubtitle}>
-            Actions you've marked done or dismissed. Restore one to put it back in
-            Priority Actions.
-          </p>
+          <Link to="../priority-actions" className={styles.Insights_headerLink}>
+            <ArrowLeftIcon size={16} />
+            Back
+          </Link>
         </div>
         {archived.length === 0 && (
           <div className={styles.Insights_card}>
             <p className={styles.Insights_sectionSubtitle}>
-              Nothing here yet. Actions you mark done or dismiss will show up here.
+              Nothing here yet. Actions you mark done or dismiss will show up
+              here.
             </p>
           </div>
         )}
@@ -104,7 +115,9 @@ export const ArchivedActions = () => {
                     {action.status === "done" ? "Done" : "Dismissed"}
                   </div>
                 </div>
-                <p className={styles.PriorityAction_description}>{action.description}</p>
+                <p className={styles.PriorityAction_description}>
+                  {action.description}
+                </p>
                 {action.savings && action.savings.kwh > 0 && (
                   <p className={styles.PriorityAction_savings}>
                     Est. savings: ₱{action.savings.php.toLocaleString()} (
@@ -117,7 +130,9 @@ export const ArchivedActions = () => {
                     onClick={() => void restore(action)}
                     disabled={restoring.includes(keyOf(action))}
                   >
-                    <ArrowCounterClockwiseIcon className={styles.PriorityAction_icon} />
+                    <ArrowCounterClockwiseIcon
+                      className={styles.PriorityAction_icon}
+                    />
                     Restore
                   </button>
                 </div>
