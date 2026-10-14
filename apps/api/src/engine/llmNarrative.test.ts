@@ -182,3 +182,17 @@ describe("savings estimates", () => {
     expect(actions?.[0].savings).toEqual({ kwh: 0, php: 0 });
   });
 });
+
+describe("action ids", () => {
+  it("derives a stable id from the title, suffixing repeats", () => {
+    const reply = JSON.stringify({
+      summary: "Fine.",
+      actions: [
+        { title: "Unplug the TV!", description: "b" },
+        { title: "unplug the tv", description: "c" },
+      ],
+    });
+    const ids = parseNarrativeReply(reply, MODEL, BILL)?.actions.map((a) => a.id);
+    expect(ids).toEqual(["ai-unplug-the-tv", "ai-unplug-the-tv-2"]);
+  });
+});

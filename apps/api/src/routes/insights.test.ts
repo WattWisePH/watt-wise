@@ -51,6 +51,13 @@ vi.mock("../store/applianceStore.js", () => ({
 const getPeerBenchmark = vi.fn();
 vi.mock("../store/benchmarkStore.js", () => ({ getPeerBenchmark }));
 
+const listActionStatuses = vi.fn();
+vi.mock("../store/actionStatusStore.js", () => ({
+  listActionStatuses,
+  setActionStatus: vi.fn(),
+  clearActionStatus: vi.fn(),
+}));
+
 const generate = vi.fn();
 vi.mock("../engine/index.js", () => ({
   getRecommendationEngine: () => ({ name: "test-engine", generate }),
@@ -141,6 +148,7 @@ beforeEach(() => {
     providerId: "33333333-3333-3333-3333-333333333333",
   });
   listBills.mockResolvedValue([latestBill, olderBill]);
+  listActionStatuses.mockResolvedValue([]);
   listAppliances.mockResolvedValue([
     { id: "a0", type: "Refrigerator", count: 1, isInverter: true },
   ]);

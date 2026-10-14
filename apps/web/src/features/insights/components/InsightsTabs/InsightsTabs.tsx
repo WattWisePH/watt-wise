@@ -4,7 +4,9 @@ import styles from "./InsightsTabs.module.css";
 export const InsightsTabs = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const currentTab = pathname.split("/")[2];
+  // The archive is reached from Priority Actions, so it keeps that tab lit.
+  const segment = pathname.split("/")[2];
+  const currentTab = segment === "archived" ? "priority-actions" : segment;
 
   return (
     <div className={styles.Tabs_background}>

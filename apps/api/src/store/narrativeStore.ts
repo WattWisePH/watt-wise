@@ -15,7 +15,7 @@
 
 import { createHash } from "node:crypto";
 import { DatabaseError, userClient } from "./supabaseClient.js";
-import type { NarrativeAction, Savings } from "../engine/llmNarrative.js";
+import { actionId, type NarrativeAction, type Savings } from "../engine/llmNarrative.js";
 
 export type NarrativeStatus = "pending" | "ready" | "failed";
 
@@ -87,6 +87,12 @@ export function profileFingerprint(input: {
     .digest("hex");
 }
 
+/** Rows written before actions carried an id get one from the title. */
+function withIds(actions: NarrativeAction[]): NarrativeAction[] {
+  const ids = new Set<string>();
+  return actions.map((a) => ({ ...a, id: a.id ?? actionId(a.title, ids) }));
+}
+
 /** The stored narrative for a bill, or null when none has been written. */
 export async function getNarrative(
   accessToken: string,
@@ -105,7 +111,7 @@ export async function getNarrative(
   return {
     status: row.status,
     summary: row.summary,
-    actions: row.actions ?? [],
+    actions: withIds(row.actions ?? []),
     ruleSavings: row.rule_savings ?? {},
     profileHash: row.profile_hash,
   };

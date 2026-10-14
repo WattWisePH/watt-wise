@@ -1,4 +1,4 @@
-import { CheckCircleIcon } from "@phosphor-icons/react";
+import { CheckCircleIcon, WarningCircleIcon } from "@phosphor-icons/react";
 
 import styles from "./Toast.module.css";
 
@@ -7,10 +7,11 @@ import styles from "./Toast.module.css";
  * when it shows and hides; give it a new `key` per message so the entrance
  * animation replays.
  */
-export function Toast({ message }: { message: string }) {
+export function Toast({ message, error = false }: { message: string; error?: boolean }) {
+  const Icon = error ? WarningCircleIcon : CheckCircleIcon;
   return (
     <div className={styles.Toast} role="status">
-      <CheckCircleIcon size={20} weight="fill" />
+      <Icon size={20} weight="fill" />
       {message}
     </div>
   );

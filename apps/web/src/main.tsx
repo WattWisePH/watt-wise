@@ -15,6 +15,7 @@ import { InsightsPage } from "./features/insights/InsightsPage.tsx";
 import { HealthScore } from "./features/insights/components/HealthScore.tsx";
 import { ApplianceSurvey } from "./features/appliance-survey/ApplianceSurvey.tsx";
 import { PriorityActions } from "./features/insights/components/PriorityActions.tsx";
+import { ArchivedActions } from "./features/insights/components/ArchivedActions.tsx";
 import { Simulator } from "./features/simulator/Simulator.tsx";
 import { Profile } from "./features/profile/Profile.tsx";
 import { EstablishmentSetup } from "./features/onboarding/EstablishmentSetup.tsx";
@@ -59,6 +60,7 @@ createRoot(document.getElementById("root")!).render(
                       path="priority-actions"
                       element={<PriorityActions />}
                     />
+                    <Route path="archived" element={<ArchivedActions />} />
                   </Route>
                   <Route path="simulator" element={<Simulator />} />
                   <Route path="profile" element={<Profile />} />

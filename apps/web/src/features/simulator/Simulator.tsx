@@ -1,67 +1,13 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router";
 
-import {
-  ChartBarIcon,
-  HourglassIcon,
-  PiggyBankIcon,
-  PlugIcon,
-  SnowflakeIcon,
-  SparkleIcon,
-  type Icon,
-} from "@phosphor-icons/react";
+import { PiggyBankIcon } from "@phosphor-icons/react";
 
 import styles from "./Simulator.module.css";
-import type { SimulatorItem } from "./types";
-import duotone from "../../styles/DuotoneIcon.module.css";
+import { toItems, totals } from "./savings";
 import { SimulatorItemToggle } from "./components/SimulatorItemToggle";
 import { MonthlyBillChart } from "../dashboard/components/MonthlyBillChart";
-import {
-  NEXT_STEP,
-  message,
-  useInsights,
-  type ReadyInsights,
-} from "../insights/useInsights";
-
-/** Icon per rule-engine category; model suggestions get a sparkle. */
-const CATEGORY_ICONS: Record<string, [Icon, string]> = {
-  benchmark: [ChartBarIcon, duotone.navy],
-  usage: [HourglassIcon, duotone.amber],
-  baseline: [PlugIcon, duotone.amber],
-  appliances: [SnowflakeIcon, duotone.navy],
-};
-
-/**
- * The same actions Priority Actions shows, each with the model's savings
- * estimate. Items the model thinks save nothing are left out: a toggle that
- * moves no number is noise in a simulator.
- */
-function toItems({ result, narrative }: ReadyInsights): SimulatorItem[] {
-  if (narrative.status !== "ready") return [];
-
-  const rules = result.recommendations.map((r) => {
-    const [icon, iconTint] = CATEGORY_ICONS[r.category] ?? [
-      PlugIcon,
-      duotone.green,
-    ];
-    return {
-      id: r.id,
-      icon,
-      iconTint,
-      label: r.title,
-      savings: narrative.ruleSavings[r.id] ?? { kwh: 0, php: 0 },
-    };
-  });
-  const suggestions = narrative.actions.map((a, i) => ({
-    id: `ai-${i}`,
-    icon: SparkleIcon,
-    iconTint: duotone.green,
-    label: a.title,
-    savings: a.savings,
-  }));
-
-  return [...rules, ...suggestions].filter((item) => item.savings.kwh > 0);
-}
+import { NEXT_STEP, message, useInsights } from "../insights/useInsights";
 
 /**
  * How far the "with changes" bar drops, as a share of the "current" bar's
@@ -103,27 +49,10 @@ export const Simulator = () => {
     );
   };
 
-  // Capped at the bill: estimates are added up independently, and a
-  // projection below zero would be nonsense on screen.
   const selected = items.filter((item) => selectedItems.includes(item.id));
-  const totalPhp = Math.min(
-    selected.reduce((sum, item) => sum + item.savings.php, 0),
-    bill.amount,
-  );
-  const totalKwh = Math.min(
-    selected.reduce((sum, item) => sum + item.savings.kwh, 0),
-    bill.kwhUsed,
-  );
+  const { php: totalPhp, kwh: totalKwh, percent: reductionPercent } = totals(selected, bill);
   // The most the options could save together; fixes the projection's axis.
-  const maxPhp = Math.min(
-    items.reduce((sum, item) => sum + item.savings.php, 0),
-    bill.amount,
-  );
-  const maxKwh = Math.min(
-    items.reduce((sum, item) => sum + item.savings.kwh, 0),
-    bill.kwhUsed,
-  );
-  const reductionPercent = bill.amount > 0 ? (totalPhp / bill.amount) * 100 : 0;
+  const maxPhp = totals(items, bill).php;
 
   const listMessage =
     state.status !== "ready"
@@ -199,32 +128,8 @@ export const Simulator = () => {
                 axisMin={axisMinFor(bill.amount, maxPhp)}
               />
               <p className={styles.Simulator_projectionDelta}>
-                −₱{peso(totalPhp)} a month ({reductionPercent.toFixed(1)}%
-                lower)
-              </p>
-            </div>
-            <div>
-              <h2 className={styles.Simulator_projectionTitle}>
-                Monthly usage (kWh)
-              </h2>
-              <MonthlyBillChart
-                data={[
-                  { month: "Current", amount: bill.kwhUsed },
-                  { month: "With changes", amount: bill.kwhUsed - totalKwh },
-                ]}
-                color="secondary"
-                showAverage={false}
-                unit="kWh"
-                valueLabel={(n) => `${Math.round(n).toLocaleString()} kWh`}
-                axisMin={axisMinFor(bill.kwhUsed, maxKwh)}
-              />
-              <p className={styles.Simulator_projectionDelta}>
-                −{totalKwh.toLocaleString()} kWh a month (
-                {(bill.kwhUsed > 0
-                  ? (totalKwh / bill.kwhUsed) * 100
-                  : 0
-                ).toFixed(1)}
-                % lower)
+                −₱{peso(totalPhp)} (−{totalKwh.toLocaleString()} kWh) a month,{" "}
+                {reductionPercent.toFixed(1)}% lower
               </p>
             </div>
             <p className={styles.Simulator_sectionSubtitle}>

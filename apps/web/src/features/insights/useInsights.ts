@@ -11,11 +11,20 @@ import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router";
 
 import { ApiError } from "../../lib/api";
-import { getInsights, type Insights } from "../../lib/insights";
+import { getInsights, type ArchivedAction, type Insights } from "../../lib/insights";
 import { useEstablishment } from "../establishment/hooks/useEstablishment";
 
 /** The insights, once there is something to show. */
 export type ReadyInsights = Extract<Insights, { available: true }>;
+
+/**
+ * What the tab screens get through the outlet: the insights, plus a way to
+ * change the archived list once a status is saved, so marking a card done
+ * on one tab shows on the other without a refetch.
+ */
+export type InsightsContext = ReadyInsights & {
+  setArchived: (update: (archived: ArchivedAction[]) => ArchivedAction[]) => void;
+};
 
 /**
  * Every state the screen can be in. Modelled explicitly so the page renders
@@ -165,6 +174,6 @@ export function useInsights(): InsightsState {
  * Safe to assume present: InsightsPage renders the outlet only once the
  * data is ready, and shows its own message in every other state.
  */
-export function useInsightsData(): ReadyInsights {
-  return useOutletContext<ReadyInsights>();
+export function useInsightsData(): InsightsContext {
+  return useOutletContext<InsightsContext>();
 }

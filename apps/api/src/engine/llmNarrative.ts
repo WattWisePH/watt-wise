@@ -110,6 +110,20 @@ function toSavings(value: unknown, bill: { kwhUsed: number; amount: number }): S
   return { kwh, php: Math.round(kwh * ratePerKwh(bill)) };
 }
 
+/**
+ * A stable id for a model-written action, from its title. The model gives
+ * none, and a position in the list would point at a different action once
+ * the narrative is rewritten — which is what a saved "done" is keyed on.
+ * `taken` holds ids already handed out, so two equal titles still differ.
+ */
+export function actionId(title: string, taken: Set<string> = new Set()): string {
+  const base = `ai-${title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}`;
+  let id = base;
+  for (let n = 2; taken.has(id); n++) id = `${base}-${n}`;
+  taken.add(id);
+  return id;
+}
+
 /** Build the instruction. Strict, so the reply is parseable. */
 function buildPrompt(input: NarrativeInput): string {
   const appliances = input.appliances.length
@@ -227,6 +241,8 @@ export function parseNarrativeReply(
         .filter((a) => a.title && a.description)
         .slice(0, MAX_ACTIONS)
     : [];
+  const ids = new Set<string>();
+  const withIds = actions.map((a) => ({ id: actionId(a.title, ids), ...a }));
 
   const ruleSavings: Record<string, Savings> = {};
   if (typeof parsed.findingSavings === "object" && parsed.findingSavings !== null) {
@@ -235,7 +251,7 @@ export function parseNarrativeReply(
     }
   }
 
-  return { summary, actions, ruleSavings, model };
+  return { summary, actions: withIds, ruleSavings, model };
 }
 
 /**

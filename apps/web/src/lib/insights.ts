@@ -77,6 +77,8 @@ export interface InsightsBasis {
  * which before acting on it.
  */
 export interface NarrativeAction {
+  /** Stable, derived from the title; what a saved status is keyed on. */
+  id: string;
   title: string;
   description: string;
   impact: ImpactLevel;
@@ -111,6 +113,26 @@ export type NarrativeState =
       ruleSavings: Record<string, Savings>;
     };
 
+/** What the user did with a priority action. */
+export type ActionStatus = "done" | "dismissed";
+
+/**
+ * A priority action marked done or dismissed, as it read at the time.
+ * Recorded per bill, so the same action can come back on a later one.
+ */
+export interface ArchivedAction {
+  billId: string;
+  periodStart: string | null;
+  periodEnd: string | null;
+  actionId: string;
+  status: ActionStatus;
+  title: string;
+  description: string;
+  impact: ImpactLevel;
+  savings: Savings | null;
+  createdAt: string;
+}
+
 export type Insights =
   | { available: false; reason: "NO_BILLS" | "NO_APPLIANCES" }
   | {
@@ -119,6 +141,8 @@ export type Insights =
       benchmark: BenchmarkContext;
       basedOn: InsightsBasis;
       narrative: NarrativeState;
+      /** Every action marked done or dismissed, across all bills, newest first. */
+      archived: ArchivedAction[];
     };
 
 /** "18% above" / "4% below" / "in line with", from the signed percentage. */
@@ -163,4 +187,50 @@ export async function getInsights(establishmentId: string): Promise<Insights> {
     );
   }
   return data as Insights;
+}
+
+/** Ids of the actions already marked done or dismissed on this bill. */
+export function archivedIds(archived: ArchivedAction[], billId: string): Set<string> {
+  return new Set(archived.filter((a) => a.billId === billId).map((a) => a.actionId));
+}
+
+/** The URL for one action's status on one bill. */
+function actionUrl(establishmentId: string, billId: string, actionId: string): string {
+  return apiUrl(
+    `/api/establishments/${establishmentId}/actions/${billId}/${encodeURIComponent(actionId)}`,
+  );
+}
+
+/** Throw an ApiError for a failed status write, with the server's wording. */
+async function ensureOk(res: Response, fallback: string): Promise<void> {
+  if (res.ok) return;
+  const data = await res.json().catch(() => ({}));
+  throw new ApiError(data.message ?? data.error ?? fallback, res.status, data.details);
+}
+
+/** Mark an action done or dismissed, saving the card as it reads now. */
+export async function setActionStatus(
+  establishmentId: string,
+  action: Omit<ArchivedAction, "periodStart" | "periodEnd" | "createdAt">,
+): Promise<void> {
+  const { billId, actionId, ...body } = action;
+  const res = await fetch(actionUrl(establishmentId, billId, actionId), {
+    method: "PUT",
+    headers: { ...(await authHeaders()), "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  await ensureOk(res, "Couldn't save that action");
+}
+
+/** Put an archived action back into Priority Actions. */
+export async function clearActionStatus(
+  establishmentId: string,
+  billId: string,
+  actionId: string,
+): Promise<void> {
+  const res = await fetch(actionUrl(establishmentId, billId, actionId), {
+    method: "DELETE",
+    headers: await authHeaders(),
+  });
+  await ensureOk(res, "Couldn't restore that action");
 }
