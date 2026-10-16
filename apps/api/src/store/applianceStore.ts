@@ -37,7 +37,7 @@ const APPLIANCE_COLUMNS =
 export async function listApplianceKinds(accessToken: string): Promise<ApplianceKind[]> {
   const { data, error } = await userClient(accessToken)
     .from("appliance_kinds")
-    .select("id, appliance_name, has_subtype")
+    .select("id, appliance_name, has_subtype, typical_watts, duty_cycle")
     .order("appliance_name");
 
   if (error) throw new DatabaseError(error.message);
@@ -45,6 +45,11 @@ export async function listApplianceKinds(accessToken: string): Promise<Appliance
     id: row.id as string,
     applianceName: row.appliance_name as string,
     hasSubtype: row.has_subtype as boolean,
+    typicalWatts: row.typical_watts === null ? undefined : Number(row.typical_watts),
+    // numeric arrives as a JSON number, but coerce for the same reason the
+    // bill store does: a string here would multiply into a wrong kWh that
+    // still looks like a number.
+    dutyCycle: Number(row.duty_cycle),
   }));
 }
 
@@ -60,7 +65,7 @@ export async function listApplianceSubtypes(
 ): Promise<ApplianceSubtype[]> {
   const { data, error } = await userClient(accessToken)
     .from("appliance_subtypes")
-    .select("id, kind_id, subtype_name")
+    .select("id, kind_id, subtype_name, typical_watts, duty_cycle")
     .order("subtype_name");
 
   if (error) throw new DatabaseError(error.message);
@@ -68,6 +73,9 @@ export async function listApplianceSubtypes(
     id: row.id as string,
     kindId: row.kind_id as string,
     subtypeName: row.subtype_name as string,
+    // Null means "same as the kind", so it stays undefined rather than 0.
+    typicalWatts: row.typical_watts === null ? undefined : Number(row.typical_watts),
+    dutyCycle: row.duty_cycle === null ? undefined : Number(row.duty_cycle),
   }));
 }
 
@@ -113,9 +121,8 @@ async function loadNameIndex(accessToken: string): Promise<NameIndex> {
 
 /** Map a row onto the domain type, resolving the names the engine reads. */
 function toAppliance(row: ApplianceRow, names: NameIndex): Appliance {
-  const subtypeName = row.subtype_id
-    ? names.subtypes.get(row.subtype_id)?.subtypeName
-    : undefined;
+  const subtype = row.subtype_id ? names.subtypes.get(row.subtype_id) : undefined;
+  const subtypeName = subtype?.subtypeName;
 
   return {
     id: row.id,
@@ -129,6 +136,10 @@ function toAppliance(row: ApplianceRow, names: NameIndex): Appliance {
     isInverter: toIsInverter(subtypeName),
     ageYears: row.age_years ?? undefined,
     hoursPerDay: row.hours_per_day ?? undefined,
+    // The subtype overrides the kind where it has its own figure: an
+    // inverter unit draws materially less than a non-inverter one.
+    typicalWatts: subtype?.typicalWatts ?? names.kinds.get(row.kind_id)?.typicalWatts,
+    dutyCycle: subtype?.dutyCycle ?? names.kinds.get(row.kind_id)?.dutyCycle ?? 1,
     createdAt: row.created_at,
   };
 }
