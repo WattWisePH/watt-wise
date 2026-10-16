@@ -271,3 +271,77 @@
 .PriorityAction_button__dismiss:hover {
   background-color: var(--bg-surface-hover);
 }
+
+.PriorityAction_savings {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary-600);
+}
+
+/* "Action taken" / "Dismiss": a quick pop, then the card is removed. */
+.PriorityAction_card__leaving {
+  animation: priority-action-pop 320ms ease-in forwards;
+  pointer-events: none;
+}
+
+@keyframes priority-action-pop {
+  30% {
+    transform: scale(1.03);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.85);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Still has to end, so the card is removed. */
+  .PriorityAction_card__leaving {
+    animation-duration: 1ms;
+  }
+}
+
+.Archived_groupTitle {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.Archived_badge__done {
+  background-color: var(--bg-success);
+  color: var(--text-on-success);
+}
+
+.Archived_badge__dismissed {
+  background-color: var(--bg-surface-hover);
+  color: var(--text-muted);
+}
+
+.Insights_titleRow {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.Insights_headerLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: var(--radius-medium);
+  border: 1px solid var(--outline);
+  background-color: var(--bg-surface);
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.Insights_headerLink:hover {
+  background-color: var(--bg-surface-hover);
+}

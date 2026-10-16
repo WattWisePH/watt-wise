@@ -28,6 +28,7 @@ import {
   profileFingerprint,
   saveNarrative,
 } from "../store/narrativeStore.js";
+import { listActionStatuses } from "../store/actionStatusStore.js";
 import { listAppliances } from "../store/applianceStore.js";
 import { getPeerBenchmark } from "../store/benchmarkStore.js";
 import { listBills } from "../store/billStore.js";
@@ -93,7 +94,12 @@ async function resolveNarrative(
     // survey has changed since, and the prose has to be rewritten.
     if (existing && existing.profileHash === profileHash) {
       if (existing.status === "ready" && existing.summary) {
-        return { status: "ready", summary: existing.summary, actions: existing.actions };
+        return {
+          status: "ready",
+          summary: existing.summary,
+          actions: existing.actions,
+          ruleSavings: existing.ruleSavings,
+        };
       }
       return { status: existing.status === "failed" ? "failed" : "pending" };
     }
@@ -124,10 +130,11 @@ insightsRouter.get("/", async (req, res, next) => {
 
   try {
     // Independent reads, so issue them together rather than in sequence.
-    const [bills, appliances, benchmark] = await Promise.all([
+    const [bills, appliances, benchmark, archived] = await Promise.all([
       listBills(token, establishment.id),
       listAppliances(token, establishment.id),
       getPeerBenchmark(token, establishment.typeId),
+      listActionStatuses(token, establishment.id),
     ]);
 
     // listBills is ordered newest period first, so the head is the current
@@ -181,8 +188,13 @@ insightsRouter.get("/", async (req, res, next) => {
         count: a.count,
         isInverter: a.isInverter,
         ageYears: a.ageYears,
+        hoursPerDay: a.hoursPerDay,
       })),
-      findings: result.recommendations.map((r) => ({ title: r.title, impact: r.impact })),
+      findings: result.recommendations.map((r) => ({
+        id: r.id,
+        title: r.title,
+        impact: r.impact,
+      })),
     };
 
     const body: InsightsResponse = {
@@ -200,6 +212,7 @@ insightsRouter.get("/", async (req, res, next) => {
         amount: latest.amount,
       },
       narrative: await resolveNarrative(token, latest.id, narrativeInput),
+      archived,
     };
     return res.json(body);
   } catch (err) {

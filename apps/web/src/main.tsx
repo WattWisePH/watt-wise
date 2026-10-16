@@ -12,9 +12,12 @@ import { RequireAuth } from "./features/auth/RequireAuth.tsx";
 import { Dashboard } from "./features/dashboard/Dashboard.tsx";
 import { BillUpload } from "./features/bill-upload/BillUpload.tsx";
 import { InsightsPage } from "./features/insights/InsightsPage.tsx";
+import { ActionsPage } from "./features/insights/ActionsPage.tsx";
 import { HealthScore } from "./features/insights/components/HealthScore.tsx";
+import { Benchmark } from "./features/insights/components/Benchmark.tsx";
 import { ApplianceSurvey } from "./features/appliance-survey/ApplianceSurvey.tsx";
 import { PriorityActions } from "./features/insights/components/PriorityActions.tsx";
+import { ArchivedActions } from "./features/insights/components/ArchivedActions.tsx";
 import { Simulator } from "./features/simulator/Simulator.tsx";
 import { Profile } from "./features/profile/Profile.tsx";
 import { EstablishmentSetup } from "./features/onboarding/EstablishmentSetup.tsx";
@@ -55,12 +58,16 @@ createRoot(document.getElementById("root")!).render(
                   <Route path="insights" element={<InsightsPage />}>
                     <Route index element={<Navigate to={"health-score"} />} />
                     <Route path="health-score" element={<HealthScore />} />
-                    <Route
-                      path="priority-actions"
-                      element={<PriorityActions />}
-                    />
+                    <Route path="benchmark" element={<Benchmark />} />
                   </Route>
-                  <Route path="simulator" element={<Simulator />} />
+                  {/* What to do about it: the actions, what they would save,
+                      and the ones already dealt with. */}
+                  <Route path="actions" element={<ActionsPage />}>
+                    <Route index element={<Navigate to={"priority-actions"} />} />
+                    <Route path="priority-actions" element={<PriorityActions />} />
+                    <Route path="simulator" element={<Simulator />} />
+                    <Route path="archived" element={<ArchivedActions />} />
+                  </Route>
                   <Route path="profile" element={<Profile />} />
                 </Route>
                 <Route path="appliances" element={<ApplianceSurvey />} />

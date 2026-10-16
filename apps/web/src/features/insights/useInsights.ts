@@ -1,7 +1,7 @@
 /**
  * Loading the active establishment's insights.
  *
- * Fetched once by InsightsPage and handed to the tab screens through the
+ * Fetched once by AnalysisLayout and handed to the tab screens through the
  * router outlet, rather than fetched by each of them: Health Score and
  * Priority Actions are two views of one analysis, and fetching per tab
  * would re-run the whole pipeline every time someone switched.
@@ -11,11 +11,20 @@ import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router";
 
 import { ApiError } from "../../lib/api";
-import { getInsights, type Insights } from "../../lib/insights";
+import { getInsights, type ArchivedAction, type Insights } from "../../lib/insights";
 import { useEstablishment } from "../establishment/hooks/useEstablishment";
 
 /** The insights, once there is something to show. */
 export type ReadyInsights = Extract<Insights, { available: true }>;
+
+/**
+ * What the tab screens get through the outlet: the insights, plus a way to
+ * change the archived list once a status is saved, so marking a card done
+ * on one tab shows on the other without a refetch.
+ */
+export type InsightsContext = ReadyInsights & {
+  setArchived: (update: (archived: ArchivedAction[]) => ArchivedAction[]) => void;
+};
 
 /**
  * Every state the screen can be in. Modelled explicitly so the page renders
@@ -81,9 +90,10 @@ const POLL_MS = 6000;
  * How many times to ask. The model is on a rate-limited free tier, so a
  * narrative that hasn't arrived after this long probably isn't coming —
  * and polling forever would keep a tab making requests all day. The score
- * is already on screen either way.
+ * is already on screen either way. 25 × 6s outlasts the API's 2-minute
+ * model timeout, which the savings estimates can come close to.
  */
-const MAX_POLLS = 5;
+const MAX_POLLS = 25;
 
 /** Load insights for whichever establishment is currently selected. */
 export function useInsights(): InsightsState {
@@ -161,9 +171,9 @@ export function useInsights(): InsightsState {
 /**
  * The insights, read by a tab screen from the outlet.
  *
- * Safe to assume present: InsightsPage renders the outlet only once the
+ * Safe to assume present: AnalysisLayout renders the outlet only once the
  * data is ready, and shows its own message in every other state.
  */
-export function useInsightsData(): ReadyInsights {
-  return useOutletContext<ReadyInsights>();
+export function useInsightsData(): InsightsContext {
+  return useOutletContext<InsightsContext>();
 }

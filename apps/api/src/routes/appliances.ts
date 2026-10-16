@@ -76,10 +76,19 @@ function parseAppliance(
     }
   }
 
+  // Optional too: whole hours, 0 (never) to 24 (always on).
+  let hoursPerDay: number | undefined;
+  if (body.hoursPerDay !== undefined && body.hoursPerDay !== null && body.hoursPerDay !== "") {
+    hoursPerDay = Number(body.hoursPerDay);
+    if (!Number.isInteger(hoursPerDay) || hoursPerDay < 0 || hoursPerDay > 24) {
+      errors.push(`${at} hoursPerDay must be a whole number from 0 to 24`);
+    }
+  }
+
   if (errors.length > 0) return { errors };
 
   return {
-    input: { kindId, subtypeId: subtypeId || undefined, count, ageYears },
+    input: { kindId, subtypeId: subtypeId || undefined, count, ageYears, hoursPerDay },
     errors: [],
   };
 }

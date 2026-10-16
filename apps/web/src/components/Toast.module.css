@@ -1,0 +1,32 @@
+.Toast {
+  position: fixed;
+  left: 50%;
+  bottom: 88px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: calc(100vw - 32px);
+  padding: 12px 16px;
+  border-radius: var(--radius-large);
+  background-color: var(--bg-secondary);
+  color: var(--text-on-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  animation: toast-in 200ms ease-out both;
+  transform: translateX(-50%);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .Toast {
+    animation: none;
+  }
+}

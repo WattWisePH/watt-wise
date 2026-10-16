@@ -1,77 +1,71 @@
 import { useMemo, useState } from "react";
 
-import {
-  SnowflakeIcon,
-  HourglassIcon,
-  PackageIcon,
-  PlugIcon,
-  PiggyBankIcon,
-} from "@phosphor-icons/react";
+import { PiggyBankIcon } from "@phosphor-icons/react";
 
 import styles from "./Simulator.module.css";
-import type { SimulatorItem } from "./types";
-import duotone from "../../styles/DuotoneIcon.module.css";
+import { toItems, totals } from "./savings";
 import { SimulatorItemToggle } from "./components/SimulatorItemToggle";
+import { MonthlyBillChart } from "../dashboard/components/MonthlyBillChart";
+import { useInsightsData } from "../insights/useInsights";
 
-const BASELINE_MONTHLY_BILL = 18200;
+/**
+ * How far the "with changes" bar drops, as a share of the "current" bar's
+ * height, when every option is selected. Raise toward 1 for more movement.
+ */
+const FULL_SELECTION_DROP = 0.25;
+
+/**
+ * Where a before/after chart's bars start. Scaled to the saving with every
+ * option selected, not the current selection, so the axis stays still while
+ * toggling and each option moves the bar by its share. From zero, a 5%
+ * saving is a couple of pixels on a phone.
+ */
+function axisMinFor(current: number, maxSaved: number): number {
+  if (maxSaved <= 0) return 0;
+  return Math.max(0, current - maxSaved / FULL_SELECTION_DROP);
+}
+
+const peso = (n: number) =>
+  n.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 
 export const Simulator = () => {
-  const simulatorData: SimulatorItem[] = [
-    {
-      id: 0,
-      icon: SnowflakeIcon,
-      iconTint: duotone.navy,
-      label: "Switch to inverter AC",
-      estSavings: 1450,
-    },
-    {
-      id: 1,
-      icon: HourglassIcon,
-      iconTint: duotone.amber,
-      label: "Optimize operating hours",
-      estSavings: 950,
-    },
-    {
-      id: 2,
-      icon: PackageIcon,
-      iconTint: duotone.green,
-      label: "Replace old refrigerator",
-      estSavings: 750,
-    },
-    {
-      id: 3,
-      icon: PlugIcon,
-      iconTint: duotone.amber,
-      label: "Reduce idle appliance usage",
-      estSavings: 350,
-    },
-  ];
+  const insights = useInsightsData();
+  const [selectedItems, setSelectedItems] = useState<string[]>([]);
+  const [showProjection, setShowProjection] = useState(false);
 
-  const [selectedItems, setSelectedItems] = useState<Array<number>>([]);
+  const items = useMemo(() => toItems(insights), [insights]);
+  const bill = insights.basedOn;
 
-  const handleItemToggle = (itemId: number) => {
-    setSelectedItems((prevItems) => {
-      if (prevItems.includes(itemId)) {
-        return prevItems.filter((prevItem) => prevItem !== itemId);
-      } else {
-        return [...prevItems, itemId];
-      }
-    });
+  const handleItemToggle = (itemId: string) => {
+    setSelectedItems((prev) =>
+      prev.includes(itemId)
+        ? prev.filter((id) => id !== itemId)
+        : [...prev, itemId],
+    );
   };
 
-  const totalSavings = useMemo(
-    () =>
-      simulatorData
-        .filter((item) => selectedItems.includes(item.id))
-        .reduce((sum, item) => sum + item.estSavings, 0),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [selectedItems],
-  );
+  const selected = items.filter((item) => selectedItems.includes(item.id));
+  const {
+    php: totalPhp,
+    kwh: totalKwh,
+    percent: reductionPercent,
+  } = totals(selected, bill);
+  // The most the options could save together; fixes the projection's axis.
+  const maxPhp = totals(items, bill).php;
 
-  const reductionPercent = useMemo(
-    () => (totalSavings / BASELINE_MONTHLY_BILL) * 100,
-    [totalSavings],
-  );
+  const listMessage =
+    insights.narrative.status === "pending"
+      ? "Estimating savings for your actions…"
+      : insights.narrative.status === "failed"
+        ? "Savings estimates aren't available right now. Try again later."
+        : items.length === 0
+          ? "No actions with measurable savings — your usage looks healthy."
+          : selectedItems.length === 0
+            ? "Select an option below."
+            : `Selected ${selectedItems.length} ${selectedItems.length === 1 ? "option" : "options"}.`;
 
   return (
     <div className={styles.Simulator}>
@@ -94,10 +88,7 @@ export const Simulator = () => {
               <div className={styles.SimulatorCard_valueRow}>
                 <p className={styles.SimulatorCard_savingsNumber}>
                   <span className={styles.SimulatorCard_currencyUnit}>₱</span>
-                  {totalSavings.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
+                  {peso(totalPhp)}
                 </p>
                 <div className={styles.SimulatorCard_reductionBadge}>
                   {reductionPercent.toFixed(1)}% reduction
@@ -106,27 +97,55 @@ export const Simulator = () => {
             </div>
           </div>
         </div>
-        <button className={styles.Simulator_button}>
-          View Detailed Projection
-        </button>
-        <p className={styles.Simulator_sectionSubtitle}>
-          {selectedItems.length === 0
-            ? "Select an option below."
-            : `Selected ${selectedItems.length} ${
-                selectedItems.length === 1 ? "option" : "options"
-              }.`}
-        </p>
-        <div className={styles.Simulator_itemList}>
-          {simulatorData.map((item) => {
-            return (
-              <SimulatorItemToggle
-                key={item.label}
-                item={item}
-                handleToggle={() => handleItemToggle(item.id)}
-                isEnabled={selectedItems.includes(item.id)}
+        {items.length > 0 && (
+          <button
+            className={styles.Simulator_button}
+            onClick={() => setShowProjection((open) => !open)}
+            aria-expanded={showProjection}
+          >
+            {showProjection
+              ? "Hide Detailed Projection"
+              : "View Detailed Projection"}
+          </button>
+        )}
+        {showProjection && items.length > 0 && (
+          <div className={styles.Simulator_projection}>
+            <div>
+              <h2 className={styles.Simulator_projectionTitle}>
+                Monthly bill (₱)
+              </h2>
+              <MonthlyBillChart
+                data={[
+                  { month: "Current", amount: bill.amount },
+                  { month: "With changes", amount: bill.amount - totalPhp },
+                ]}
+                color="primary"
+                showAverage={false}
+                unit="pesos"
+                valueLabel={(n) => `₱${peso(n)}`}
+                axisMin={axisMinFor(bill.amount, maxPhp)}
               />
-            );
-          })}
+              <p className={styles.Simulator_projectionDelta}>
+                −₱{peso(totalPhp)} (−{totalKwh.toLocaleString()} kWh) a month,{" "}
+                {reductionPercent.toFixed(1)}% lower
+              </p>
+            </div>
+            <p className={styles.Simulator_sectionSubtitle}>
+              *Bars do not start at zero. Estimates are AI-generated from your
+              bill and appliance survey.
+            </p>
+          </div>
+        )}
+        <p className={styles.Simulator_sectionSubtitle}>{listMessage}</p>
+        <div className={styles.Simulator_itemList}>
+          {items.map((item) => (
+            <SimulatorItemToggle
+              key={item.id}
+              item={item}
+              handleToggle={() => handleItemToggle(item.id)}
+              isEnabled={selectedItems.includes(item.id)}
+            />
+          ))}
         </div>
       </section>
     </div>

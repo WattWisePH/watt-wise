@@ -8,6 +8,7 @@
  *   GET  /api/establishments            List the user's establishments.
  *   .../:establishmentId/bills          Bills recorded for one establishment.
  *   .../:establishmentId/appliances     The establishment's appliance survey.
+ *   .../:establishmentId/actions        Priority actions marked done or dismissed.
  *
  * All routes require authentication. The two lookup lists are shared
  * reference data rather than user data, but they still sit behind auth
@@ -19,6 +20,7 @@ import { isUuid } from "../lib/uuid.js";
 import { requireAuth } from "../middleware/requireAuth.js";
 import { requireDatabase } from "../middleware/requireDatabase.js";
 import { requireEstablishment } from "../middleware/requireEstablishment.js";
+import { actionsRouter } from "./actions.js";
 import { appliancesRouter } from "./appliances.js";
 import { billsRouter } from "./bills.js";
 import { insightsRouter } from "./insights.js";
@@ -53,6 +55,7 @@ establishmentsRouter.use(
   requireEstablishment,
   insightsRouter,
 );
+establishmentsRouter.use("/:establishmentId/actions", requireEstablishment, actionsRouter);
 
 /** How a database failure reads to someone filling in the survey. */
 const ERRORS: StoreErrorMessages = {

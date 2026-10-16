@@ -26,11 +26,12 @@ interface ApplianceRow {
   subtype_id: string | null;
   quantity: number;
   age_years: number | null;
+  hours_per_day: number | null;
   created_at: string;
 }
 
 const APPLIANCE_COLUMNS =
-  "id, establishment_id, kind_id, subtype_id, quantity, age_years, created_at";
+  "id, establishment_id, kind_id, subtype_id, quantity, age_years, hours_per_day, created_at";
 
 /** The appliance kinds the survey offers, alphabetical. */
 export async function listApplianceKinds(accessToken: string): Promise<ApplianceKind[]> {
@@ -127,6 +128,7 @@ function toAppliance(row: ApplianceRow, names: NameIndex): Appliance {
     count: row.quantity,
     isInverter: toIsInverter(subtypeName),
     ageYears: row.age_years ?? undefined,
+    hoursPerDay: row.hours_per_day ?? undefined,
     createdAt: row.created_at,
   };
 }
@@ -139,6 +141,7 @@ function toRow(establishmentId: string, input: ApplianceSurveyInput) {
     subtype_id: input.subtypeId ?? null,
     quantity: input.count,
     age_years: input.ageYears ?? null,
+    hours_per_day: input.hoursPerDay ?? null,
   };
 }
 

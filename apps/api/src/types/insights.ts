@@ -22,9 +22,22 @@ import type { ImpactLevel, RecommendationResult } from "./recommendation.js";
  * those figures, and the UI has to be able to tell a reader which is which.
  */
 export interface NarrativeAction {
+  /** "ai-" plus the title as a slug; what a saved status is keyed on. */
+  id: string;
   title: string;
   description: string;
   impact: ImpactLevel;
+  savings: Savings;
+}
+
+/**
+ * A model's estimate of what acting on something saves per month. The kWh
+ * is the model's; the peso figure is that kWh at the bill's own effective
+ * rate, worked out here so it always agrees with the bill.
+ */
+export interface Savings {
+  kwh: number;
+  php: number;
 }
 
 /**
@@ -39,7 +52,33 @@ export interface NarrativeAction {
 export type NarrativeState =
   | { status: "pending" }
   | { status: "failed" }
-  | { status: "ready"; summary: string; actions: NarrativeAction[] };
+  | {
+      status: "ready";
+      summary: string;
+      actions: NarrativeAction[];
+      /** Estimates for the rule engine's recommendations, keyed by their id. */
+      ruleSavings: Record<string, Savings>;
+    };
+
+/** What the user did with a priority action. */
+export type ActionStatus = "done" | "dismissed";
+
+/**
+ * A priority action the user has marked done or dismissed, as it read when
+ * they did. Recorded per bill: the same action can come back on a later one.
+ */
+export interface ArchivedAction {
+  billId: string;
+  periodStart: string | null;
+  periodEnd: string | null;
+  actionId: string;
+  status: ActionStatus;
+  title: string;
+  description: string;
+  impact: ImpactLevel;
+  savings: Savings | null;
+  createdAt: string;
+}
 
 /** Where the peer average in the result came from. */
 export interface BenchmarkContext {
@@ -90,4 +129,6 @@ export type InsightsResponse =
       basedOn: InsightsBasis;
       /** The model-written layer. Always present; often still pending. */
       narrative: NarrativeState;
+      /** Every action marked done or dismissed, across all bills, newest first. */
+      archived: ArchivedAction[];
     };

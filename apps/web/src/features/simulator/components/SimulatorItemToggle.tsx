@@ -22,7 +22,7 @@ export const SimulatorItemToggle = ({
       <div className={styles.SimulatorItem_contentLayout}>
         <div className={styles.SimulatorItem_label}>{item.label}</div>
         <div className={styles.SimulatorItem_description}>
-          Estimated savings: ₱{item.estSavings} / month
+          Estimated savings: ₱{item.savings.php.toLocaleString()} ({item.savings.kwh} kWh) / month
         </div>
       </div>
       <div className={styles.SimulatorItem_toggleWrapper}>

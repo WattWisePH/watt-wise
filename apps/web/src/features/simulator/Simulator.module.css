@@ -49,14 +49,14 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 56px;
-  height: 56px;
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.15);
 }
 
 .SimulatorCard_icon {
-  font-size: 32px !important;
+  font-size: 48px !important;
 }
 
 .SimulatorCard_icon path:first-child {
@@ -80,14 +80,17 @@
   font-size: 20px;
   color: var(--text-on-primary);
   font-weight: normal;
+  margin-left: auto;
+  text-align: end;
+  line-height: 100%;
 }
 
 .SimulatorCard_valueRow {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: end;
   justify-content: space-between;
-  gap: 8px;
+  gap: 4px;
   width: 100%;
 }
 
@@ -104,10 +107,12 @@
   color: currentColor;
   font-weight: bold;
   text-transform: uppercase;
-  padding: 2px 8px;
+  padding: 4px 8px;
   font-size: 11px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  line-height: 100%;
   flex-shrink: 0;
   height: fit-content;
   transition: opacity 200ms ease;
@@ -231,4 +236,27 @@
   transform: translate(-50%, -50%);
   color: var(--text-on-primary);
   pointer-events: none;
+}
+
+.Simulator_projection {
+  padding: 16px;
+  border-radius: var(--radius-large);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--outline);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.Simulator_projectionTitle {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.Simulator_projectionDelta {
+  margin: 4px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-600);
 }

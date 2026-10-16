@@ -15,7 +15,7 @@
 
 import { createHash } from "node:crypto";
 import { DatabaseError, userClient } from "./supabaseClient.js";
-import type { NarrativeAction } from "../engine/llmNarrative.js";
+import { actionId, type NarrativeAction, type Savings } from "../engine/llmNarrative.js";
 
 export type NarrativeStatus = "pending" | "ready" | "failed";
 
@@ -23,6 +23,7 @@ export interface StoredNarrative {
   status: NarrativeStatus;
   summary: string | null;
   actions: NarrativeAction[];
+  ruleSavings: Record<string, Savings>;
   profileHash: string;
 }
 
@@ -31,10 +32,11 @@ interface NarrativeRow {
   status: NarrativeStatus;
   summary: string | null;
   actions: NarrativeAction[] | null;
+  rule_savings: Record<string, Savings> | null;
   profile_hash: string;
 }
 
-const NARRATIVE_COLUMNS = "status, summary, actions, profile_hash";
+const NARRATIVE_COLUMNS = "status, summary, actions, rule_savings, profile_hash";
 
 /**
  * Fingerprint the inputs a narrative was written about.
@@ -52,10 +54,19 @@ export function profileFingerprint(input: {
   amount: number;
   peerAverageKwh: number;
   comparedWithPeers: boolean;
-  appliances: { type: string; count: number; isInverter?: boolean; ageYears?: number }[];
+  appliances: {
+    type: string;
+    count: number;
+    isInverter?: boolean;
+    ageYears?: number;
+    hoursPerDay?: number;
+  }[];
 }): string {
   const appliances = input.appliances
-    .map((a) => `${a.type}|${a.count}|${a.isInverter ?? ""}|${a.ageYears ?? ""}`)
+    .map(
+      (a) =>
+        `${a.type}|${a.count}|${a.isInverter ?? ""}|${a.ageYears ?? ""}|${a.hoursPerDay ?? ""}`,
+    )
     .sort()
     .join(";");
 
@@ -76,6 +87,12 @@ export function profileFingerprint(input: {
     .digest("hex");
 }
 
+/** Rows written before actions carried an id get one from the title. */
+function withIds(actions: NarrativeAction[]): NarrativeAction[] {
+  const ids = new Set<string>();
+  return actions.map((a) => ({ ...a, id: a.id ?? actionId(a.title, ids) }));
+}
+
 /** The stored narrative for a bill, or null when none has been written. */
 export async function getNarrative(
   accessToken: string,
@@ -94,7 +111,8 @@ export async function getNarrative(
   return {
     status: row.status,
     summary: row.summary,
-    actions: row.actions ?? [],
+    actions: withIds(row.actions ?? []),
+    ruleSavings: row.rule_savings ?? {},
     profileHash: row.profile_hash,
   };
 }
@@ -128,6 +146,7 @@ export async function claimNarrative(
     profile_hash: profileHash,
     summary: null,
     actions: [],
+    rule_savings: {},
     model: null,
     updated_at: new Date().toISOString(),
   };
@@ -160,7 +179,12 @@ export async function claimNarrative(
 export async function saveNarrative(
   accessToken: string,
   billId: string,
-  narrative: { summary: string; actions: NarrativeAction[]; model: string },
+  narrative: {
+    summary: string;
+    actions: NarrativeAction[];
+    ruleSavings: Record<string, Savings>;
+    model: string;
+  },
   profileHash: string,
 ): Promise<void> {
   const { error } = await userClient(accessToken)
@@ -169,6 +193,7 @@ export async function saveNarrative(
       status: "ready",
       summary: narrative.summary,
       actions: narrative.actions,
+      rule_savings: narrative.ruleSavings,
       model: narrative.model,
       updated_at: new Date().toISOString(),
     })

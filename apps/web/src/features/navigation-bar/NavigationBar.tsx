@@ -2,9 +2,9 @@ import navStyles from "./NavigationBar.module.css";
 import duotone from "../../styles/DuotoneIcon.module.css";
 import { useNavigate, useLocation } from "react-router";
 import {
+  CheckCircleIcon,
   HouseIcon,
   LightbulbIcon,
-  LeafIcon,
   UserIcon,
   type Icon,
 } from "@phosphor-icons/react";
@@ -28,9 +28,9 @@ export const NavigationBar = () => {
       tint: "amber",
     },
     {
-      icon: LeafIcon,
-      itemName: "Simulator",
-      route: "/simulator",
+      icon: CheckCircleIcon,
+      itemName: "Actions",
+      route: "/actions",
       tint: "green",
     },
     {
