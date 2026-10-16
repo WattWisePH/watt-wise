@@ -20,6 +20,7 @@
 import { Router } from "express";
 import { getRecommendationEngine } from "../engine/index.js";
 import { billTrend, describeTrend } from "../engine/billTrend.js";
+import { describeLoad, loadBreakdown } from "../engine/loadEstimate.js";
 import { generateNarrative, type NarrativeInput } from "../engine/llmNarrative.js";
 import {
   claimNarrative,
@@ -177,6 +178,10 @@ insightsRouter.get("/", async (req, res, next) => {
       // Reduced to sentences here so the model is never the thing doing the
       // arithmetic on a bill history.
       history: describeTrend(billTrend(bills)),
+      // Likewise for consumption: calculated from sourced wattages and the
+      // hours the user gave, so the shares are checkable rather than a
+      // model's impression of what an aircon draws.
+      load: describeLoad(loadBreakdown(appliances, latest.kwhUsed)),
       kwhUsed: latest.kwhUsed,
       amount: latest.amount,
       peerAverageKwh: result.benchmark.peerAverageKwh,

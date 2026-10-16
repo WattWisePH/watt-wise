@@ -122,17 +122,30 @@ const profileSent = () => generate.mock.calls[0][0];
  * what the fingerprint covers makes these tests disagree with the route
  * instead of both drifting together.
  */
+/** The surveyed appliance every narrative test works from. */
+const FRIDGE = {
+  id: "a0",
+  type: "Refrigerator",
+  count: 1,
+  isInverter: true,
+  hoursPerDay: 24,
+  typicalWatts: 120,
+  dutyCycle: 0.3,
+};
+
 const { profileFingerprint } = await import("../store/narrativeStore.js");
 const { billTrend, describeTrend } = await import("../engine/billTrend.js");
+const { describeLoad, loadBreakdown } = await import("../engine/loadEstimate.js");
 const CURRENT_HASH = profileFingerprint({
   // No typeName on the mocked establishment, so the route's own fallback.
   establishmentType: "establishment",
   history: describeTrend(billTrend([latestBill, olderBill])),
+  load: describeLoad(loadBreakdown([FRIDGE], latestBill.kwhUsed)),
   kwhUsed: latestBill.kwhUsed,
   amount: latestBill.amount,
   peerAverageKwh: engineResult.benchmark.peerAverageKwh,
   comparedWithPeers: true,
-  appliances: [{ type: "Refrigerator", count: 1, isInverter: true }],
+  appliances: [FRIDGE],
 });
 
 beforeEach(() => {
@@ -149,9 +162,7 @@ beforeEach(() => {
   });
   listBills.mockResolvedValue([latestBill, olderBill]);
   listActionStatuses.mockResolvedValue([]);
-  listAppliances.mockResolvedValue([
-    { id: "a0", type: "Refrigerator", count: 1, isInverter: true },
-  ]);
+  listAppliances.mockResolvedValue([FRIDGE]);
   getPeerBenchmark.mockResolvedValue({ peerAverageKwh: 300, cohortSize: 7 });
   generate.mockResolvedValue(engineResult);
 

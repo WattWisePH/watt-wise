@@ -50,6 +50,7 @@ const NARRATIVE_COLUMNS = "status, summary, actions, rule_savings, profile_hash"
 export function profileFingerprint(input: {
   establishmentType: string;
   history: string;
+  load: string;
   kwhUsed: number;
   amount: number;
   peerAverageKwh: number;
@@ -77,6 +78,10 @@ export function profileFingerprint(input: {
         // the model is actually told, and a new bill rewrites it.
         input.establishmentType,
         input.history,
+        // Derived from the appliances below, but included in its own right:
+        // sourcing real wattages rewrites it without a single appliance
+        // changing, and the prose then describes shares that no longer hold.
+        input.load,
         input.kwhUsed,
         input.amount,
         input.peerAverageKwh,
