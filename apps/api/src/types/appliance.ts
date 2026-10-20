@@ -22,6 +22,10 @@ export interface ApplianceKind {
   id: string;
   /** Display name, and what the recommendation engine groups by. */
   applianceName: string;
+  /** Typical running draw in watts; absent until someone sources it. */
+  typicalWatts?: number;
+  /** Share of its "on" hours that it actually draws power. */
+  dutyCycle?: number;
   /**
    * Whether this kind has variants to choose from. False for a ceiling fan,
    * which has no inverter/non-inverter or bulb-type distinction at all —
@@ -36,6 +40,9 @@ export interface ApplianceSubtype {
   /** The kind this variant belongs to; a subtype is never offered alone. */
   kindId: string;
   subtypeName: string;
+  /** Overrides the kind's figure; absent means "same as the kind". */
+  typicalWatts?: number;
+  dutyCycle?: number;
 }
 
 /** What the survey form submits for one appliance. */
@@ -64,6 +71,14 @@ export interface Appliance extends ApplianceInput {
   establishmentId: string;
   kindId: string;
   subtypeId: string | null;
+  /**
+   * Typical draw and duty cycle resolved from the lookup tables, with the
+   * subtype overriding the kind. Undefined watts means nobody has sourced
+   * a figure for this kind yet, and the load estimate leaves it out rather
+   * than guessing.
+   */
+  typicalWatts?: number;
+  dutyCycle: number;
   createdAt: string;
 }
 

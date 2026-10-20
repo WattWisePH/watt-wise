@@ -13,6 +13,7 @@ import { profileFingerprint } from "./narrativeStore.js";
 
 const base = {
   establishmentType: "Cafe",
+  load: "Estimated consumption per appliance:\n- 1x Air Conditioner: about 201.6 kWh/month (65% of the bill)",
   history: "This is bill number 3 on record. Consumption is 4% higher than the previous bill.",
   kwhUsed: 312,
   amount: 1785.5,
@@ -111,6 +112,18 @@ describe("inputs that have genuinely changed", () => {
     expect(profileFingerprint({ ...base, establishmentType: "Household" })).not.toBe(
       profileFingerprint(base),
     );
+  });
+
+  it("notices the appliance estimates being recalculated", () => {
+    // Sourcing real wattages rewrites what the model is told without a
+    // single appliance changing, and the old prose describes shares that
+    // no longer hold.
+    const resourced = {
+      ...base,
+      load: "Estimated consumption per appliance:\n- 1x Air Conditioner: about 150 kWh/month (48% of the bill)",
+    };
+
+    expect(profileFingerprint(resourced)).not.toBe(profileFingerprint(base));
   });
 
   it("notices a new bill rewriting the history", () => {

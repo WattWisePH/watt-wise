@@ -400,6 +400,43 @@ select count(*) from public.bill_insights;
 SQL
 
 echo
+echo "Appliance power"
+
+expect_eq "every kind has a wattage to calculate from" "0" <<'SQL'
+-- A kind with no figure silently drops out of the load estimate, which
+-- looks like the appliance using nothing at all.
+select count(*) from public.appliance_kinds where typical_watts is null;
+SQL
+
+expect_eq "an inverter draws less than its non-inverter equivalent" "t" <<'SQL'
+-- The entire basis of the recommendation the app makes about them. If this
+-- ever inverts, switching to an inverter would be advised as a cost.
+select inv.typical_watts < non.typical_watts
+from public.appliance_subtypes inv
+join public.appliance_subtypes non
+  on non.kind_id = inv.kind_id and non.subtype_name = 'Non-inverter'
+join public.appliance_kinds k on k.id = inv.kind_id
+where inv.subtype_name = 'Inverter' and k.appliance_name = 'Air Conditioner';
+SQL
+
+expect_eq "the unverified figures say so in the data" "0" <<'SQL'
+-- Not buried in a comment: the gap is queryable, so it can't be forgotten.
+select count(*) from public.appliance_kinds
+where typical_watts is not null and power_source not like 'PLACEHOLDER%';
+SQL
+
+expect_error "a duty cycle above 1 is rejected" <<'SQL'
+update public.appliance_kinds set duty_cycle = 1.5
+where appliance_name = 'Refrigerator';
+SQL
+
+expect_eq "a signed-in user can read the power figures" "t" <<'SQL'
+set role authenticated;
+set request.jwt.claim.sub = '11111111-1111-1111-1111-111111111111';
+select count(*) > 0 from public.appliance_kinds where typical_watts is not null;
+SQL
+
+echo
 if (( FAILURES > 0 )); then
   echo "${FAILURES} check(s) failed."
   exit 1

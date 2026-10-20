@@ -57,6 +57,13 @@ export interface NarrativeInput {
    */
   establishmentType: string;
   /**
+   * The per-appliance consumption estimate, already reduced to sentences.
+   * Calculated from sourced wattages and the hours the user gave, so the
+   * model is repeating arithmetic rather than forming an opinion about
+   * what an aircon draws.
+   */
+  load: string;
+  /**
    * The bill history, already reduced to sentences. Deliberately not the
    * raw bills: handing those over would leave the model doing the
    * arithmetic, and a percentage it worked out itself is a number no rule
@@ -174,21 +181,25 @@ Here is their most recent month of data:
 - Energy health score: ${input.healthScore} out of 100
 - Appliances: ${appliances}
 
+${input.load}
+
 History: ${input.history}
 
 An analysis has already produced these findings:
 ${findings}
 
-Write a short plain-language summary of the situation, then suggest up to ${MAX_ACTIONS} ADDITIONAL practical actions that the findings above do NOT already cover.
+Write a short plain-language summary of the situation, then add any practical actions worth taking that the findings above do NOT already cover — at most ${MAX_ACTIONS}, and fewer is better. Returning none is a good answer when there is nothing worth adding.
 
-Then estimate how many kWh per month acting on each finding, and on each of your actions, would save. Base it on the appliance counts, typical wattages for those appliances in the Philippines, and the hours of use given. Be conservative: all estimates together must stay well under the ${input.kwhUsed} kWh used. Use 0 when an item saves no measurable energy. Never count the same saving twice: a general finding (such as being above average) only gets what the other items do not already cover.
+Then estimate how many kWh per month acting on each finding, and on each of your actions, would save. Work from the per-appliance estimates above — they are calculated, so an action on an appliance cannot save more than that appliance uses. Be conservative: all estimates together must stay well under the ${input.kwhUsed} kWh used. Use 0 when an item saves no measurable energy. Never count the same saving twice: a general finding (such as being above average) only gets what the other items do not already cover.
 
 Rules you must follow:
 - In the summary and descriptions, use ONLY the figures given above. Never state a number that is not listed here — no peso amounts, no percentages. Savings estimates go in the kWh fields only.
 - Do not repeat the findings listed above; add angles they miss.
 - Write for ${isHousehold ? "a homeowner" : "a small business owner"}, not an engineer. Two or three sentences for the summary.
 - Only describe a trend if the History section states one. Never work out a percentage or a peso figure yourself.
-- If there is nothing useful to add, return an empty actions array.
+- If there is nothing useful to add, return an empty actions array. Do not pad the list to reach ${MAX_ACTIONS}.
+- Weigh whether an action is worth the bother at this level of use. At PHP ${ratePerKwh(input).toFixed(2)} per kWh, suggesting a replacement that saves a few kWh a month is wasting the reader's attention — say so rather than recommending it.
+- Lead with whatever the per-appliance estimates show is largest. That is where the money is.
 
 Reply with ONLY a JSON object, no markdown and no prose around it. findingSavings is keyed by the id in square brackets above:
 {"summary": string, "findingSavings": {"<finding id>": number}, "actions": [{"title": string, "description": string, "impact": "high"|"medium"|"low", "kwhSavedPerMonth": number}]}`;
